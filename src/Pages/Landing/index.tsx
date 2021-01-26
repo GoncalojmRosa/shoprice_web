@@ -15,7 +15,7 @@ import TopBarContainer from '../../Components/TopBarContainer';
 export default function Landing() {
   return (
     <div>
-      <TopBarContainer />
+      <TopBarContainer profile={true} linkToHome={false} />
       <Theme />
 
       <div id="page-landing">

@@ -35,8 +35,8 @@ const TopBarContainer: React.FunctionComponent<TopBarContainerProps> = ({
       {profile ? (
         <div className="top-bar-container">
           <Link to="/profile" className="profile-button">
-            <img alt="Perfil" />
-            <p>Olá</p> {[user.email, 'aaaa'].join(' ')}
+            <img src={user.avatar} alt="Perfil" />
+            <p>Olá {[user.name].join('!')}</p>
           </Link>
           <p>{title}</p>
           <img src={leaveIcon} alt="Sair" onClick={(e) => handleSignOut()} />

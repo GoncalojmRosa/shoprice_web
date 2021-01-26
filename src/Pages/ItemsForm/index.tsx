@@ -10,6 +10,7 @@ import ProductItem from '../../Components/ProductItem';
 
 //CSS
 import './styles.css';
+import TopBarContainer from '../../Components/TopBarContainer';
 
 export default function ItemsForm() {
   const [isModalOpen, setModalState] = useState(false);
@@ -52,7 +53,9 @@ export default function ItemsForm() {
 
   return (
     <div id="page-teacher-form" className="container">
+      {/* <TopBarContainer */}
       <PageHeader
+        page={'Comparar'}
         title={'Ainda bem que você decidiu poupar dinheiro'}
         description={'O primeiro passo é criar a sua lista de compras'}
       ></PageHeader>

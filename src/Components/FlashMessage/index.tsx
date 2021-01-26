@@ -1,52 +1,46 @@
-import React from 'react';
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
-import { makeStyles, Theme } from '@material-ui/core/styles';
+import React, { useEffect, useState } from 'react';
+import errorIcon from '../../Assets/x.svg';
+import successIcon from '../../Assets/check.svg';
+import './styles.scss';
 
-interface alertProps {
-  message?: string;
-  type?: string;
-}
+const FlashMessage: React.FunctionComponent<{
+  text: string;
+  type: string;
+  time?: number;
+}> = ({ text, type = 'error', time = 5000, children }) => {
+  const [t, setT] = useState(false);
 
-function Alert(props: AlertProps) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
+  let timeout: NodeJS.Timeout;
 
-const useStyles = makeStyles((theme: Theme) => ({
-  root: {
-    width: '100%',
-    '& > * + *': {
-      marginTop: theme.spacing(2),
-    },
-  },
-}));
-
-const CustomizedSnackbars: React.FunctionComponent<alertProps> = ({ message, type }) => {
-  const classes = useStyles();
-
-  const [open, setOpen] = React.useState(true);
-
-  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
+  useEffect(() => {
+    if (text !== '') {
+      setT(true);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      //@ts-ignore
+      timeout = setTimeout(() => setT(false), time);
     }
+  }, [text]);
 
-    setOpen(false);
-  };
+  function handleCloseFlash() {
+    setT(false);
+    clearTimeout(timeout);
+  }
 
   return (
-    <div className={classes.root}>
-      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert
-          onClose={handleClose}
-          severity={type ? 'error' : 'success'}
-          style={{ fontSize: '15px' }}
-        >
-          {message ? message : ''}
-        </Alert>
-      </Snackbar>
+    <div
+      id="flash-message"
+      className={`${type}-message ${t ? 'flash-active' : ''}`}
+      onClick={handleCloseFlash}
+    >
+      <div className="flash-icon">
+        <img src={type === 'error' ? errorIcon : successIcon} alt="Icon" />
+      </div>
+      <div className="flash-content ">
+        <div className="flash-heading">{type === 'error' ? 'Vish!' : 'Muito bom!'}</div>
+        <div className="flash-message">{text}</div>
+      </div>
     </div>
   );
 };
 
-export default CustomizedSnackbars;
+export default FlashMessage;

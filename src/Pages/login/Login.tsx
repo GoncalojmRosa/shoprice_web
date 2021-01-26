@@ -6,7 +6,7 @@ import Input from '../../Components/Input';
 import purpleHeartIcon from '../../Assets/icons/purple-heart.svg';
 import { AuthContext } from '../../contexts/auth';
 import './styles.scss';
-import FlashMessage from '../../Components/FlashMessage';
+import FlashMessage from '../../Components/PopUpMessage';
 import api from '../../services/api';
 
 function Login() {
