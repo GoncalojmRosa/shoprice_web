@@ -1,0 +1,17 @@
+import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import './Assets/Styles/global.css';
+import AuthProvider from './contexts/auth';
+import Routes from './routes';
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AuthProvider>
+        <Routes />
+      </AuthProvider>
+    </BrowserRouter>
+  );
+}
+
+export default App;

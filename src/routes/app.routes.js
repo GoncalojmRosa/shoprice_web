@@ -1,0 +1,23 @@
+import React from 'react'
+
+import { BrowserRouter, Route } from 'react-router-dom'
+import Contact from '../Pages/Contact'
+import ItemsForm from '../Pages/ItemsForm'
+import Landing from '../Pages/Landing'
+import Notify from '../Pages/Notify'
+
+
+function AppRoutes() {
+  return (
+    <BrowserRouter>
+      <Route path="/" exact component={Landing} />
+      <Route path="/compare" component={ItemsForm} />
+      <Route path="/contact" component={Contact} />
+      <Route path="/notify" component={Notify} />
+      {/* <Redirect path="*" to="/" /> */}
+
+    </BrowserRouter>
+  )
+}
+
+export default AppRoutes;
