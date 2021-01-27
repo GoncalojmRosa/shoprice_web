@@ -24,6 +24,11 @@ export function authenticate(params: object): Promise<Response> {
 }
 
 export function register(params: object): Promise<Response> {
-  console.log(params)
   return api.post('/register', params)
+}
+export function getProfile(params: object): Promise<Response> {
+  return api.get('/profile', params)
+}
+export function updateProfile(params: object): Promise<Response> {
+  return api.get('/profile', params)
 }

@@ -7,7 +7,6 @@ import purpleHeartIcon from '../../Assets/icons/purple-heart.svg';
 import { AuthContext } from '../../contexts/auth';
 import './styles.scss';
 import FlashMessage from '../../Components/PopUpMessage';
-import api from '../../services/api';
 
 function Login() {
   const { signIn } = useContext(AuthContext);
@@ -20,10 +19,12 @@ function Login() {
 
   async function handleSignIn(e: FormEvent) {
     e.preventDefault();
-    console.log('ola');
     if (isAble()) {
-      await signIn({ email, password });
-      history.push('/');
+      await signIn({ email, password })
+        .then((res) => {
+          history.push('/');
+        })
+        .catch((res) => {});
     }
   }
 

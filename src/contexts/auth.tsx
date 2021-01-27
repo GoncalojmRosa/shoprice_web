@@ -19,7 +19,6 @@ export const AuthContext = createContext<AuthContextData>({} as AuthContextData)
 const AuthProvider: React.FunctionComponent = ({ children }) => {
   api.interceptors.response.use(
     function (response) {
-      console.log(response);
       return response;
     },
     async function (error) {
@@ -52,6 +51,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
   }
 
   async function signIn(params: { email: string; password: string; refresh_token?: string }) {
+    console.log(params);
     await auth
       .authenticate(params)
       .then((response) => {
@@ -60,7 +60,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
         setLocalUser(user);
         api.defaults.headers['Authorization'] = `Bearer ${token}`;
       })
-      .catch(() => {
+      .catch((err) => {
         signOut();
       });
   }

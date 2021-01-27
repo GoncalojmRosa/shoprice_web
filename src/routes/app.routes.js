@@ -5,6 +5,7 @@ import Contact from '../Pages/Contact'
 import ItemsForm from '../Pages/ItemsForm'
 import Landing from '../Pages/Landing'
 import Notify from '../Pages/Notify'
+import Profile from '../Pages/Profile'
 
 
 function AppRoutes() {
@@ -14,6 +15,7 @@ function AppRoutes() {
       <Route path="/compare" component={ItemsForm} />
       <Route path="/contact" component={Contact} />
       <Route path="/notify" component={Notify} />
+      <Route path="/profile" component={Profile} />
       {/* <Redirect path="*" to="/" /> */}
 
     </BrowserRouter>
