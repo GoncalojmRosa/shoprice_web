@@ -26,9 +26,9 @@ export function authenticate(params: object): Promise<Response> {
 export function register(params: object): Promise<Response> {
   return api.post('/register', params)
 }
-export function getProfile(params: object): Promise<Response> {
-  return api.get('/profile', params)
+export function getProfile(params: Object): Promise<Response> {
+  return api.post('/profile', params)
 }
 export function updateProfile(params: object): Promise<Response> {
-  return api.get('/profile', params)
+  return api.put('/profile', params)
 }

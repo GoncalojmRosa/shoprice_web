@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import PageHeader from '../../Components/PageHeader';
 import Input from '../../Components/Input';
 import warningIcon from '../../Assets/warning.svg';
-// import cameraIcon from '../../Assets/icons/camera.svg';
+import cameraIcon from '../../Assets/icons/camera.svg';
 import './styles.scss';
 import backgroundImg from '../../Assets/success-background.svg';
 import { getProfile, updateProfile } from '../../services/auth';
@@ -11,7 +11,7 @@ import { AuthContext } from '../../contexts/auth';
 import api from '../../services/api';
 
 function Profile() {
-  const { setLocalUser, emitMessage } = useContext(AuthContext);
+  const { setLocalUser, emitMessage, user } = useContext(AuthContext);
 
   const [name, setName] = useState('');
   const [surname, setSurname] = useState('');
@@ -41,10 +41,11 @@ function Profile() {
 
         // uploadAvatar({ image: el.files[0] }).then(() => {
         //   emitMessage('Seu avatar foi atualizado!');
-        //   getProfile().then((response) => {
-        //     const { email, name, surname, avatar, id } = response.data.user;
-        //     setLocalUser({ email, name, surname, avatar, id });
-        //   });
+        // getProfile().then((response) => {
+        //   const { email, name, avatar, id } = response.data.user;
+        //   // setLocalUser({ email, name, avatar, id });
+        //   console
+        // });
         // });
       }
     });
@@ -66,7 +67,16 @@ function Profile() {
       setAvatar(e.target.result);
     }
   }
-
+  getProfile(user)
+    .then((res) => {
+      const { name, email, avatar } = res.data.user;
+      setName(name as string);
+      setAvatar(avatar as string);
+      setEmail(email as string);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   // getProfile(true).then((response) => {
   //   const { name, email, avatar, surname, bio, whatsapp } = response.data.user
 
@@ -89,7 +99,7 @@ function Profile() {
               <div className="avatar-preview">
                 <img src={avatar} alt="avatar" />
                 <img
-                  //   src={cameraIcon}
+                  src={cameraIcon}
                   alt="Ícone Camera"
                   className="camera-icon"
                   onClick={(e) => {
