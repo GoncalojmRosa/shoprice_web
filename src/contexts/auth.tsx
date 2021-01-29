@@ -3,6 +3,7 @@ import api from '../services/api';
 import { UserData } from '../services/auth';
 import * as auth from '../services/auth';
 import FlashMessage from '../Components/FlashMessage';
+import Cookie from 'js-cookie';
 
 interface AuthContextData {
   signed: boolean;
@@ -56,7 +57,8 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
       .authenticate(params)
       .then((response) => {
         const { token, refresh_token, user } = response.data;
-        setLocalToken(token, refresh_token);
+        Cookie.set('refresh_token', refresh_token, { expires: 1 });
+        // setLocalToken(token, refresh_token);
         setLocalUser(user);
         api.defaults.headers['Authorization'] = `Bearer ${token}`;
       })
@@ -66,6 +68,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
   }
 
   function signOut() {
+    Cookie.remove('refresh_token');
     localStorage.removeItem('@shoprice:user');
     localStorage.removeItem('@shoprice:token');
     localStorage.removeItem('@shoprice:refresh_token');
@@ -100,8 +103,8 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
         JSON.parse(localStorage.getItem('@proffy:refresh_token') as string),
       );
 
-      let refresh_token = localStorage.getItem('@proffy:refresh_token') as string;
-
+      // let refresh_token = localStorage.getItem('@proffy:refresh_token') as string;
+      let refresh_token = Cookie.get('refresh_token');
       if (
         typeof refresh_token === 'undefined' ||
         refresh_token === 'null' ||
@@ -109,7 +112,6 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
       ) {
         signOut();
       } else {
-        refresh_token = JSON.parse(refresh_token);
         signIn({ email: '', password: '', refresh_token }).then();
       }
     },
