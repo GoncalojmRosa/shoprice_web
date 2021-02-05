@@ -2,27 +2,33 @@ import React from 'react';
 
 import './styles.css';
 
-interface Teacher {
-  name: string;
-  price: string;
-  photo: string;
+export interface Product {
+  Data: {
+    name: string;
+    price: string;
+    img: string;
+  };
 }
 
-const TeacherItem: React.FC<Teacher> = (props) => {
+interface ProductItemProps {
+  product: Product;
+}
+
+const TeacherItem: React.FC<ProductItemProps> = ({ product }) => {
   return (
     <div>
       <article className="teacher-item">
         <header>
-          <img src={props.photo} alt={props.name} />
+          <img src={product.Data.img} alt={product.Data.name} />
           <div>
-            <strong>{props.name}</strong>
+            <strong>{product.Data.name}</strong>
           </div>
         </header>
         {/* <p>{teacher.bio}</p> */}
         <footer>
           <p>
             Preço/hora
-            <strong>{props.price}€</strong>
+            <strong>{product.Data.price}€</strong>
           </p>
 
           <a

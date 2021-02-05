@@ -18,6 +18,13 @@ export interface Response {
     user: UserData
   }
 }
+export interface ProductsResponse {
+  Data: {
+    price: string,
+    img: string,
+    name: string
+  }
+}
 
 export function authenticate(params: object): Promise<Response> {
   return api.post('/authenticate', params)
@@ -31,4 +38,8 @@ export function getProfile(params: Object): Promise<Response> {
 }
 export function updateProfile(params: object): Promise<Response> {
   return api.put('/profile', params)
+}
+
+export function getProducts(params: object): Promise<ProductsResponse> {
+  return api.post('/products', params)
 }
