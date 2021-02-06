@@ -10,6 +10,15 @@ export interface UserData {
   isConfirmed?: boolean
   emailToken?: string
 }
+export interface Product {
+  title: string
+  name: string
+  price: string
+  img: string
+}
+export interface ProductsResponse {
+  data: [Product]
+}
 
 export interface Response {
   data: {
@@ -18,13 +27,10 @@ export interface Response {
     user: UserData
   }
 }
-export interface ProductsResponse {
-  Data: {
-    price: string,
-    img: string,
-    name: string
-  }
-}
+
+
+
+
 
 export function authenticate(params: object): Promise<Response> {
   return api.post('/authenticate', params)

@@ -1,7 +1,7 @@
 import React, { FormEvent, useState } from 'react';
 import Input from '../../Components/Input';
 import PageHeader from '../../Components/PageHeader';
-import { Product } from '../../Components/ProductItem';
+// import { Product } from '../../Components/ProductItem';
 
 import { getProducts, ProductsResponse } from '../../services/auth';
 //CSS
@@ -10,7 +10,7 @@ import './styles.css';
 export default function ItemsForm() {
   const [isModalOpen, setModalState] = useState(false);
   const [product, setProduct] = useState('');
-  const [result, setResult] = useState([]);
+  const [result, setResult] = useState<ProductsResponse[]>([]);
 
   const toggleModal = () => setModalState(!isModalOpen);
 
@@ -18,9 +18,10 @@ export default function ItemsForm() {
     e.preventDefault();
     getProducts({ product })
       .then((res) => {
-        // console.log(res.data.Data[0].Continente.name);
-        // console.log(res.data.Data.length);
-        setResult(res.Data[0]);
+        console.log(res.data);
+        // setResult(res.data.Data[0].);
+        // console.log(res.data);
+        setResult(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -52,11 +53,11 @@ export default function ItemsForm() {
             Go
           </button>
         </form>
-        <div>
+        {/* <div>
           {result.map((prods: ProductsResponse) => {
             return <div key="a">{}</div>;
           })}
-        </div>
+        </div> */}
       </PageHeader>
       {/* <main></main> */}
     </div>
