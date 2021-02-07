@@ -3,32 +3,31 @@ import React from 'react';
 import './styles.css';
 
 export interface Product {
-  Data: {
-    name: string;
-    price: string;
-    img: string;
-  };
+  title: string;
+  name: string;
+  price: string;
+  img: string;
 }
 
 interface ProductItemProps {
   product: Product;
 }
 
-const TeacherItem: React.FC<ProductItemProps> = ({ product }) => {
+const ProductItem: React.FC<ProductItemProps> = ({ product }) => {
   return (
     <div>
       <article className="teacher-item">
         <header>
-          <img src={product.Data.img} alt={product.Data.name} />
+          <img src={product.img} alt={product.name} />
           <div>
-            <strong>{product.Data.name}</strong>
+            <strong>{product.name}</strong>
           </div>
         </header>
         {/* <p>{teacher.bio}</p> */}
         <footer>
           <p>
-            Preço/hora
-            <strong>{product.Data.price}€</strong>
+            Preço
+            <strong>{product.price}</strong>
           </p>
 
           <a
@@ -43,4 +42,4 @@ const TeacherItem: React.FC<ProductItemProps> = ({ product }) => {
   );
 };
 
-export default TeacherItem;
+export default ProductItem;

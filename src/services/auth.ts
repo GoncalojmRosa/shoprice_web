@@ -17,7 +17,7 @@ export interface Product {
   img: string
 }
 export interface ProductsResponse {
-  data: [Product]
+  data: Product[]
 }
 
 export interface Response {

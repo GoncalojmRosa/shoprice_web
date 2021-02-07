@@ -1,16 +1,17 @@
 import React, { FormEvent, useState } from 'react';
 import Input from '../../Components/Input';
 import PageHeader from '../../Components/PageHeader';
+import ProductItem from '../../Components/ProductItem';
 // import { Product } from '../../Components/ProductItem';
 
-import { getProducts, ProductsResponse } from '../../services/auth';
+import { getProducts, Product } from '../../services/auth';
 //CSS
 import './styles.css';
 
 export default function ItemsForm() {
   const [isModalOpen, setModalState] = useState(false);
   const [product, setProduct] = useState('');
-  const [result, setResult] = useState<ProductsResponse[]>([]);
+  const [result, setResult] = useState<Product[]>([]);
 
   const toggleModal = () => setModalState(!isModalOpen);
 
@@ -53,12 +54,12 @@ export default function ItemsForm() {
             Go
           </button>
         </form>
-        {/* <div>
-          {result.map((prods: ProductsResponse) => {
-            return <div key="a">{}</div>;
-          })}
-        </div> */}
       </PageHeader>
+      <div>
+        {result.map((prods: Product) => {
+          return <ProductItem key={prods.title} product={prods} />;
+        })}
+      </div>
       {/* <main></main> */}
     </div>
   );
