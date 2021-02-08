@@ -7,6 +7,7 @@ export interface Product {
   name: string;
   price: string;
   img: string;
+  url: string;
 }
 
 interface ProductItemProps {
@@ -32,7 +33,7 @@ const ProductItem: React.FC<ProductItemProps> = ({ product }) => {
 
           <a
             // onClick={createNewConnection}
-            href={`https://mercadao.pt/store/pingo-doce/search`}
+            href={product.url}
           >
             Ver na Loja Online
           </a>

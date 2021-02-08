@@ -15,6 +15,7 @@ export interface Product {
   name: string
   price: string
   img: string
+  url: string
 }
 export interface ProductsResponse {
   data: Product[]

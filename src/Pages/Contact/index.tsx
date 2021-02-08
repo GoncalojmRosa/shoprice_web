@@ -48,6 +48,7 @@ export default function Contact() {
     <div>
       <div id="page-teacher-form" className="container">
         <PageHeader
+          page="Contactar"
           title="Que incrivel que você quer dar aulas"
           description="O primeiro passo é preencher esse formulário de inscrição"
         />

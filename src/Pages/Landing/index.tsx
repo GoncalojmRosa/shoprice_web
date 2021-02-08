@@ -29,7 +29,7 @@ export default function Landing() {
           <div className="info-container">
             <h1>Shoprice</h1>
             <h2>
-              A Sua plataforma de comparação <br /> de preços online
+              A sua plataforma de comparação <br /> de preços online
             </h2>
           </div>
 

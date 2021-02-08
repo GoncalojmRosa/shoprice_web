@@ -49,11 +49,12 @@
   
   .buttons-container a {
     width: 30rem;
-    height: 10.4rem;
+    height: 7rem;
     border-radius: 0.8rem;
     font: 700 2.5rem Archivo;
     font-size: 3rem !important;
     display: flex;
+    border-radius: 5rem;
     align-items: center;
     justify-content: center;
     text-decoration: none;
@@ -66,19 +67,22 @@
   }
   
   .buttons-container a.study {
-    background: var(--color-primary-lighter);
+    background: #6C62FD;
   }
   
   .buttons-container a.give-classes {
-    background: var(--color-secundary);
+    border: solid;
+    color: black;
+
   }
   
   .buttons-container a.study:hover {
-    background: var(--color-primary-light);
+    background: #3F3D56;
   }
   
   .buttons-container a.give-classes:hover {
-    background: var(--color-secundary-dark);
+    background: #dddddd;
+    
   }
   
   .buttons-container a img {

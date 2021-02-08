@@ -1,16 +1,15 @@
 .holder-top-bar {
+  z-index: 1;
     width: 100vw;
     display: flex;
     align-items: center;
     justify-content: center;
     position: absolute;
+    background-color: #3F3D56;
     top: 0;
     left: 0;
     & + div {
-      margin-top: 7.2rem;
-    }
-    &.holder-dark {
-      background: var(--color-primary-dark);
+      margin-top: 5rem;
     }
   }
   
@@ -24,7 +23,7 @@
     padding: 1.6rem 0;
   
     & > img {
-      height: 1.6rem;
+      height: 3rem;
     }
   
     .profile-button {
@@ -46,7 +45,7 @@
         border: 0;
       }
       & + p + img {
-        background: var(--color-primary-dark);
+        background: red;
         height: 100%;
         padding: 0.7rem;
         border-radius: 0.8rem;
