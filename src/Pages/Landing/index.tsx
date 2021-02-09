@@ -40,7 +40,7 @@ export default function Landing() {
               Comparar
             </Link>
 
-            <Link to="/contact" className="give-classes">
+            <Link to="" className="give-classes">
               Contactar
             </Link>
           </div>
