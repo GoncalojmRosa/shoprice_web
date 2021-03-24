@@ -5,7 +5,7 @@ export interface UserData {
   name?: string
   avatar?: string
   email: string
-  password: string
+  password?: string
   badge?: string
   isConfirmed?: boolean
   emailToken?: string

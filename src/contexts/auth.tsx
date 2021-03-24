@@ -52,7 +52,6 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
   }
 
   async function signIn(params: { email: string; password: string; refresh_token?: string }) {
-    console.log(params);
     await auth
       .authenticate(params)
       .then((response) => {

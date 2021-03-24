@@ -1,4 +1,4 @@
-import React, { FormEvent, useContext, useEffect, useState } from 'react';
+import React, { FormEvent, useCallback, useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import PageHeader from '../../Components/PageHeader';
 import Input from '../../Components/Input';
@@ -14,15 +14,12 @@ function Profile() {
   const { setLocalUser, emitMessage, user } = useContext(AuthContext);
 
   const [name, setName] = useState('');
-  const [surname, setSurname] = useState('');
   const [avatar, setAvatar] = useState('');
-  const [whatsapp, setWhatsapp] = useState('');
   const [email, setEmail] = useState('');
-  const [bio, setBio] = useState('');
 
   async function handleUpdateProfile(e: FormEvent) {
     e.preventDefault();
-    await updateProfile({ name, whatsapp, email, bio, surname }).then(() => {
+    await updateProfile({ name, email, id: user.id }).then(() => {
       emitMessage('Seu perfil foi atualizado!');
     });
   }
@@ -39,27 +36,28 @@ function Profile() {
         reader.onload = imageIsLoaded;
         reader.readAsDataURL(el.files[0]);
 
-        // uploadAvatar({ image: el.files[0] }).then(() => {
-        //   emitMessage('Seu avatar foi atualizado!');
-        // getProfile().then((response) => {
-        //   const { email, name, avatar, id } = response.data.user;
-        //   // setLocalUser({ email, name, avatar, id });
-        //   console
-        // });
-        // });
+        uploadAvatar({ image: el.files[0], id: user.id }).then(() => {
+          // emitMessage('Seu avatar foi atualizado!');
+
+          getProfile(user).then((response) => {
+            const { email, name, avatar, id } = response.data.user;
+            setLocalUser({ email, name, avatar, id });
+          });
+        });
       }
     });
 
-    function uploadAvatar({ image }: { image: any }) {
+    function uploadAvatar({ id, image }: { image: any; id: any }) {
       const formData = new FormData();
       formData.append('image', image);
+      formData.append('id', id);
       const config = {
         headers: {
           'content-type': 'multipart/form-data',
         },
       };
 
-      return api.post('avatar', formData, config);
+      return api.put('avatar', formData, config);
     }
 
     function imageIsLoaded(e: ProgressEvent<FileReader>) {
@@ -67,28 +65,28 @@ function Profile() {
       setAvatar(e.target.result);
     }
   }
-  getProfile(user)
-    .then((res) => {
-      const { name, email, avatar } = res.data.user;
-      setName(name as string);
-      setAvatar(avatar as string);
-      setEmail(email as string);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+
+  useEffect(() => {
+    getProfile(user)
+      .then((res) => {
+        const { name, email, avatar } = res.data.user;
+        setName(name as string);
+        setAvatar(avatar as string);
+        setEmail(email as string);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  // console.log(a);
   // getProfile(true).then((response) => {
-  //   const { name, email, avatar, surname, bio, whatsapp } = response.data.user
+  //   const { name, email, avatar } = response.data.user;
 
-  //   const classes = response.data.classes
-
-  //   setName(name as string)
-  //   setSurname(surname as string)
-  //   setAvatar(avatar as string)
-  //   setBio(bio as string)
-  //   setWhatsapp(whatsapp as string)
-  //   setEmail(email as string)
-  // }),[]);
+  //   setName(name as string);
+  //   setAvatar(avatar as string);
+  //   setEmail(email as string);
+  // });
 
   return (
     <div id="page-teacher-profile" className="container">
@@ -109,7 +107,6 @@ function Profile() {
               </div>
             </div>
           </form>
-          <h2>{name + ' ' + surname}</h2>
           {/*<h3>{subject}</h3>*/}
         </div>
       </PageHeader>
@@ -121,21 +118,14 @@ function Profile() {
             <div id="personal-info">
               <div id="name-info">
                 <Input
+                  type="text"
                   label="Nome"
                   name="name"
                   value={name || ''}
                   onChange={(e) => setName(e.target.value)}
                 />
               </div>
-              <div id="surname-info">
-                <Input
-                  label="Sobrenome"
-                  id="surname-info"
-                  name="surname"
-                  value={surname || ''}
-                  onChange={(e) => setSurname(e.target.value)}
-                />
-              </div>
+
               <div id="email-info">
                 <Input
                   label="E-mail"
@@ -143,18 +133,6 @@ function Profile() {
                   value={email || ''}
                   type="email"
                   onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-              <div id="whatsapp-info">
-                <Input
-                  label="Whatsapp"
-                  name="whatsapp"
-                  value={whatsapp || ''}
-                  placeholder="+1122555554444"
-                  type="tel"
-                  accept="number"
-                  pattern="^\+(?:[0-9] ?){6,14}[0-9]"
-                  onChange={(e) => setWhatsapp(e.target.value)}
                 />
               </div>
             </div>
