@@ -143,7 +143,7 @@ function Profile() {
               Importante! <br />
               Preencha todos os dados
             </p>
-            <button type="submit">Salvar cadastro</button>
+            <button type="submit">Atualizar Perfil</button>
           </footer>
           <fieldset>
             <legend>
