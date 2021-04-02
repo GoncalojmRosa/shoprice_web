@@ -130,7 +130,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
         // @ts-ignore
         register,
         setLocalUser,
-        // emitMessage,
+        emitMessage,
       }}
     >
       <FlashMessage text={flash.text} type={flash.type} time={flash.time} />

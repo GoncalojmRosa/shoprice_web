@@ -9,7 +9,6 @@ import Register from '../Pages/register/Register'
 import UserProfile from '../Pages/Profile'
 import Notify from '../Pages/Notify'
 import Login from '../Pages/login/Login'
-import Test from '../Pages/Test/test'
 
 function AuthRoutes() {
   return (
@@ -22,7 +21,7 @@ function AuthRoutes() {
       {/* <Route path="/validate-account" exact component={ValidateAccount} /> */}
       
       <Route path="/notify" component={Notify} />
-      <Route path="/test" component={Test} />
+      {/* <Route path="/test" component={Test} /> */}
     </BrowserRouter>
   )
 }

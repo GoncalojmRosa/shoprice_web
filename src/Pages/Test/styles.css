@@ -1,16 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@200;400;700&family=Raleway:wght@400;700&display=swap'); /*font-family: 'Raleway', sans-serif;*/
-
-/*- Dark Blue (intro and email sign up background): hsl(217, 28%, 15%)
-- Dark Blue (main background): hsl(218, 28%, 13%)
-- Dark Blue (footer background): hsl(216, 53%, 9%)
-- Dark Blue (testimonials background): hsl(219, 30%, 18%)*/
+/* @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@200;400;700&family=Raleway:wght@400;700&display=swap');
 
 
 body{
     font-family: 'Open Sans', sans-serif;
     background-image:linear-gradient(hsl(218, 28%, 15%),hsl(217, 28%, 13%));
     font-size:14px;
-    overflow: visible !important;
+    overflow-y: auto !important;
 }
 
 .navbar{
@@ -403,4 +398,4 @@ footer{
     color:hsl(176, 68%, 64%);
     border:1px solid hsl(176, 68%, 64%);
 }
-
+ */

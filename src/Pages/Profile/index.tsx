@@ -1,5 +1,4 @@
-import React, { FormEvent, useCallback, useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { FormEvent, useContext, useEffect, useState } from 'react';
 import PageHeader from '../../Components/PageHeader';
 import Input from '../../Components/Input';
 import warningIcon from '../../Assets/warning.svg';
@@ -37,7 +36,7 @@ function Profile() {
         reader.readAsDataURL(el.files[0]);
 
         uploadAvatar({ image: el.files[0], id: user.id }).then(() => {
-          // emitMessage('Seu avatar foi atualizado!');
+          emitMessage('Seu avatar foi atualizado!');
 
           getProfile(user).then((response) => {
             const { email, name, avatar, id } = response.data.user;
@@ -78,15 +77,6 @@ function Profile() {
         console.log(err);
       });
   }, []);
-
-  // console.log(a);
-  // getProfile(true).then((response) => {
-  //   const { name, email, avatar } = response.data.user;
-
-  //   setName(name as string);
-  //   setAvatar(avatar as string);
-  //   setEmail(email as string);
-  // });
 
   return (
     <div id="page-teacher-profile" className="container">
@@ -145,12 +135,6 @@ function Profile() {
             </p>
             <button type="submit">Atualizar Perfil</button>
           </footer>
-          <fieldset>
-            <legend>
-              Suas aulas
-              <Link to="/give-classes">+ Nova aula</Link>
-            </legend>
-          </fieldset>
         </form>
       </main>
     </div>

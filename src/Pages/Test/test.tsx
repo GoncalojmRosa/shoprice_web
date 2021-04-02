@@ -11,9 +11,9 @@ function Test() {
         <div className="navbar">
           <img src={logo} alt="" />
           <div className="right-nav">
-            <a href="#">Features</a>
-            <a href="#">Team</a>
-            <a href="#">Sign In</a>
+            <a href="/">Features</a>
+            <a href="/">Team</a>
+            <a href="/">Sign In</a>
           </div>
         </div>
       </header>
@@ -95,7 +95,7 @@ function Test() {
               Securely share files and folders with friends, family, and colleagues for live
               collaboration. No email attachments required.
             </p>
-            <a href="#">
+            <a href="/">
               See how Fylo works{' '}
               <img
                 src="https://raw.githubusercontent.com/hammercait/fylo-dark-theme-landing-page/658fd0afb4462e6a7e94996ab981bb7d5b336997/images/icon-arrow.svg"
@@ -124,7 +124,7 @@ function Test() {
                 alt="profile pic"
               />
               <h5>Satish Patel</h5>
-              <h6>Founder & CEO, Huddle</h6>
+              <h6>Founder CEO, Huddle</h6>
             </div>
             <div className="card">
               <p>
@@ -137,7 +137,7 @@ function Test() {
                 alt="profile pic"
               />
               <h5>Bruce McKenzie</h5>
-              <h6>Founder & CEO, Huddle</h6>
+              <h6>Founder CEO, Huddle</h6>
             </div>
             <div className="card">
               <p>
@@ -151,7 +151,7 @@ function Test() {
                 alt="profile pic"
               />
               <h5>Iva Boyd</h5>
-              <h6>Founder & CEO, Huddle</h6>
+              <h6>Founder CEO, Huddle</h6>
             </div>
           </div>
         </div>
@@ -225,6 +225,7 @@ function Test() {
           </li>
         </ul>
       </footer>
+      <script src="https://kit.fontawesome.com/369c45c001.js" crossOrigin="anonymous" />
     </div>
   );
 }
