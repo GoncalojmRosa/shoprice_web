@@ -1,12 +1,9 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import backIconPurple from '../../Assets/backPurple.svg';
-import backIcon from '../../Assets/back.svg';
-import leaveIcon from '../../Assets/icons/leave.svg';
-import logoImg from '../../Assets/logo.svg';
-import logoImgPurple from '../../Assets/logoPurple.svg';
-
-import './styles.scss';
+import Group2 from '../../Assets/images/Group2.svg';
+import '../../Assets/Styles/style.min.css';
+import 'mdi/css/materialdesignicons.min.css';
+// import './styles.scss';
 import { AuthContext } from '../../contexts/auth';
 
 interface TopBarContainerProps {
@@ -31,37 +28,78 @@ const TopBarContainer: React.FunctionComponent<TopBarContainerProps> = ({
   }
 
   return (
-    <div className={`holder-top-bar ${!profile || (transparent && 'holder-dark')}`}>
-      {profile ? (
-        <div className="top-bar-container">
-          <Link to="/profile" className="profile-button">
-            <img src={user.avatar} alt="Perfil" />
-            <p>Olá {[user.name].join('!')}</p>
-          </Link>
-          <p>{title}</p>
-          <img src={leaveIcon} alt="Sair" onClick={(e) => handleSignOut()} />
+    <header id="header-section" style={{ zIndex: 2 }}>
+      <nav
+        className="navbar navbar-expand-lg pl-3 pl-sm-0"
+        style={{ backgroundColor: 'transparent' }}
+        id="navbar"
+      >
+        <div className="container">
+          <div className="navbar-brand-wrapper d-flex w-100">
+            <img src={Group2} alt="" />
+            <button
+              className="navbar-toggler ml-auto"
+              type="button"
+              data-toggle="collapse"
+              data-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span className="mdi mdi-menu navbar-toggler-icon"></span>
+            </button>
+          </div>
+          <div className="collapse navbar-collapse navbar-menu-wrapper" id="navbarSupportedContent">
+            <ul className="navbar-nav align-items-lg-center align-items-start ml-auto">
+              <li className="d-flex align-items-center justify-content-between pl-4 pl-lg-0">
+                <div className="navbar-collapse-logo">
+                  <img src={Group2} alt="" />
+                </div>
+                <button
+                  className="navbar-toggler close-button"
+                  type="button"
+                  data-toggle="collapse"
+                  data-target="#navbarSupportedContent"
+                  aria-controls="navbarSupportedContent"
+                  aria-expanded="false"
+                  aria-label="Toggle navigation"
+                >
+                  <span className="mdi mdi-close navbar-toggler-icon pl-5"></span>
+                </button>
+              </li>
+              <li className="nav-item">
+                {/* <a className="nav-link" href="#header-section">
+                    Home <span className="sr-only">(current)</span>
+                  </a> */}
+                <Link to="/Test" className="nav-link">
+                  Profile
+                </Link>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" href="#features-section">
+                  About
+                </a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" href="#digital-marketing-section">
+                  Blog
+                </a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" href="#feedback-section">
+                  Testimonials
+                </a>
+              </li>
+              <li className="nav-item btn-contact-us pl-4 pl-lg-0">
+                <button className="btn btn-info" data-toggle="modal" data-target="#exampleModal">
+                  Contact Us
+                </button>
+              </li>
+            </ul>
+          </div>
         </div>
-      ) : (
-        <div className="top-bar-container">
-          {linkToHome ? (
-            <Link to="/">
-              <img src={backIcon} alt="Voltar" />
-            </Link>
-          ) : (
-            <Link to="/">
-              <img src={backIconPurple} alt="Voltar" />
-            </Link>
-          )}
-
-          <p>{title}</p>
-          {logoColor ? (
-            <img src={logoImg} alt="Proffy" />
-          ) : (
-            <img src={logoImgPurple} alt="Proffy" />
-          )}
-        </div>
-      )}
-    </div>
+      </nav>
+    </header>
   );
 };
 

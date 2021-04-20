@@ -55,26 +55,26 @@ $flashsize: 9rem;
     .flash-icon {
       img {
         border: 1rem solid #ffbfc0;
-        background: var(--color-danger);
+        background: #e33d3d;
       }
     }
 
     .flash-content {
       border-left-color: #f37375;
-      background: linear-gradient(45deg, var(--color-danger), #f57b7d);
+      background: linear-gradient(45deg, #e33d3d, #f57b7d);
     }
   }
   &.success-message {
     .flash-icon {
       img {
         border: 1rem solid #aff5d0;
-        background: var(--color-secundary);
+        background: #04d361;
       }
     }
 
     .flash-content {
       border-left-color: #67db9e;
-      background: linear-gradient(45deg, var(--color-secundary), #6de0a8);
+      background: linear-gradient(45deg, #04d361, #6de0a8);
     }
   }
 }

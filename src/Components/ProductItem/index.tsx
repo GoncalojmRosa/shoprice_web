@@ -16,29 +16,28 @@ interface ProductItemProps {
 
 const ProductItem: React.FC<ProductItemProps> = ({ product }) => {
   return (
-    <div>
-      <article className="teacher-item">
-        <header>
-          <img src={product.img} alt={product.name} />
-          <div>
-            <strong>{product.name}</strong>
-          </div>
-        </header>
-        {/* <p>{teacher.bio}</p> */}
-        <footer>
-          <p>
-            Preço
-            <strong>{product.price}</strong>
+    <div className="wrapper-random">
+      <div className="outer">
+        <div className="content-item animated fadeInLeft">
+          <span className="bg animated fadeInDown">{product.title}</span>
+          <h1>
+            {product.name}
+            <br /> baseball hair
+          </h1>
+          <p className="paragraph">
+            Shadow your real allegiance to New York's Pirate radio with this cool cap featuring the
+            Graphic Know Wave logo.
           </p>
 
-          <a
-            // onClick={createNewConnection}
-            href={product.url}
-          >
-            Ver na Loja Online
-          </a>
-        </footer>
-      </article>
+          <div className="button">
+            <a href="#">{product.price}</a>
+            <a className="cart-btn" href="#">
+              <i className="cart-icon ion-bag"></i>ADD TO CART
+            </a>
+          </div>
+        </div>
+        <img src={product.img} width="300px" className="animated fadeInRight image-item" />
+      </div>
     </div>
   );
 };

@@ -2,6 +2,7 @@ import React, { FormEvent, useState } from 'react';
 import Input from '../../Components/Input';
 import PageHeader from '../../Components/PageHeader';
 import ProductItem from '../../Components/ProductItem';
+import TopBarContainer from '../../Components/TopBarContainer';
 // import { Product } from '../../Components/ProductItem';
 
 import { getProducts, Product } from '../../services/auth';
@@ -12,16 +13,20 @@ export default function ItemsForm() {
   const [isModalOpen, setModalState] = useState(false);
   const [product, setProduct] = useState('');
   const [result, setResult] = useState<Product[]>([]);
+  const [isClicked, setClicked] = useState(false);
+  const [style, setStyle] = useState('active');
+  const [defaultOption, setDefaultOption] = useState('All');
 
   const toggleModal = () => setModalState(!isModalOpen);
 
   function handleSearch(e: FormEvent) {
+    console.log(product);
     e.preventDefault();
     getProducts({ product })
       .then((res) => {
         console.log(res.data);
         // setResult(res.data.Data[0].);
-        // console.log(res.data);
+        console.log(res.data);
         setResult(res.data);
       })
       .catch((err) => {
@@ -29,38 +34,52 @@ export default function ItemsForm() {
       });
   }
 
+  function DropDownList(e: any) {
+    e.preventDefault();
+
+    setClicked(!isClicked);
+
+    // $('.dropdown ul li').click(function () {
+    //   var text = $(this).text();
+    //   $('.default_option').text(text);
+    //   $('.dropdown ul').removeClass('active');
+    // });
+  }
+
   return (
-    <div id="page-teacher-form" className="container">
-      {/* <TopBarContainer */}
-      <PageHeader
-        page={'Comparar'}
-        title={'Ainda bem que você decidiu poupar dinheiro'}
-        description={'O primeiro passo é criar a sua lista de compras'}
-      >
-        <form id="search-container" onSubmit={(e) => handleSearch(e)}>
-          {/* <input type="text" className="search-box" placeholder="Search For a Product.." /> */}
-          <div className="input-div">
-            <Input
-              name=""
-              label="asdas"
-              className="search-box"
-              value={product}
-              onChange={(e) => {
-                setProduct(e.target.value);
-              }}
-            />
+    <div>
+      <TopBarContainer />
+      <div className="wrapper">
+        <form onSubmit={handleSearch}>
+          <div className="search_box">
+            <div className="dropdown" onClick={DropDownList}>
+              <div className="default_option">{defaultOption}</div>
+              <ul className={isClicked ? style : ''}>
+                <li onClick={() => setDefaultOption('All')}>All</li>
+                <li onClick={() => setDefaultOption('Recent')}>Recent</li>
+                <li onClick={() => setDefaultOption('Popular')}>Popular</li>
+              </ul>
+            </div>
+            <div className="search_field">
+              <input
+                type="text"
+                className="input"
+                value={product}
+                placeholder="Search"
+                onChange={(e) => {
+                  setProduct(e.target.value);
+                }}
+              />
+              <i className="fas fa-search" onClick={handleSearch}></i>
+            </div>
           </div>
-          <button type="submit" className="search-button">
-            Go
-          </button>
         </form>
-      </PageHeader>
-      <div>
+      </div>
+      <div className="wrapper-random">
         {result.map((prods: Product) => {
           return <ProductItem key={prods.title} product={prods} />;
         })}
       </div>
-      {/* <main></main> */}
     </div>
   );
 }

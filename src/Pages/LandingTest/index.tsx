@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import Aos from 'aos';
 
 import 'mdi/css/materialdesignicons.min.css';
@@ -28,6 +28,9 @@ import Group126 from '../../Assets/images/Group126.svg';
 import Group115 from '../../Assets/images/Group115.svg';
 
 import CarouselComponent from '../../Components/Carousel/Carousel';
+import { Link } from 'react-router-dom';
+import Theme from '../../Hooks';
+import { AuthContext } from '../../contexts/auth';
 
 function LandingTest() {
   useEffect(() => {
@@ -75,9 +78,12 @@ function LandingTest() {
                   </button>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="#header-section">
+                  {/* <a className="nav-link" href="#header-section">
                     Home <span className="sr-only">(current)</span>
-                  </a>
+                  </a> */}
+                  <Link to="/Test" className="nav-link">
+                    Profile
+                  </Link>
                 </li>
                 <li className="nav-item">
                   <a className="nav-link" href="#features-section">

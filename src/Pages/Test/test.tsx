@@ -1,231 +1,167 @@
-import React from 'react';
+import React, { FormEvent, useContext, useEffect, useState } from 'react';
 import './styles.css';
-
+import cameraIcon from '../../Assets/icons/camera.svg';
 import shopping from '../../Assets/add_cart.svg';
 import logo from '../../Assets/logo.svg';
+import { getProfile, getSuggestions, Suggestions, updateProfile } from '../../services/auth';
+import api from '../../services/api';
+import { AuthContext } from '../../contexts/auth';
+import SuggestionsComponent from '../../Components/Suggestions';
 
 function Test() {
+  const { setLocalUser, emitMessage, user } = useContext(AuthContext);
+
+  const [name, setName] = useState('');
+  const [avatar, setAvatar] = useState('');
+  const [email, setEmail] = useState('');
+  const [suggestions, setSuggestion] = useState<Suggestions[]>([]);
+
+  async function handleUpdateProfile(e: FormEvent) {
+    e.preventDefault();
+    await updateProfile({ name, email, id: user.id }).then(() => {
+      emitMessage('Seu perfil foi atualizado!');
+    });
+  }
+
+  function handleUploadAvatar() {
+    const el = document.createElement('input');
+    el.setAttribute('type', 'file');
+    el.setAttribute('accept', 'image/*');
+    el.click();
+    el.addEventListener('change', async () => {
+      if (el.files && el.files[0]) {
+        let reader = new FileReader();
+
+        reader.onload = imageIsLoaded;
+        reader.readAsDataURL(el.files[0]);
+
+        uploadAvatar({ image: el.files[0], id: user.id }).then(() => {
+          emitMessage('Seu avatar foi atualizado!');
+
+          getProfile(user).then((response) => {
+            const { email, name, avatar, id } = response.data.user;
+            setLocalUser({ email, name, avatar, id });
+          });
+        });
+      }
+    });
+
+    function uploadAvatar({ id, image }: { image: any; id: any }) {
+      const formData = new FormData();
+      formData.append('image', image);
+      formData.append('id', id);
+      const config = {
+        headers: {
+          'content-type': 'multipart/form-data',
+        },
+      };
+
+      return api.put('avatar', formData, config);
+    }
+
+    function imageIsLoaded(e: ProgressEvent<FileReader>) {
+      // @ts-ignore
+      setAvatar(e.target.result);
+    }
+  }
+
+  useEffect(() => {
+    getProfile(user)
+      .then((res) => {
+        const { name, email, avatar } = res.data.user;
+        setName(name as string);
+        setAvatar(avatar as string);
+        setEmail(email as string);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    getSuggestions(user).then((res) => {
+      const sug = res.data;
+
+      setSuggestion(sug);
+      // setComments(comment);
+    });
+  }, []);
+
   return (
-    <div>
-      <header>
-        <div className="navbar">
-          <img src={logo} alt="" />
-          <div className="right-nav">
-            <a href="/">Features</a>
-            <a href="/">Team</a>
-            <a href="/">Sign In</a>
-          </div>
-        </div>
-      </header>
-      <div className="content">
-        <div className="section1">
-          <img src={shopping} alt="people and folders" />
-          <div className="mountain">
-            <div className="mountain-words">
-              <h1>All your files in one secure location, accessible anywhere.</h1>
-              <h2>
-                Fylo stores all your most important files in one secure location. Access them
-                whenever you need, share and collaborate with friends, family, and co-workers.
-              </h2>
-              <button className="get-started">Get Started</button>
-            </div>
-          </div>
-        </div>
+    <div className="container">
+      <div className="row">
+        <div className="col-md-12">
+          <div id="content" className="content content-full-width">
+            <div className="profile">
+              <div className="profile-header">
+                <div className="profile-header-cover"></div>
 
-        <div className="section2">
-          <div className="features">
-            <div className="tile access">
-              <img
-                src="https://raw.githubusercontent.com/hammercait/fylo-dark-theme-landing-page/658fd0afb4462e6a7e94996ab981bb7d5b336997/images/icon-access-anywhere.svg"
-                alt="access icon"
-              />
-              <h3>Access your files, anywhere</h3>
-              <p>
-                The ability to use a smartphone, tablet, or computer to access your account means
-                your files follow you everywhere.
-              </p>
-            </div>
-            <div className="tile security">
-              <img
-                src="https://raw.githubusercontent.com/hammercait/fylo-dark-theme-landing-page/658fd0afb4462e6a7e94996ab981bb7d5b336997/images/icon-security.svg"
-                alt="security icon"
-              />
-              <h3>Security you can trust</h3>
-              <p>
-                2-factor authentication and user-controlled encryption are just a couple of the
-                security features we allow to help secure your files.
-              </p>
-            </div>
-            <div className="tile real-time">
-              <img
-                src="https://raw.githubusercontent.com/hammercait/fylo-dark-theme-landing-page/658fd0afb4462e6a7e94996ab981bb7d5b336997/images/icon-collaboration.svg"
-                alt="clock icon"
-              />
-              <h3>Real-time collaboration</h3>
-              <p>
-                Securely share files and folders with friends, family, and colleagues for live
-                collaboration. No email attachments required.
-              </p>
-            </div>
-            <div className="tile storage">
-              <img
-                src="https://raw.githubusercontent.com/hammercait/fylo-dark-theme-landing-page/658fd0afb4462e6a7e94996ab981bb7d5b336997/images/icon-any-file.svg"
-                alt="storage icon"
-              />
-              <h3>Store any type of file</h3>
-              <p>
-                Whether you're sharing holidays, photos, or work documents, Fylo as you covered,
-                allowing for all file types to be securely stored and shared.
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="section3">
-          <img
-            src="https://github.com/hammercait/fylo-dark-theme-landing-page/blob/master/images/illustration-stay-productive.png?raw=true"
-            alt="people working"
-          />
-          <div className="sec3text">
-            <h1>Stay productive, wherever you are</h1>
-            <p>
-              Never let location be an issue when accessing your files. Fylo has you covered for all
-              your file storage needs.
-              <br />
-              <br />
-              Securely share files and folders with friends, family, and colleagues for live
-              collaboration. No email attachments required.
-            </p>
-            <a href="/">
-              See how Fylo works{' '}
-              <img
-                src="https://raw.githubusercontent.com/hammercait/fylo-dark-theme-landing-page/658fd0afb4462e6a7e94996ab981bb7d5b336997/images/icon-arrow.svg"
-                alt="tiny arrow"
-              />
-            </a>
-          </div>
-        </div>
-        <div className="section4">
-          <div className="quotes">
-            <img
-              id="quotation"
-              src="https://github.com/hammercait/fylo-dark-theme-landing-page/blob/master/images/bg-quotes.png?raw=true"
-              alt="quotation mark"
-            />
-          </div>
-          <div className="quote-cards">
-            <div className="card">
-              <p>
-                Fylo has improved our team productivity by an order of magnitude. Since making the
-                switch, our team has become a well-oiled collaboration machine.
-              </p>
-              <img
-                className="profile-pic"
-                src="https://github.com/hammercait/fylo-dark-theme-landing-page/blob/master/images/profile-1.jpg?raw=true"
-                alt="profile pic"
-              />
-              <h5>Satish Patel</h5>
-              <h6>Founder CEO, Huddle</h6>
-            </div>
-            <div className="card">
-              <p>
-                Fylo has improved our team productivity by an order of magnitude. Since making the
-                switch, our team has become a well-oiled collaboration machine.
-              </p>
-              <img
-                className="profile-pic"
-                src="https://github.com/hammercait/fylo-dark-theme-landing-page/blob/master/images/profile-2.jpg?raw=true"
-                alt="profile pic"
-              />
-              <h5>Bruce McKenzie</h5>
-              <h6>Founder CEO, Huddle</h6>
-            </div>
-            <div className="card">
-              <p>
-                Fylo has improved our team productivity by an order of magnitude. Since making the
-                switch, our team has become a well-oiled collaboration machine.
-              </p>
+                <div className="profile-header-content">
+                  <div className="profile-header-img">
+                    <img src={avatar} alt="" />
+                    <img
+                      src={cameraIcon}
+                      alt="Ícone Camera"
+                      className="camera-icon"
+                      onClick={(e) => {
+                        handleUploadAvatar();
+                      }}
+                    />
+                  </div>
 
-              <img
-                className="profile-pic"
-                src="https://github.com/hammercait/fylo-dark-theme-landing-page/blob/master/images/profile-3.jpg?raw=true"
-                alt="profile pic"
-              />
-              <h5>Iva Boyd</h5>
-              <h6>Founder CEO, Huddle</h6>
+                  <div className="profile-header-info">
+                    <h4 className="m-t-10 m-b-5">{name}</h4>
+                    <p className="m-b-10">{user.badge}</p>
+                    <a href="#" className="btn btn-sm btn-info mb-2">
+                      Editar Perfil
+                    </a>
+                  </div>
+                </div>
+
+                <ul className="profile-header-tab nav nav-tabs">
+                  <li className="nav-item">
+                    <a href="#profile-post" className="nav-link active show" data-toggle="tab">
+                      POSTS
+                    </a>
+                  </li>
+                  <li className="nav-item">
+                    <a href="#profile-about" className="nav-link" data-toggle="tab">
+                      ABOUT
+                    </a>
+                  </li>
+                </ul>
+              </div>
             </div>
-          </div>
-        </div>
-        <div className="section5">
-          <div className="contact-box">
-            <h1>Get early access today</h1>
-            <p>
-              It only takes a minute to sign up and our free starter tier is extremely generous. If
-              you have any questions, our support team would be happy to help you.
-            </p>
-            <form action="#">
-              <input type="email" id="email" name="email" placeholder="email@example.com" />
-              <input id="submit" type="submit" value="Get Started For Free" />
-            </form>
+
+            {/* <div className="profile-content">
+              <div className="tab-content p-0">
+                <div className="tab-pane fade active show" id="profile-post">
+                  <ul className="timeline">
+                    <li> */}
+            {suggestions.map((prods: Suggestions) => {
+              return (
+                <SuggestionsComponent
+                  name={name}
+                  avatar={avatar}
+                  data={prods}
+                  comments={prods.comments}
+                  // user={prods.comments}
+                />
+              );
+            })}
+            {/* </li>
+                    <li>
+                      <div className="timeline-icon">
+                        <a href="javascript:;">&nbsp;</a>
+                      </div>
+
+                      <div className="timeline-body">Loading...</div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div> */}
           </div>
         </div>
       </div>
-      <footer>
-        <div className="left">
-          <img
-            id="logo"
-            src="https://raw.githubusercontent.com/hammercait/fylo-dark-theme-landing-page/658fd0afb4462e6a7e94996ab981bb7d5b336997/images/logo.svg"
-            alt="logo"
-          />
-          <div className="left2">
-            <img
-              id="pin"
-              src="https://raw.githubusercontent.com/hammercait/fylo-dark-theme-landing-page/658fd0afb4462e6a7e94996ab981bb7d5b336997/images/icon-location.svg"
-              alt="location pin"
-            />
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-              incididunt ut labore et dolore magna aliqua
-            </p>
-          </div>
-        </div>
-        <div className="contact">
-          <div>
-            <img
-              src="https://raw.githubusercontent.com/hammercait/fylo-dark-theme-landing-page/658fd0afb4462e6a7e94996ab981bb7d5b336997/images/icon-phone.svg"
-              alt="phone"
-            />
-            <p>+1-543-123-4567</p>
-          </div>
-          <div>
-            <img
-              src="https://raw.githubusercontent.com/hammercait/fylo-dark-theme-landing-page/658fd0afb4462e6a7e94996ab981bb7d5b336997/images/icon-email.svg"
-              alt="email"
-            />
-            <p>example@fylo.com</p>
-          </div>
-        </div>
-        <ul className="info">
-          <li>About Us</li>
-          <li>Contact Us</li>
-          <li>Jobs</li>
-          <li>Terms</li>
-          <li>Press</li>
-          <li>Privacy</li>
-          <li>Blog</li>
-        </ul>
-        <ul className="social">
-          <li>
-            <i className="fab fa-facebook-f"></i>
-          </li>
-          <li>
-            <i className="fab fa-twitter"></i>
-          </li>
-          <li>
-            <i className="fab fa-instagram"></i>
-          </li>
-        </ul>
-      </footer>
-      <script src="https://kit.fontawesome.com/369c45c001.js" crossOrigin="anonymous" />
     </div>
   );
 }

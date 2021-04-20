@@ -1,7 +1,7 @@
 import api from './api'
 
 export interface UserData {
-  id?: string
+  id: string
   name?: string
   avatar?: string
   email: string
@@ -30,6 +30,23 @@ export interface Response {
 }
 
 
+export interface Suggestions {
+  id: Int16Array
+  text: string
+  likes: Int16Array
+  shares: Int16Array
+  views: Int16Array
+  comments: []
+  user_id: Int16Array
+  _created_at: string
+  name: string
+  avatar: string
+}
+export interface SuggestionsResponse {
+  data: Suggestions[]
+}
+
+
 
 
 
@@ -49,4 +66,8 @@ export function updateProfile(params: object): Promise<Response> {
 
 export function getProducts(params: object): Promise<ProductsResponse> {
   return api.post('/products', params)
+}
+
+export function getSuggestions(params: object): Promise<SuggestionsResponse> {
+  return api.post('/userSuggestion', params)
 }

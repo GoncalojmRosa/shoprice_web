@@ -1,106 +1,130 @@
+.wrapper-random {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	float:left;
+	font-family: Montserrat;
+	width: 100%;
+	height: 80vh;
+	z-index: -2;
+}
+
+.outer {
+	position: relative;
+	background: #fff;
+	height: 350px;
+	width: 550px;
+	overflow: hidden;
+	display: flex;
+	align-items: center;
+	margin-left: 20px;
+	margin-top: 8rem;
+	z-index: -1;
+}
+
+.image-item {
+	position: absolute;
+	top: 0px;
+	right: -20px;
+	z-index: 0;
+	animation-delay: 0.5s;
+}
+
+.content-item {
+	animation-delay: 0.3s;
+	position: absolute;
+	left: 20px;
+	z-index: 3
+	
+}
+
+h1 {
+	color: #111;
+}
+
+.paragraph {
+	width: 280px;
+	font-size: 13px;
+	line-height: 1.4;
+	color: #aaa;
+	margin: 20px 0;
+	
+}
+
+.bg {
+	display: inline-block;
+	color: #fff;
+	background: cornflowerblue;
+	padding: 5px 10px;
+	border-radius: 50px;
+	font-size: .7em;
+}
+.button {
+	width: fit-content;
+	height: fit-content;
+	margin-top: 10px;
+	
+	
+	
+}
+
+.button a {
+	display: inline-block;
+	overflow: hidden;
+	position: relative;
+	font-size: 11px;
+	color: #111;
+	text-decoration: none;
+	padding: 10px 15px;
+	border: 1px solid #aaa;
+	font-weight: bold;
+	
+	
+}
+
+.button a:after{
+	content: "";
+	position: absolute;
+	top: 0;
+	right: -10px;
+	width: 0%;
+	background: #111;
+	height: 100%;
+	z-index: -1;
+	transition: width 0.3s ease-in-out;
+	transform: skew(-25deg);
+	transform-origin: right;
+}
+
+.button a:hover:after {
+	width: 150%;
+	left: -10px;
+	transform-origin: left;
+	
+}
+
+.button a:hover {
+	color: #fff;
+	transition: all 0.5s ease;
+}
 
 
-.teacher-item {
-    background-color: var(--color-background);
-    border: 1px solid var(--color-line-in-white);
-    border-radius: 0.8rem;
-    margin-top: 2.4rem;
-  }
-  
-  .teacher-item header {
-    padding: 3.2rem 2rem;
-    display: flex;
-    align-items: center;
-  }
-  
-  .teacher-item header img {
-    width: 8rem;
-    height: 8rem;
-    border-radius: 50%;
-  }
-  
-  .teacher-item header div {
-    margin-left: 2.4rem;
-  }
-  
-  .teacher-item header div strong {
-    font: 700 2.4rem Archivo;
-    display: block;
-    color: var(--color-text-title);
-  }
-  
-  .teacher-item header div span {
-    font-size: 1.6rem;
-    display: block;
-    margin-top: 0.4rem;
-  }
-  
-  .teacher-item > p {
-    padding: 0 2rem;
-    font-size: 1.6rem;
-    line-height: 2.8rem;
-  }
-  
-  .teacher-item footer {
-    padding: 3.2rem 2rem;
-    background: var(--color-box-footer);
-    border-top: 1px solid var(--color-line-in-white);
-    margin-top: 3.2rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  
-  .teacher-item footer p strong {
-    color: var(--color-primary);
-    font-size: 1.6rem;
-    display: block;
-  }
-  
-  .teacher-item footer a {
-    width: 20rem;
-    height: 5.6rem;
-    display: block;
-    background: var(--color-secundary);
-    color: var(--color-button-text);
-    border: 0;
-    border-radius: 0.8rem;
-    cursor: pointer;
-    font: 700 1.4rem Archivo;
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    transition: 0.2s;
-    text-decoration: none;
-  }
-  
-  .teacher-item footer a:hover {
-    background: var(--color-secundary-dark);
-  }
-  
-  @media (min-width: 700px) {
-    .teacher-item header,
-    .teacher-item footer {
-      padding: 3.2rem;
-    }
-  
-    .teacher-item > p {
-      padding: 0 3.2rem;
-    }
-  
-    .teacher-item footer p strong {
-      display: initial;
-      margin-left: 1.6rem;
-    }
-  
-    .teacher-item footer button {
-      width: 24.5rem;
-      font-size: 1.6rem;
-      justify-content: center;
-    }
-  
-    .teacher-item footer button img {
-      margin-right: 1.6rem;
-    }
-  }
-  
+.button a:nth-of-type(1) {
+	border-radius: 50px 0 0 50px;
+	border-right: none;
+}
+
+.button a:nth-of-type(2) {
+	border-radius: 0px 50px 50px 0;
+}
+
+.cart-icon {
+	padding-right: 8px;
+	
+}
+
+.footer {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+}
