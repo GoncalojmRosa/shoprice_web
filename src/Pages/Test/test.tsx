@@ -86,68 +86,69 @@ function Test() {
   }, []);
 
   return (
-    <div className="container">
-      <div className="row">
-        <div className="col-md-12">
-          <div id="content" className="content content-full-width">
-            <div className="profile">
-              <div className="profile-header">
-                <div className="profile-header-cover"></div>
+    <div className="body">
+      <div className="container">
+        <div className="row">
+          <div className="col-md-12">
+            <div id="content" className="content content-full-width">
+              <div className="profile">
+                <div className="profile-header">
+                  <div className="profile-header-cover"></div>
 
-                <div className="profile-header-content">
-                  <div className="profile-header-img">
-                    <img src={avatar} alt="" />
-                    <img
-                      src={cameraIcon}
-                      alt="Ícone Camera"
-                      className="camera-icon"
-                      onClick={(e) => {
-                        handleUploadAvatar();
-                      }}
-                    />
+                  <div className="profile-header-content">
+                    <div className="profile-header-img">
+                      <img src={avatar} alt="" />
+                      <img
+                        src={cameraIcon}
+                        alt="Ícone Camera"
+                        className="camera-icon"
+                        onClick={(e) => {
+                          handleUploadAvatar();
+                        }}
+                      />
+                    </div>
+
+                    <div className="profile-header-info">
+                      <h4 className="m-t-10 m-b-5">{name}</h4>
+                      <p className="m-b-10">{user.badge}</p>
+                      <a href="#" className="btn btn-sm btn-info mb-2">
+                        Editar Perfil
+                      </a>
+                    </div>
                   </div>
 
-                  <div className="profile-header-info">
-                    <h4 className="m-t-10 m-b-5">{name}</h4>
-                    <p className="m-b-10">{user.badge}</p>
-                    <a href="#" className="btn btn-sm btn-info mb-2">
-                      Editar Perfil
-                    </a>
-                  </div>
+                  <ul className="profile-header-tab nav nav-tabs">
+                    <li className="nav-item">
+                      <a href="#profile-post" className="nav-link active show" data-toggle="tab">
+                        POSTS
+                      </a>
+                    </li>
+                    <li className="nav-item">
+                      <a href="#profile-about" className="nav-link" data-toggle="tab">
+                        ABOUT
+                      </a>
+                    </li>
+                  </ul>
                 </div>
-
-                <ul className="profile-header-tab nav nav-tabs">
-                  <li className="nav-item">
-                    <a href="#profile-post" className="nav-link active show" data-toggle="tab">
-                      POSTS
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a href="#profile-about" className="nav-link" data-toggle="tab">
-                      ABOUT
-                    </a>
-                  </li>
-                </ul>
               </div>
-            </div>
 
-            {/* <div className="profile-content">
+              {/* <div className="profile-content">
               <div className="tab-content p-0">
                 <div className="tab-pane fade active show" id="profile-post">
                   <ul className="timeline">
                     <li> */}
-            {suggestions.map((prods: Suggestions) => {
-              return (
-                <SuggestionsComponent
-                  name={name}
-                  avatar={avatar}
-                  data={prods}
-                  comments={prods.comments}
-                  // user={prods.comments}
-                />
-              );
-            })}
-            {/* </li>
+              {suggestions.map((prods: Suggestions) => {
+                return (
+                  <SuggestionsComponent
+                    name={name}
+                    avatar={avatar}
+                    data={prods}
+                    comments={prods.comments}
+                    // user={prods.comments}
+                  />
+                );
+              })}
+              {/* </li>
                     <li>
                       <div className="timeline-icon">
                         <a href="javascript:;">&nbsp;</a>
@@ -159,6 +160,7 @@ function Test() {
                 </div>
               </div>
             </div> */}
+            </div>
           </div>
         </div>
       </div>

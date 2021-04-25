@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Aos from 'aos';
 
 import 'mdi/css/materialdesignicons.min.css';
@@ -29,12 +29,55 @@ import Group115 from '../../Assets/images/Group115.svg';
 
 import CarouselComponent from '../../Components/Carousel/Carousel';
 import { Link } from 'react-router-dom';
-import Theme from '../../Hooks';
 import { AuthContext } from '../../contexts/auth';
+import 'intro.js/introjs.css';
+
+import logo from '../../Assets/icons/Vector.svg';
+// import 'intro.js/themes/introjs-modern.css';
+
+const { Steps, Hints } = require('intro.js-react');
 
 function LandingTest() {
+  const [enableIntro, setEnableIntro] = useState(true);
+
+  const steps = [
+    {
+      element: '.selector1',
+      intro: 'test 1',
+      // position: 'right',
+      // tooltipClass: 'myTooltipClass',
+      // highlightClass: 'myHighlightClass',
+    },
+    {
+      element: '.nav-link',
+      intro: 'test 2',
+    },
+    {
+      element: '.selector3',
+      intro: 'test 3',
+    },
+  ];
+  const hints = [
+    {
+      element: '.nav-link',
+      hint: 'test 1',
+      hintPosition: 'middle-middle',
+      doneLabel: 'Ok',
+    },
+    {
+      element: '.selector2',
+      hint: 'test 2',
+    },
+  ];
+
+  const options = {
+    doneLabel: 'Skip',
+    // skipLabel: 'Skip',
+  };
+
   useEffect(() => {
     Aos.init({ duration: 3000 });
+    // setLoading(false);
   }, []);
 
   return (
@@ -43,7 +86,8 @@ function LandingTest() {
         <nav className="navbar navbar-expand-lg pl-3 pl-sm-0" id="navbar">
           <div className="container">
             <div className="navbar-brand-wrapper d-flex w-100">
-              <img src={Group2} alt="" />
+              {/* <img src={logo} alt="" /> */}
+              Shoprice
               <button
                 className="navbar-toggler ml-auto"
                 type="button"
@@ -60,11 +104,18 @@ function LandingTest() {
               className="collapse navbar-collapse navbar-menu-wrapper"
               id="navbarSupportedContent"
             >
+              <Steps
+                enabled={enableIntro}
+                steps={steps}
+                initialStep={0}
+                onExit={() => setEnableIntro(false)}
+                options={options}
+              />
+
+              {/* <Hints enabled={true} hints={hints} /> */}
               <ul className="navbar-nav align-items-lg-center align-items-start ml-auto">
                 <li className="d-flex align-items-center justify-content-between pl-4 pl-lg-0">
-                  <div className="navbar-collapse-logo">
-                    <img src={Group2} alt="" />
-                  </div>
+                  <div className="navbar-collapse-logo">{/* <img src={Group2} alt="" /> */}</div>
                   <button
                     className="navbar-toggler close-button"
                     type="button"
@@ -86,18 +137,18 @@ function LandingTest() {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="#features-section">
-                    About
+                  <a className="nav-link" href="#digital-marketing-section">
+                    Sobre
                   </a>
                 </li>
                 <li className="nav-item">
                   <a className="nav-link" href="#digital-marketing-section">
-                    Blog
+                    Doar
                   </a>
                 </li>
                 <li className="nav-item">
                   <a className="nav-link" href="#feedback-section">
-                    Testimonials
+                    Sugestões
                   </a>
                 </li>
                 <li className="nav-item btn-contact-us pl-4 pl-lg-0">
@@ -113,12 +164,11 @@ function LandingTest() {
       <div className="banner">
         <div className="container">
           <h1 className="font-weight-semibold">
-            Search engine optimisation &<br />
-            Marketing.
+            Compare preços entre <br />
+            supermercados portugueses.
           </h1>
           <h6 className="font-weight-normal text-muted pb-3">
-            Simple is a simple template with a creative design that solves all your marketing and
-            SEO queries.
+            Shoprice é uma plataforma totalmente segura e inovadora no mercado português.
           </h6>
           <div>
             <button className="btn btn-opacity-light mr-1">Get started</button>
@@ -131,11 +181,9 @@ function LandingTest() {
         <div className="container">
           <section className="features-overview" id="features-section">
             <div className="content-header">
-              <h2>How does it works</h2>
+              <h2>Como funciona?</h2>
               <h6 className="section-subtitle text-muted">
-                One theme that serves as an easy-to-use operational toolkit
-                <br />
-                that meets customer's needs.
+                Basta pesquisar pelo produto que pretende e nós fazemos o resto.
               </h6>
             </div>
             <div className="d-md-flex justify-content-between">
@@ -143,16 +191,16 @@ function LandingTest() {
                 <div className="features-width">
                   <img src={Group12} alt="" className="img-icons" />
                   <h5 className="py-3">
-                    Speed
+                    Experiência
                     <br />
-                    Optimisation
+                    incrível
                   </h5>
                   <p className="text-muted">
                     Lorem ipsum dolor sit amet, tincidunt vestibulum. Fusce egeabus consectetuer
                     turpis, suspendisse.
                   </p>
                   <a href="#">
-                    <p className="readmore-link">Readmore</p>
+                    <p className="readmore-link">Ler Mais</p>
                   </a>
                 </div>
               </div>
@@ -160,9 +208,9 @@ function LandingTest() {
                 <div className="features-width">
                   <img src={Group7} alt="" className="img-icons" />
                   <h5 className="py-3">
-                    SEO and
+                    Preços
                     <br />
-                    Backlinks
+                    100% reais
                   </h5>
                   <p className="text-muted">
                     Lorem ipsum dolor sit amet, tincidunt vestibulum. Fusce egeabus consectetuer
@@ -177,9 +225,9 @@ function LandingTest() {
                 <div className="features-width">
                   <img src={Group5} alt="" className="img-icons" />
                   <h5 className="py-3">
-                    Content
+                    Filtre por
                     <br />
-                    Marketing
+                    categorias
                   </h5>
                   <p className="text-muted">
                     Lorem ipsum dolor sit amet, tincidunt vestibulum. Fusce egeabus consectetuer
@@ -196,9 +244,9 @@ function LandingTest() {
             <div className="row align-items-center">
               <div className="col-12 col-lg-7 grid-margin grid-margin-lg-0" data-aos="fade-right">
                 <h3 className="m-0">
-                  We Offer a Full Range
+                  Oferecemos uma Grande gama
                   <br />
-                  of Digital Marketing Services!
+                  de supermercados Portugueses
                 </h3>
                 <div className="col-lg-7 col-xl-6 p-0">
                   <p className="py-4 m-0 text-muted">
@@ -226,17 +274,17 @@ function LandingTest() {
               </div>
               <div className="col-12 col-lg-5 flex-item grid-margin" data-aos="fade-left">
                 <h3 className="m-0">
-                  Leading Digital Agency
+                  Lideramos as
                   <br />
-                  for Business Solution.
+                  comparações em Portugal.
                 </h3>
                 <div className="col-lg-9 col-xl-8 p-0">
                   <p className="py-4 m-0 text-muted">
-                    Power-packed with impressive features and well-optimized, this template is
-                    designed to provide the best performance in all circumstances.
+                    Temos funcionalidades impressionantes e bem optimizadas prontas para serem
+                    usadas estando desenhadas com o intuito de o ajuda.
                   </p>
                   <p className="pb-2 font-weight-medium text-muted">
-                    Its smart features make it a powerful stand-alone website building tool.
+                    Garantimos uma ferramenta autônoma e inteligente.
                   </p>
                 </div>
                 <button className="btn btn-info">Readmore</button>
@@ -246,7 +294,7 @@ function LandingTest() {
           <section className="case-studies" id="case-studies-section">
             <div className="row grid-margin">
               <div className="col-12 text-center pb-5">
-                <h2>Our case studies</h2>
+                <h2>Aquilo que realmente importa</h2>
                 <h6 className="section-subtitle text-muted">
                   Lorem ipsum dolor sit amet, tincidunt vestibulum.
                 </h6>
@@ -269,7 +317,7 @@ function LandingTest() {
                       </div>
                     </div>
                     <div className="card-details text-center pt-4">
-                      <h6 className="m-0 pb-1">Online Marketing</h6>
+                      <h6 className="m-0 pb-1">Proteger os seus dados</h6>
                       <p>Seo, Marketing</p>
                     </div>
                   </div>
@@ -294,7 +342,7 @@ function LandingTest() {
                       </div>
                     </div>
                     <div className="card-details text-center pt-4">
-                      <h6 className="m-0 pb-1">Web Development</h6>
+                      <h6 className="m-0 pb-1">Mostrar Preços reais</h6>
                       <p>Developing, Designing</p>
                     </div>
                   </div>
@@ -319,7 +367,7 @@ function LandingTest() {
                       </div>
                     </div>
                     <div className="card-details text-center pt-4">
-                      <h6 className="m-0 pb-1">Web Designing</h6>
+                      <h6 className="m-0 pb-1">Design apelativo e moderno</h6>
                       <p>Designing, Developing</p>
                     </div>
                   </div>
@@ -346,7 +394,7 @@ function LandingTest() {
                       </div>
                     </div>
                     <div className="card-details text-center pt-4">
-                      <h6 className="m-0 pb-1">Software Development</h6>
+                      <h6 className="m-0 pb-1">Multiplataforma</h6>
                       <p>Developing, Designing</p>
                     </div>
                   </div>
@@ -357,7 +405,7 @@ function LandingTest() {
           <section className="customer-feedback" id="feedback-section" data-aos="fade-right">
             <div>
               <div className="col-12 text-center pb-5">
-                <h2>What our customers have to say</h2>
+                <h2>O que os nosso clientes têm a dizer</h2>
                 <h6 className="section-subtitle text-muted m-0">
                   Lorem ipsum dolor sit amet, tincidunt vestibulum.
                 </h6>
@@ -373,40 +421,39 @@ function LandingTest() {
             <div className="contact-us-bgimage grid-margin">
               <div className="pb-4">
                 <h4 className="px-3 px-md-0 m-0" data-aos="fade-down">
-                  Do you have any projects?
+                  Tem alguma Sugestão?
                 </h4>
                 <h4 className="pt-1" data-aos="fade-down">
-                  Contact us
+                  Envie-nos
                 </h4>
               </div>
               <div data-aos="fade-up">
-                <button className="btn btn-rounded btn-outline-danger">Contact us</button>
+                <button className="btn btn-rounded btn-outline-danger">Sugerir</button>
               </div>
             </div>
           </section>
           <section className="contact-details" id="contact-details-section">
             <div className="row text-center text-md-left">
               <div className="col-12 col-md-6 col-lg-3 grid-margin">
-                <img src={Group2} alt="" className="pb-2" />
+                {/* <img src={Group2} alt="" className="pb-2" /> */}
+                Shoprice
                 <div className="pt-2">
-                  <p className="text-muted m-0">mikayla_beer@feil.name</p>
-                  <p className="text-muted m-0">906-179-8309</p>
+                  <p className="text-muted m-0">shoprice@gmail.com</p>
+                  <p className="text-muted m-0">-------------</p>
                 </div>
               </div>
               <div className="col-12 col-md-6 col-lg-3 grid-margin">
-                <h5 className="pb-2">Get in Touch</h5>
-                <p className="text-muted">
-                  Don’t miss any updates of our new templates and extensions.!
-                </p>
+                <h5 className="pb-2">Entre em Contacto</h5>
+                <p className="text-muted">Não perca nenhuma atualização na nossa App.!</p>
                 <form>
                   <input type="text" className="form-control" id="Email" placeholder="Email id" />
                 </form>
                 <div className="pt-3">
-                  <button className="btn btn-dark">Subscribe</button>
+                  <button className="btn btn-dark">Subscrever</button>
                 </div>
               </div>
               <div className="col-12 col-md-6 col-lg-3 grid-margin">
-                <h5 className="pb-2">Our Guidelines</h5>
+                <h5 className="pb-2">Diretrizes</h5>
                 <a href="#">
                   <p className="m-0 pb-2">Terms</p>
                 </a>
@@ -421,11 +468,11 @@ function LandingTest() {
                 </a>
               </div>
               <div className="col-12 col-md-6 col-lg-3 grid-margin">
-                <h5 className="pb-2">Our address</h5>
+                <h5 className="pb-2">Onde nos situamos</h5>
                 <p className="text-muted">
-                  518 Schmeler Neck
+                  Portugal
                   <br />
-                  Bartlett. Illinois
+                  Castelo Branco
                 </p>
                 <div className="d-flex justify-content-center justify-content-md-start">
                   <a href="#">
@@ -446,11 +493,11 @@ function LandingTest() {
           </section>
           <footer className="border-top">
             <p className="text-center text-muted pt-4">
-              Copyright © 2019
-              <a href="https://www.bootstrapdash.com/" className="px-1">
-                Bootstrapdash.
+              Copyright © 2021
+              <a href="#" className="px-1">
+                Gonçalo Rosa.
               </a>
-              All rights reserved.
+              Direitos Reservados.
             </p>
           </footer>
           <div

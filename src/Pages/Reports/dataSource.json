@@ -1,0 +1,231 @@
+{
+    
+    "cardData": [
+        {
+            
+            "Title": "Task - 29001",
+            "Status": "Open",
+            "Summary": "Analyze customer requirements.",
+            "Priority": "High",
+            "Tags": "Bug, Release Bug"
+        },
+        {
+            
+            "Title": "Task - 29002",
+            "Status": "InProgress",
+            "Summary": "Add responsive support to applicaton",
+            "Priority": "Low",
+            "Tags": "Story, Kanban"
+        },
+        {
+            
+            "Title": "Task - 29003",
+            "Status": "Open",
+            "Summary": "Show the retrived data from the server in grid control.",
+            "Priority": "High",
+            "Tags": "Bug, Breaking Issue"
+        },
+        {
+            
+            "Title": "Task - 29004",
+            "Status": "Open",
+            "Summary": "Fix the issues reported in the IE browser.",
+            "Priority": "High",
+            "Tags": "Bug, Customer"
+        },
+        {
+            
+            "Title": "Task - 29005",
+            "Status": "Review",
+            "Summary": "Improve application performance.",
+            "Priority": "Normal",
+            "Tags": "Story, Kanban"
+        },
+        {
+            
+            "Title": "Task - 29009",
+            "Status": "Review",
+            "Summary": "API Improvements.",
+            "Priority": "Critical",
+            "Tags": "Bug, Customer"
+        },
+        {
+            
+            "Title": "Task - 29010",
+            "Status": "Close",
+            "Summary": "Fix cannot open user's default database sql error.",
+            "Priority": "High",
+            "Tags": "Bug, Internal"
+        },
+        {
+            
+            "Title": "Task - 29015",
+            "Status": "Open",
+            "Summary": "Fix the filtering issues reported in safari.",
+            "Priority": "Critical",
+            "Tags": "Bug, Breaking Issue"
+        },
+        {
+            
+            "Title": "Task - 29016",
+            "Status": "Review",
+            "Summary": "Fix the issues reported in IE browser.",
+            "Priority": "High",
+            "Tags": "Bug, Customer"
+        },
+        {
+            
+            "Title": "Task - 29017",
+            "Status": "Review",
+            "Summary": "Enhance editing functionality.",
+            "Priority": "Normal",
+            "Tags": "Story, Kanban"
+        },
+        {
+            
+            "Title": "Task - 29018",
+            "Status": "Close",
+            "Summary": "Arrange web meeting with customer to get login page requirement.",
+            "Priority": "High",
+            "Tags": "Feature"
+        },
+        {
+            
+            "Title": "Task - 29020",
+            "Status": "Close",
+            "Summary": "Login page validation.",
+            "Priority": "Low",
+            "Tags": "Bug"
+        },
+        {
+            
+            "Title": "Task - 29021",
+            "Status": "Close",
+            "Summary": "Test the application in IE browser.",
+            "Priority": "Normal",
+            "Tags": "Bug"
+        },
+        {
+            
+            "Title": "Task - 29022",
+            "Status": "Close",
+            "Summary": "Analyze stored procedure.",
+            "Priority": "Critical",
+            "Tags": "CustomSample"
+        },
+        {
+            
+            "Title": "Task - 29024",
+            "Status": "Review",
+            "Summary": "Check login page validation.",
+            "Priority": "Low",
+            "Tags": "Story"
+        },
+        {
+            
+            "Title": "Task - 29025",
+            "Status": "Close",
+            "Summary": "Add input validation for editing.",
+            "Priority": "Critical",
+            "Tags": "Bug, Breaking Issue"
+        },
+        {
+            
+            "Title": "Task - 29026",
+            "Status": "InProgress",
+            "Summary": "Improve performance of editing functionality.",
+            "Priority": "Critical",
+            "Tags": "Bug, Customer"
+        },
+        {
+            
+            "Title": "Task - 29027",
+            "Status": "Open",
+            "Summary": "Arrange web meeting for cutomer requirement.",
+            "Priority": "High",
+            "Tags": "Story"
+        },
+        {
+            
+            "Title": "Task - 29029",
+            "Status": "Review",
+            "Summary": "Fix the issues reported by the customer.",
+            "Priority": "High",
+            "Tags": "Bug"
+        },
+        {
+            
+            "Title": "Task - 29030",
+            "Status": "InProgress",
+            "Summary": "Test editing functionality",
+            "Priority": "Low",
+            "Tags": "Story"
+        },
+        {
+            
+            "Title": "Task - 29031",
+            "Status": "InProgress",
+            "Summary": "Check filtering validation",
+            "Priority": "Normal",
+            "Tags": "Feature, Release"
+        },
+        {
+            
+            "Title": "Task - 29032",
+            "Status": "InProgress",
+            "Summary": "Arrange web meeting with customer to get login page requirement",
+            "Priority": "Critical",
+            "Tags": "Feature"
+        },
+        {
+            
+            "Title": "Task - 29033",
+            "Status": "Open",
+            "Summary": "Arrange web meeting with customer to get editing requirements",
+            "Priority": "Critical",
+            "Tags": "Story, Improvement"
+        },
+        {
+            
+            "Title": "Task - 29034",
+            "Status": "InProgress",
+            "Summary": "Fix the issues reported by the customer.",
+            "Priority": "Critical",
+            "Tags": "Bug, Customer"
+        },
+        {
+            
+            "Title": "Task - 29035",
+            "Status": "Close",
+            "Summary": "Fix the issues reported in Safari browser.",
+            "Priority": "High",
+            "Tags": "Bug"
+        },
+        {
+            
+            "Title": "Task - 29036",
+            "Status": "Review",
+            "Summary": "Check Login page validation.",
+            "Priority": "Critical",
+            "Tags": "Bug, Customer"
+        },
+        {
+            
+            "Title": "Task - 29037",
+            "Status": "Open",
+            "Summary": "Fix the issues reported in data binding.",
+            "Priority": "Normal",
+            "Tags": "Bug",
+            "Estimate": "3.5"
+        },
+        {
+            
+            "Title": "Task - 29038",
+            "Status": "Close",
+            "Summary": "Test editing functionality.",
+            "Priority": "Normal",
+            "Tags": "Story",
+            "Estimate": 0.5
+        }
+    ]
+}

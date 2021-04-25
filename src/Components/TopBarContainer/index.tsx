@@ -36,7 +36,8 @@ const TopBarContainer: React.FunctionComponent<TopBarContainerProps> = ({
       >
         <div className="container">
           <div className="navbar-brand-wrapper d-flex w-100">
-            <img src={Group2} alt="" />
+            {/* <img src={Group2} alt="" /> */}
+            Shoprice
             <button
               className="navbar-toggler ml-auto"
               type="button"
@@ -77,17 +78,17 @@ const TopBarContainer: React.FunctionComponent<TopBarContainerProps> = ({
               </li>
               <li className="nav-item">
                 <a className="nav-link" href="#features-section">
-                  About
+                  Sobre
                 </a>
               </li>
               <li className="nav-item">
                 <a className="nav-link" href="#digital-marketing-section">
-                  Blog
+                  Doar
                 </a>
               </li>
               <li className="nav-item">
                 <a className="nav-link" href="#feedback-section">
-                  Testimonials
+                  Sugestões
                 </a>
               </li>
               <li className="nav-item btn-contact-us pl-4 pl-lg-0">

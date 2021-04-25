@@ -5,6 +5,8 @@
   "dependencies": {
     "@material-ui/core": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.57",
+    "@syncfusion/ej2-base": "^19.1.57",
+    "@syncfusion/ej2-react-kanban": "^19.1.57",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
@@ -16,6 +18,8 @@
     "aos": "^2.3.4",
     "axios": "^0.21.1",
     "bootstrap": "^4.6.0",
+    "intro.js": "^3.4.0",
+    "intro.js-react": "^0.3.0",
     "js-cookie": "^2.2.1",
     "mdi": "^2.2.43",
     "node-sass": "^4.14.1",
@@ -54,6 +58,7 @@
   },
   "devDependencies": {
     "@types/aos": "^3.0.3",
+    "@types/intro.js": "^3.0.1",
     "@types/js-cookie": "^2.2.6",
     "@types/react-modal": "^3.10.6",
     "@types/react-router-dom": "^5.1.6"

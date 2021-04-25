@@ -46,7 +46,19 @@ export interface SuggestionsResponse {
   data: Suggestions[]
 }
 
-
+export interface Reports {
+  id: Int16Array
+  Title: string
+  Status: string
+  Summary: string
+  Priority: string
+  Tags: string
+  user_id: Int16Array
+  user: string
+}
+export interface ReportsResponse {
+  data: Reports[]
+}
 
 
 
@@ -70,4 +82,18 @@ export function getProducts(params: object): Promise<ProductsResponse> {
 
 export function getSuggestions(params: object): Promise<SuggestionsResponse> {
   return api.post('/userSuggestion', params)
+}
+
+export function getReports(): Promise<ReportsResponse> {
+  return api.get('/reports')
+}
+export function newReport(params: object): Promise<ReportsResponse> {
+  return api.post('/reports', params)
+}
+export function updateReport(params: object): Promise<ReportsResponse> {
+  return api.put('/reports', params)
+}
+export function deleteReport(params: object): Promise<ReportsResponse> {
+  console.log(params)
+  return api.delete('/reports', params)
 }

@@ -7,6 +7,7 @@ import Landing from '../Pages/Landing'
 import LandingTest from '../Pages/LandingTest'
 import Notify from '../Pages/Notify'
 import Profile from '../Pages/Profile'
+import TestRandom from '../Pages/Reports'
 import Test from '../Pages/Test/test'
 
 
@@ -21,6 +22,7 @@ function AppRoutes() {
       {/* <Redirect path="*" to="/" /> */}
       <Route path="/test" component={Test} />
       <Route path="/LandingTest" component={LandingTest} />
+      <Route path="/reports" component={TestRandom} />
     </BrowserRouter>
   )
 }
