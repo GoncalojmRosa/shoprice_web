@@ -1,10 +1,13 @@
-import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useContext } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import Group2 from '../../Assets/images/Group2.svg';
 import '../../Assets/Styles/style.min.css';
 import 'mdi/css/materialdesignicons.min.css';
 // import './styles.scss';
 import { AuthContext } from '../../contexts/auth';
+import { authenticate } from '../../services/auth';
+
+import './style.scss';
 
 interface TopBarContainerProps {
   profile?: boolean;
@@ -20,8 +23,10 @@ const TopBarContainer: React.FunctionComponent<TopBarContainerProps> = ({
   transparent = false,
   linkToHome = true,
   logoColor = true,
+  children,
 }) => {
-  const { signOut, user } = useContext(AuthContext);
+  const { signOut, user, isAdmin } = useContext(AuthContext);
+  const [isOpen, setIsOpen] = useState(false);
 
   function handleSignOut() {
     signOut();
@@ -31,7 +36,7 @@ const TopBarContainer: React.FunctionComponent<TopBarContainerProps> = ({
     <header id="header-section" style={{ zIndex: 2 }}>
       <nav
         className="navbar navbar-expand-lg pl-3 pl-sm-0"
-        style={{ backgroundColor: 'transparent' }}
+        // style={{ backgroundColor: 'transparent' }}
         id="navbar"
       >
         <div className="container">
@@ -69,11 +74,8 @@ const TopBarContainer: React.FunctionComponent<TopBarContainerProps> = ({
                 </button>
               </li>
               <li className="nav-item">
-                {/* <a className="nav-link" href="#header-section">
-                    Home <span className="sr-only">(current)</span>
-                  </a> */}
-                <Link to="/Test" className="nav-link">
-                  Profile
+                <Link to="/compare" className="nav-link">
+                  Compare
                 </Link>
               </li>
               <li className="nav-item">
@@ -91,11 +93,53 @@ const TopBarContainer: React.FunctionComponent<TopBarContainerProps> = ({
                   Sugestões
                 </a>
               </li>
-              <li className="nav-item btn-contact-us pl-4 pl-lg-0">
-                <button className="btn btn-info" data-toggle="modal" data-target="#exampleModal">
-                  Contact Us
-                </button>
-              </li>
+              {profile ? (
+                <li className="nav-item">
+                  <div
+                    className="header__avatar"
+                    style={{
+                      backgroundImage: `url(${user.avatar})`,
+                    }}
+                    onClick={() => setIsOpen(!isOpen)}
+                  >
+                    <div className={isOpen ? 'dropdown dropdown--active' : 'dropdown'}>
+                      <ul className="dropdown__list">
+                        <Link to="/test">
+                          <li className="dropdown__list-item">
+                            <span className="dropdown__icon">
+                              <i className="far fa-user"></i>
+                            </span>
+                            <span className="dropdown__title">Perfil</span>
+                          </li>
+                        </Link>
+                        {isAdmin ? (
+                          <Link to="/reports">
+                            <li className="dropdown__list-item">
+                              <span className="dropdown__icon">
+                                <i className="fas fa-clipboard-list"></i>
+                              </span>
+                              <span className="dropdown__title">Bug Reportados</span>
+                            </li>
+                          </Link>
+                        ) : (
+                          ''
+                        )}
+
+                        <li className="dropdown__list-item" onClick={() => handleSignOut()}>
+                          <span className="dropdown__icon">
+                            <i className="fas fa-sign-out-alt"></i>
+                          </span>
+                          <span className="dropdown__title">log out</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </li>
+              ) : (
+                ''
+              )}
+
+              {children}
             </ul>
           </div>
         </div>

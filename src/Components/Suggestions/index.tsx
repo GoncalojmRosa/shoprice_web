@@ -1,5 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { deleteSuggestion, getSuggestions } from '../../services/auth';
+import ModalComponent from '../Modal';
 
 import './styles.css';
 
@@ -37,10 +39,19 @@ export interface SuggestionsItemProps {
 }
 
 const SuggestionsComponent: React.FC<SuggestionsItemProps> = ({ data, avatar, name, comments }) => {
+  const [openModal, setOpenModal] = useState(false);
   //   console.log(comments[0].user.avatar);
+  function HandleReportDelete(id: Int16Array) {
+    console.log(id);
+
+    deleteSuggestion({ id: id }).then((sug) => {
+      console.log(sug);
+    });
+  }
 
   return (
     <div className="container bootstrap snippets bootdey">
+      <ModalComponent isOpen={openModal} title="asdasd" onClose={() => setOpenModal(false)} />
       <div className="row mt-4">
         <div className="col-md-12">
           <div className="blog-comment">
@@ -49,10 +60,15 @@ const SuggestionsComponent: React.FC<SuggestionsItemProps> = ({ data, avatar, na
                 <img src={avatar} className="avatar" alt="" />
                 <div className="post-comments">
                   <p className="meta">
-                    {data._created_at} <a href="#">{name}</a> sugeriu :{' '}
+                    {data._created_at} <a href="#">{name}</a> sugeriu:{' '}
+                    <i className="pull-right" style={{ marginLeft: '15px' }}>
+                      <a href="#">
+                        <small onClick={() => setOpenModal(!openModal)}>Reply</small>
+                      </a>
+                    </i>{' '}
                     <i className="pull-right">
                       <a href="#">
-                        <small>Reply</small>
+                        <small onClick={() => HandleReportDelete(data.id)}>Delete</small>
                       </a>
                     </i>
                   </p>

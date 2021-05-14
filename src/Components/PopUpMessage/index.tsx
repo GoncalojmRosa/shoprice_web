@@ -6,6 +6,7 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 interface alertProps {
   message?: string;
   type?: string;
+  show?: Boolean;
 }
 
 function Alert(props: AlertProps) {
@@ -21,7 +22,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const CustomizedSnackbars: React.FunctionComponent<alertProps> = ({ message, type }) => {
+const CustomizedSnackbars: React.FunctionComponent<alertProps> = ({ show, message, type }) => {
   const classes = useStyles();
 
   const [open, setOpen] = React.useState(true);
@@ -35,16 +36,22 @@ const CustomizedSnackbars: React.FunctionComponent<alertProps> = ({ message, typ
   };
 
   return (
-    <div className={classes.root}>
-      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert
-          onClose={handleClose}
-          severity={type ? 'error' : 'success'}
-          style={{ fontSize: '15px' }}
-        >
-          {message ? message : ''}
-        </Alert>
-      </Snackbar>
+    <div>
+      {show ? (
+        <div className={classes.root}>
+          <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+            <Alert
+              onClose={handleClose}
+              severity={type ? 'error' : 'success'}
+              style={{ fontSize: '15px' }}
+            >
+              {message ? message : ''}
+            </Alert>
+          </Snackbar>
+        </div>
+      ) : (
+        ''
+      )}
     </div>
   );
 };

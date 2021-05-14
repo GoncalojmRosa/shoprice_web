@@ -1,24 +1,27 @@
 import './style.css';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { extend, addClass } from '@syncfusion/ej2-base';
 import { KanbanComponent, ColumnsDirective, ColumnDirective } from '@syncfusion/ej2-react-kanban';
 import * as dataSource from './dataSource.json';
-import { deleteReport, getReports, newReport, Reports, updateReport } from '../../services/auth';
+import { deleteReport, getReports, Reports, updateReport } from '../../services/auth';
+import TopBarContainer from '../../Components/TopBarContainer';
+import { AuthContext } from '../../contexts/auth';
 
 export default function TestRandom() {
+  const { emitMessage } = useContext(AuthContext);
   const [reports, setReports] = useState<Reports[]>([]);
 
   useEffect(() => {
     getReports().then((report) => {
       setReports(report.data);
-      // console.log(report);
+      console.log(report);
     });
   }, []);
 
   function cardRendered(args: any) {
     let val = args.data.Priority;
     addClass([args.element], val);
-    // console.log(args.data);
+    console.log(args.data);
   }
   function columnTemplate(props: any) {
     return (
@@ -29,64 +32,78 @@ export default function TestRandom() {
     );
   }
 
-  function test(s: any) {
+  function HandleCard(s: any) {
     if (s.requestType === 'cardChanged') {
-      updateReport(s.changedRecords[0]).then((rep) => {
+      updateReport({ Reports: s.changedRecords }).then((rep) => {
         console.log(rep);
+        emitMessage('Report Editado com Sucesso');
       });
     } else if (s.requestType === 'cardRemoved') {
-      deleteReport({ id: 1 }).then((rep) => {
+      // console.log(s);
+      deleteReport(s.deletedRecords[0]).then((rep) => {
         console.log(rep);
+        emitMessage('Report Eliminado com Sucesso');
       });
     }
   }
 
   return (
-    <div className="schedule-control-section">
-      <div className="col-lg-12 control-section">
-        <div className="control-wrapper">
-          <KanbanComponent
-            id="kanban"
-            cssClass="kanban-overview"
-            keyField="Status"
-            dataSource={reports}
-            enableTooltip={true}
-            swimlaneSettings={{ keyField: 'Priority' }}
-            cardSettings={{
-              headerField: 'Title',
-              contentField: 'Summary',
-              tagsField: 'Tags',
-              selectionType: 'Multiple',
-            }}
-            // dragStop={HandleDragUpdateReport}
-            cardRendered={cardRendered.bind(reports)}
-            actionComplete={test}
-            // dialogClose={HandleChangeReport}
-            // dialogSettings={ a.fields }
-          >
-            <ColumnsDirective>
-              <ColumnDirective
-                headerText="To Do"
-                keyField="Open"
-                template={columnTemplate.bind(reports)}
-              />
-              <ColumnDirective
-                headerText="In Progress"
-                keyField="InProgress"
-                template={columnTemplate.bind(reports)}
-              />
-              <ColumnDirective
-                headerText="In Review"
-                keyField="Review"
-                template={columnTemplate.bind(reports)}
-              />
-              <ColumnDirective
-                headerText="Done"
-                keyField="Close"
-                template={columnTemplate.bind(reports)}
-              />
-            </ColumnsDirective>
-          </KanbanComponent>
+    <div style={{ backgroundColor: '#F7F8FA' }}>
+      <TopBarContainer profile={true} />
+
+      <div className="schedule-control-section">
+        <div className="col-lg-12 control-section">
+          <div className="control-wrapper">
+            <KanbanComponent
+              id="kanban"
+              cssClass="kanban-overview"
+              keyField="Status"
+              dataSource={reports}
+              enableTooltip={true}
+              swimlaneSettings={{ keyField: 'Priority' }}
+              cardSettings={{
+                headerField: 'Title',
+                contentField: 'Summary',
+                tagsField: 'Tags',
+                selectionType: 'Multiple',
+              }}
+              // dragStop={HandleDragUpdateReport}
+              cardRendered={cardRendered.bind(reports)}
+              actionComplete={HandleCard}
+              dialogSettings={{
+                fields: [
+                  { text: 'ID', key: 'Title', type: 'TextBox' },
+                  { key: 'Status', type: 'DropDown' },
+                  { key: 'Tags', type: 'TextBox' },
+                  { key: 'Priority', type: 'DropDown' },
+                  { key: 'Summary', type: 'TextArea' },
+                ],
+              }}
+            >
+              <ColumnsDirective>
+                <ColumnDirective
+                  headerText="To Do"
+                  keyField="Open"
+                  template={columnTemplate.bind(reports)}
+                />
+                <ColumnDirective
+                  headerText="In Progress"
+                  keyField="InProgress"
+                  template={columnTemplate.bind(reports)}
+                />
+                <ColumnDirective
+                  headerText="In Review"
+                  keyField="Review"
+                  template={columnTemplate.bind(reports)}
+                />
+                <ColumnDirective
+                  headerText="Done"
+                  keyField="Close"
+                  template={columnTemplate.bind(reports)}
+                />
+              </ColumnsDirective>
+            </KanbanComponent>
+          </div>
         </div>
       </div>
     </div>

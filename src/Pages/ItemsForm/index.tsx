@@ -1,11 +1,11 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import Input from '../../Components/Input';
 import PageHeader from '../../Components/PageHeader';
 import ProductItem from '../../Components/ProductItem';
 import TopBarContainer from '../../Components/TopBarContainer';
 // import { Product } from '../../Components/ProductItem';
 
-import { getProducts, Product } from '../../services/auth';
+import { Categories, getCategories, getProducts, Product } from '../../services/auth';
 //CSS
 import './styles.css';
 
@@ -13,16 +13,24 @@ export default function ItemsForm() {
   const [isModalOpen, setModalState] = useState(false);
   const [product, setProduct] = useState('');
   const [result, setResult] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Categories[]>([]);
   const [isClicked, setClicked] = useState(false);
   const [style, setStyle] = useState('active');
-  const [defaultOption, setDefaultOption] = useState('All');
+  const [defaultOption, setDefaultOption] = useState<String>('All');
 
   const toggleModal = () => setModalState(!isModalOpen);
 
   function handleSearch(e: FormEvent) {
     console.log(product);
     e.preventDefault();
-    getProducts({ product })
+
+    let Category: String = '';
+
+    defaultOption === 'All' ? (Category = '') : (Category = defaultOption);
+
+    console.log(Category);
+
+    getProducts({ product, Category })
       .then((res) => {
         console.log(res.data);
         // setResult(res.data.Data[0].);
@@ -33,6 +41,12 @@ export default function ItemsForm() {
         console.log(err);
       });
   }
+
+  useEffect(() => {
+    getCategories({ id: 1 }).then((a) => {
+      setCategories(a.data);
+    });
+  }, []);
 
   function DropDownList(e: any) {
     e.preventDefault();
@@ -48,16 +62,20 @@ export default function ItemsForm() {
 
   return (
     <div>
-      <TopBarContainer />
+      <TopBarContainer profile={true} />
       <div className="wrapper">
         <form onSubmit={handleSearch}>
           <div className="search_box">
-            <div className="dropdown" onClick={DropDownList}>
+            <div className="dropdown-categories" onClick={DropDownList}>
               <div className="default_option">{defaultOption}</div>
               <ul className={isClicked ? style : ''}>
                 <li onClick={() => setDefaultOption('All')}>All</li>
+                {categories.map((cat) => {
+                  return <li onClick={() => setDefaultOption(cat.name)}>{cat.name}</li>;
+                })}
+                {/* <li onClick={() => setDefaultOption('All')}>All</li>
                 <li onClick={() => setDefaultOption('Recent')}>Recent</li>
-                <li onClick={() => setDefaultOption('Popular')}>Popular</li>
+                <li onClick={() => setDefaultOption('Popular')}>Popular</li> */}
               </ul>
             </div>
             <div className="search_field">

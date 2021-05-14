@@ -9,13 +9,13 @@ import './styles.scss';
 import FlashMessage from '../../Components/PopUpMessage';
 
 function Login() {
-  const { signIn } = useContext(AuthContext);
+  const { signIn, emitMessage } = useContext(AuthContext);
   const history = useHistory();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [success, setSuccess] = useState(false);
   const [message, setMessage] = useState('');
-  const [type, setType] = useState('');
+  const [type, setType] = useState('error');
 
   async function handleSignIn(e: FormEvent) {
     e.preventDefault();
@@ -23,6 +23,7 @@ function Login() {
       await signIn({ email, password })
         .then((res) => {
           history.push('/');
+          emitMessage('Logado com sucesso');
         })
         .catch((res) => {});
     }

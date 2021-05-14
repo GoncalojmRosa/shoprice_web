@@ -1,12 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { FormEvent, useContext, useEffect, useState } from 'react';
 import Aos from 'aos';
 
 import 'mdi/css/materialdesignicons.min.css';
 import 'aos/dist/aos.css';
 import '../../Assets/Styles/style.min.css';
 // import 'react-responsive-carousel/lib/styles/carousel.min.css';
-//@ts-ignore
-import Group2 from '../../Assets/images/Group2.svg';
 //@ts-ignore
 import Group171 from '../../Assets/images/Group171.svg';
 import Group12 from '../../Assets/images/Group12.svg';
@@ -33,12 +31,22 @@ import { AuthContext } from '../../contexts/auth';
 import 'intro.js/introjs.css';
 
 import logo from '../../Assets/icons/Vector.svg';
+import { indexSuggestions, listSuggestions, newReport } from '../../services/auth';
+import TopBarContainer from '../../Components/TopBarContainer';
+import ModalComponent from '../../Components/Modal';
 // import 'intro.js/themes/introjs-modern.css';
 
 const { Steps, Hints } = require('intro.js-react');
 
 function LandingTest() {
+  const { user } = useContext(AuthContext);
   const [enableIntro, setEnableIntro] = useState(true);
+  const [enableModal, setEnableModal] = useState(false);
+  const [assunto, setAssunto] = useState('');
+  const [mensagem, setMensagem] = useState('');
+  const [listSuggestions, setListSuggestions] = useState<listSuggestions[]>([]);
+
+  const [itemsShow, setItemsShow] = useState(4);
 
   const steps = [
     {
@@ -71,96 +79,49 @@ function LandingTest() {
   ];
 
   const options = {
-    doneLabel: 'Skip',
+    // doneLabel: 'Skip',
+    nextLabel: 'Next',
     // skipLabel: 'Skip',
+    showBullets: false,
+    showStepNumbers: true,
   };
+  window.onresize = ChangeCarouselItems;
+
+  function ChangeCarouselItems() {
+    if (window.innerWidth <= 768) {
+      setItemsShow(2);
+    } else if (window.innerWidth > 768 && window.innerWidth < 993) {
+      setItemsShow(3);
+    } else if (window.innerWidth > 993) {
+      setItemsShow(4);
+    }
+  }
+
+  function HandleReportSubmit(e: FormEvent) {
+    e.preventDefault();
+    newReport({ Title: assunto, Summary: mensagem, user_id: user.id }).then(() => {
+      setEnableModal(false);
+    });
+  }
 
   useEffect(() => {
     Aos.init({ duration: 3000 });
+    ChangeCarouselItems();
+    indexSuggestions().then((sug) => {
+      setListSuggestions(sug.data);
+    });
     // setLoading(false);
   }, []);
 
   return (
     <div id="body" data-spy="scroll" data-target=".navbar" data-offset="100">
-      <header id="header-section">
-        <nav className="navbar navbar-expand-lg pl-3 pl-sm-0" id="navbar">
-          <div className="container">
-            <div className="navbar-brand-wrapper d-flex w-100">
-              {/* <img src={logo} alt="" /> */}
-              Shoprice
-              <button
-                className="navbar-toggler ml-auto"
-                type="button"
-                data-toggle="collapse"
-                data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent"
-                aria-expanded="false"
-                aria-label="Toggle navigation"
-              >
-                <span className="mdi mdi-menu navbar-toggler-icon"></span>
-              </button>
-            </div>
-            <div
-              className="collapse navbar-collapse navbar-menu-wrapper"
-              id="navbarSupportedContent"
-            >
-              <Steps
-                enabled={enableIntro}
-                steps={steps}
-                initialStep={0}
-                onExit={() => setEnableIntro(false)}
-                options={options}
-              />
-
-              {/* <Hints enabled={true} hints={hints} /> */}
-              <ul className="navbar-nav align-items-lg-center align-items-start ml-auto">
-                <li className="d-flex align-items-center justify-content-between pl-4 pl-lg-0">
-                  <div className="navbar-collapse-logo">{/* <img src={Group2} alt="" /> */}</div>
-                  <button
-                    className="navbar-toggler close-button"
-                    type="button"
-                    data-toggle="collapse"
-                    data-target="#navbarSupportedContent"
-                    aria-controls="navbarSupportedContent"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation"
-                  >
-                    <span className="mdi mdi-close navbar-toggler-icon pl-5"></span>
-                  </button>
-                </li>
-                <li className="nav-item">
-                  {/* <a className="nav-link" href="#header-section">
-                    Home <span className="sr-only">(current)</span>
-                  </a> */}
-                  <Link to="/Test" className="nav-link">
-                    Profile
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="#digital-marketing-section">
-                    Sobre
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="#digital-marketing-section">
-                    Doar
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="#feedback-section">
-                    Sugestões
-                  </a>
-                </li>
-                <li className="nav-item btn-contact-us pl-4 pl-lg-0">
-                  <button className="btn btn-info" data-toggle="modal" data-target="#exampleModal">
-                    Contact Us
-                  </button>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </nav>
-      </header>
+      <TopBarContainer profile={true}>
+        <li className="nav-item btn-contact-us pl-4 pl-lg-0">
+          <button onClick={() => setEnableModal(true)} className="btn btn-info">
+            Contact Us
+          </button>
+        </li>
+      </TopBarContainer>
       <div className="banner">
         <div className="container">
           <h1 className="font-weight-semibold">
@@ -412,7 +373,7 @@ function LandingTest() {
               </div>
               {/* <OwlCarousel options={options} events={events}> */}
               <div className="grid-margin">
-                <CarouselComponent />
+                <CarouselComponent data={listSuggestions} itemsToShow={itemsShow} />
               </div>
               {/* </OwlCarousel> */}
             </div>
@@ -500,57 +461,43 @@ function LandingTest() {
               Direitos Reservados.
             </p>
           </footer>
-          <div
-            className="modal fade"
-            id="exampleModal"
-            // tabIndex="-1"
-            role="dialog"
-            aria-labelledby="exampleModalLabel"
-            aria-hidden="true"
-          >
-            <div className="modal-dialog" role="document">
-              <div className="modal-content">
-                <div className="modal-header">
-                  <h4 className="modal-title" id="exampleModalLabel">
-                    Contact Us
-                  </h4>
-                </div>
-                <div className="modal-body">
-                  <form>
-                    <div className="form-group">
-                      <label about="Name">Name</label>
-                      <input type="text" className="form-control" id="Name" placeholder="Name" />
-                    </div>
-                    <div className="form-group">
-                      <label about="Email">Email</label>
-                      <input
-                        type="email"
-                        className="form-control"
-                        id="Email-1"
-                        placeholder="Email"
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label about="Message">Message</label>
-                      <textarea
-                        className="form-control"
-                        id="Message"
-                        placeholder="Enter your Message"
-                      ></textarea>
-                    </div>
-                  </form>
-                </div>
-                <div className="modal-footer">
-                  <button type="button" className="btn btn-light" data-dismiss="modal">
-                    Close
-                  </button>
-                  <button type="button" className="btn btn-success">
-                    Submit
-                  </button>
-                </div>
+          <ModalComponent isOpen={enableModal} title="aaaaa" onClose={() => setEnableModal(false)}>
+            <p style={{ fontSize: '24px' }}>Pedimos desculpa pelo Bug</p>
+            <br />
+            <form onSubmit={HandleReportSubmit}>
+              <div className="form-outline mb-4">
+                <input
+                  type="text"
+                  id="form4Example1"
+                  className="form-control"
+                  onChange={(e) => {
+                    setAssunto(e.target.value);
+                  }}
+                />
+                <label className="form-label" form="form4Example1" style={{ fontSize: '16px' }}>
+                  Assunto
+                </label>
               </div>
-            </div>
-          </div>
+
+              <div className="form-outline mb-4">
+                <textarea
+                  className="form-control"
+                  id="form4Example3"
+                  rows={4}
+                  onChange={(e) => {
+                    setMensagem(e.target.value);
+                  }}
+                ></textarea>
+                <label className="form-label" form="form4Example3" style={{ fontSize: '16px' }}>
+                  Mensagem
+                </label>
+              </div>
+
+              <button type="submit" className="btn btn-primary btn-block mb-4">
+                Enviar
+              </button>
+            </form>
+          </ModalComponent>
         </div>
       </div>
     </div>

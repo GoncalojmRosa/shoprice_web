@@ -22,7 +22,7 @@ const ProductItem: React.FC<ProductItemProps> = ({ product }) => {
           <span className="bg animated fadeInDown">{product.title}</span>
           <h1>
             {product.name}
-            <br /> baseball hair
+            <br />
           </h1>
           <p className="paragraph">
             Shadow your real allegiance to New York's Pirate radio with this cool cap featuring the

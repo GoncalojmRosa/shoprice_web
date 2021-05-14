@@ -7,6 +7,7 @@ import Cookie from 'js-cookie';
 
 interface AuthContextData {
   signed: boolean;
+  isAdmin: boolean;
   user: UserData;
   signIn(params: { password: string; email: string }): Promise<UserData>;
 
@@ -23,14 +24,16 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
       return response;
     },
     async function (error) {
+      console.log(error.response.status);
       if (401 === error.response.status) {
         signIn({
           email: '',
           password: '',
-          refresh_token: JSON.parse(localStorage.getItem('@proffy:refresh_token') as string),
+          refresh_token: JSON.parse(localStorage.getItem('@shoprice:refresh_token') as string),
         });
       } else if (403 === error.response.status) {
-        emitMessage('Você não tem permissão para acessar os dados desta página.', 'error');
+        emitMessage('Você não tem permissão para acessar os dados desta página.', 'error', 40000);
+        setIsAdmin(!isAdmin);
       } else if (404 === error.response.status) {
         emitMessage('Esta página não foi encontrada.', 'error');
       } else {
@@ -39,12 +42,16 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
     },
   );
 
+  function emitMessage(text: string, type: string = 'success', time?: number) {
+    setFlash({ text: text, type: type, time: time });
+  }
   const [user, setUser] = useState<UserData | null>(null);
   const [flash, setFlash] = useState<{
     text: string;
     type: string;
     time: number | undefined;
   }>({ text: '', type: 'success', time: undefined });
+  const [isAdmin, setIsAdmin] = useState(false);
 
   function setLocalUser(userData: UserData) {
     setUser(userData);
@@ -57,8 +64,11 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
       .then((response) => {
         const { token, refresh_token, user } = response.data;
         Cookie.set('refresh_token', refresh_token, { expires: 1 });
-        // setLocalToken(token, refresh_token);
+        setLocalToken(token, refresh_token);
         setLocalUser(user);
+        if (user.role === 'admin') {
+          setIsAdmin(true);
+        }
         api.defaults.headers['Authorization'] = `Bearer ${token}`;
       })
       .catch((err) => {
@@ -89,20 +99,16 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
     });
   }
 
-  function emitMessage(text: string, type: string = 'success', time?: number) {
-    setFlash({ text, type, time });
-  }
-
   useEffect(
     // @ts-ignore
     () => {
-      setUser(JSON.parse(localStorage.getItem('@proffy:user') as string));
+      setUser(JSON.parse(localStorage.getItem('@shoprice:user') as string));
       setLocalToken(
-        JSON.parse(localStorage.getItem('@proffy:token') as string),
-        JSON.parse(localStorage.getItem('@proffy:refresh_token') as string),
+        JSON.parse(localStorage.getItem('@shoprice:token') as string),
+        JSON.parse(localStorage.getItem('@shoprice:refresh_token') as string),
       );
 
-      // let refresh_token = localStorage.getItem('@proffy:refresh_token') as string;
+      // let refresh_token = localStorage.getItem('@shoprice:refresh_token') as string;
       let refresh_token = Cookie.get('refresh_token');
       if (
         typeof refresh_token === 'undefined' ||
@@ -124,6 +130,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
         signed: !!user,
         // @ts-ignore
         user,
+        isAdmin,
         // @ts-ignore
         signIn,
         signOut,

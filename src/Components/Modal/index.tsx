@@ -21,15 +21,19 @@ const ModalComponent: React.FC<ModalProps> = ({ title, isOpen, onClose, children
   };
 
   return isOpen ? (
-    <div className={'modal'}>
-      <div className={'modal fade'}>
-        <div ref={outsideRef} className={'modal__overlay'} onClick={handleCloseOnOverlay} />
-        <div className={'modal__box'} style={{ overflowY: 'auto' }}>
-          <button className={'modal__close'} onClick={onClose}>
-            <img src={iconX} alt={'close'} />
-          </button>
-          <div className={'modal__title'}>{title}</div>
-          <div className={'modal__content'}>{children}</div>
+    <div className="modal" tabIndex={-1}>
+      <div className="modal-dialog" ref={outsideRef} onClick={handleCloseOnOverlay}>
+        <div className="modal-content">
+          <div className="modal-header">
+            <button
+              type="button"
+              className="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+              onClick={onClose}
+            ></button>
+          </div>
+          <div className="modal-body">{children}</div>
         </div>
       </div>
     </div>
