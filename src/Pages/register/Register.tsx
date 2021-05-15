@@ -3,13 +3,12 @@ import Input from '../../Components/Input';
 import WrapperContent from '../../Components/wrappercontent';
 import LogoContainer from '../../Components/LogoContainer';
 import './styles.scss';
-import { useHistory } from 'react-router-dom';
+// import { useHistory } from 'react-router-dom';
 import PopUpMessage from '../../Components/PopUpMessage';
 import { AuthContext } from '../../contexts/auth';
 
 function SignUp() {
   const { register } = useContext(AuthContext);
-  const history = useHistory();
 
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
@@ -25,7 +24,6 @@ function SignUp() {
         .then((res) => {
           // const msg = `Agora você faz parte da plataforma da Shoprice. Mas antes é nessário que você verifique a sua conta. Enviamos um token para seu e-mail!`;
           // window.location.href = `/notify?title=Valide sua conta&msg=${msg}&url=/&text=Página Inicial`;
-          history.push('/');
         })
         .catch((err) => {
           console.log(err);

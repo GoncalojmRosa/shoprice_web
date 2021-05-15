@@ -1,29 +1,28 @@
-import React from 'react'
+import { Navigate } from 'react-router-dom';
+import DashboardLayout from '../Components/DashboardLayout';
+import MainLayout from '../Components/MainLayout';
+import Account from '../Pages/Account';
+import CustomerList from '../Pages/CustomerList';
+import Dashboard from '../Pages/Dashboard';
+import ItemsForm from '../Pages/ItemsForm';
+import LandingTest from '../Pages/LandingTest';
+import Login from '../Pages/login/Login';
+import LoginTest from '../Pages/login/Login';
+import NotFound from '../Pages/NotFound';
+import ProductList from '../Pages/ProductList';
+import Register from '../Pages/Register';
+import SignUp from '../Pages/register/Register';
+import Settings from '../Pages/Settings';
 
-import { BrowserRouter, Route } from 'react-router-dom'
+const AuthRoutes = [
+  {
+    path: '/login',
+    element: <Login />,
+  },
+  {
+    path: '/signup',
+    element: <SignUp />,
+  }
+];
 
-import Register from '../Pages/register/Register'
-// import ForgotPassword from '../Pages/ForgotPassword'
-// import ResetPassword from '../Pages/ResetPassword'
-// import ValidateAccount from "../Pages/";
-import UserProfile from '../Pages/Profile'
-import Notify from '../Pages/Notify'
-import Login from '../Pages/login/Login'
-import Test from '../Pages/Test/test'
-
-function AuthRoutes() {
-  return (
-    <BrowserRouter>
-      <Route path="/" exact component={Login} />
-      <Route path="/login" exact component={Login} />
-      <Route path="/signup" exact component={Register} />
-      {/* <Route path="/forgot-password" exact component={ForgotPassword} /> */}
-      {/* <Route path="/reset-password" exact component={ResetPassword} /> */}
-      {/* <Route path="/validate-account" exact component={ValidateAccount} /> */}
-      
-      <Route path="/notify" component={Notify} />
-    </BrowserRouter>
-  )
-}
-
-export default AuthRoutes
+export default AuthRoutes;

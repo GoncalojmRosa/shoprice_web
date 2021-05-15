@@ -1,5 +1,5 @@
 import React, { FormEvent, useContext, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import WrapperContent from '../../Components/wrappercontent';
 import LogoContainer from '../../Components/LogoContainer';
 import Input from '../../Components/Input';
@@ -10,7 +10,6 @@ import FlashMessage from '../../Components/PopUpMessage';
 
 function Login() {
   const { signIn, emitMessage } = useContext(AuthContext);
-  const history = useHistory();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [success, setSuccess] = useState(false);
@@ -22,7 +21,6 @@ function Login() {
     if (isAble()) {
       await signIn({ email, password })
         .then((res) => {
-          history.push('/');
           emitMessage('Logado com sucesso');
         })
         .catch((res) => {});

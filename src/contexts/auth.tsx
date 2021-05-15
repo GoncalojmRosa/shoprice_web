@@ -64,6 +64,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
       .then((response) => {
         const { token, refresh_token, user } = response.data;
         Cookie.set('refresh_token', refresh_token, { expires: 1 });
+        console.log('asdkjasdkajsdjask');
         setLocalToken(token, refresh_token);
         setLocalUser(user);
         if (user.role === 'admin') {
@@ -117,6 +118,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
       ) {
         signOut();
       } else {
+        console.log('ENTREI');
         signIn({ email: '', password: '', refresh_token }).then();
       }
     },

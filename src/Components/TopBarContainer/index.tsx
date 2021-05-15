@@ -1,11 +1,10 @@
 import React, { useState, useContext } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Group2 from '../../Assets/images/Group2.svg';
 import '../../Assets/Styles/style.min.css';
 import 'mdi/css/materialdesignicons.min.css';
 // import './styles.scss';
 import { AuthContext } from '../../contexts/auth';
-import { authenticate } from '../../services/auth';
 
 import './style.scss';
 
@@ -113,14 +112,24 @@ const TopBarContainer: React.FunctionComponent<TopBarContainerProps> = ({
                           </li>
                         </Link>
                         {isAdmin ? (
-                          <Link to="/reports">
-                            <li className="dropdown__list-item">
-                              <span className="dropdown__icon">
-                                <i className="fas fa-clipboard-list"></i>
-                              </span>
-                              <span className="dropdown__title">Bug Reportados</span>
-                            </li>
-                          </Link>
+                          <div>
+                            <Link to="/app/dashboard">
+                              <li className="dropdown__list-item">
+                                <span className="dropdown__icon">
+                                  <i className="fas fa-columns"></i>
+                                </span>
+                                <span className="dropdown__title">Dashboard</span>
+                              </li>
+                            </Link>
+                            <Link to="/reports">
+                              <li className="dropdown__list-item">
+                                <span className="dropdown__icon">
+                                  <i className="fas fa-clipboard-list"></i>
+                                </span>
+                                <span className="dropdown__title">Bug's Reportados</span>
+                              </li>
+                            </Link>
+                          </div>
                         ) : (
                           ''
                         )}
