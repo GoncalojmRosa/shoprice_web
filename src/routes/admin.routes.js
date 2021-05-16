@@ -13,6 +13,7 @@ import ProductList from '../Pages/ProductList';
 import Register from '../Pages/Register';
 import TestRandom from '../Pages/Reports';
 import Settings from '../Pages/Settings';
+import Suggestions from '../Pages/Suggestions';
 
 const AdminRoutes = [
   {
@@ -27,6 +28,7 @@ const AdminRoutes = [
       { path: 'Test', element: <LandingTest /> },
       { path: '*', element: <Navigate to="/404" /> },
       { path: 'reports', element: <TestRandom/> },
+      { path: 'suggestions', element: <Suggestions /> },
     ]
   },{ path: 'compare', element: <ItemsForm /> },
   {

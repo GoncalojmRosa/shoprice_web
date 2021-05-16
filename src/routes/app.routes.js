@@ -12,6 +12,7 @@ import NotFound from '../Pages/NotFound';
 import ProductList from '../Pages/ProductList';
 import Register from '../Pages/Register';
 import Settings from '../Pages/Settings';
+import Suggestions from '../Pages/Suggestions';
 
 const AppRoutes = [
   {
@@ -20,6 +21,7 @@ const AppRoutes = [
     children: [
       { path: 'account', element: <Account /> },    
       { path: 'settings', element: <Settings /> },
+      { path: 'suggestions', element: <Suggestions /> },
       // { path: '*', element: <Navigate to="/404" /> },
     ]
   },

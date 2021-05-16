@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet';
-import React from 'react'
+import React, {useEffect, useState, useContext} from 'react'
 import {
   Box,
   Container,
@@ -7,8 +7,27 @@ import {
 } from '@material-ui/core';
 import AccountProfile from '../Components/account/AccountProfile';
 import AccountProfileDetails from '../Components/account/AccountProfileDetails';
+import AccountSuggestions from '../Components/account/AccountSuggestions';
+import { indexSuggestions } from '../services/auth';
+import { AuthContext } from '../contexts/auth';
 
-const Account = () => (
+function Account(){
+
+  const { user } = useContext(AuthContext);
+
+  const [suggestions, setSuggestion] = useState([]);
+
+
+  useEffect(()=>{
+    indexSuggestions(user).then((res) => {
+      const sug = res.data;
+      setSuggestion(sug);
+      // setComments(comment);
+    });
+  }, [])
+
+
+  return(
   <>
     <Helmet>
       <title>Account | Material Kit</title>
@@ -29,9 +48,9 @@ const Account = () => (
             item
             lg={4}
             md={6}
-            xs={6}
+            xs={12}
           >
-            <AccountProfile />
+            <AccountProfile updateButton={true} />
           </Grid>
           <Grid
             item
@@ -41,18 +60,22 @@ const Account = () => (
           >
             <AccountProfileDetails />
           </Grid>
-          <Grid
+          {suggestions.map((suggestion)=>{
+            return(
+              <Grid
             item
             lg={12}
-            md={6}
+            md={12}
             xs={12}
           >
-            <AccountProfileDetails />
+            <AccountSuggestions avatar={suggestion.user.avatar} name={suggestion.user.name} text={suggestion.text} />
           </Grid>
-        </Grid>
+            )
+          })}
+          </Grid>
       </Container>
     </Box>
-  </>
-);
+  </>)
+};
 
 export default Account;

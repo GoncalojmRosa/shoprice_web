@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useEffect, useState } from 'react';
-import { deleteSuggestion, getSuggestions } from '../../services/auth';
+import React, { useState } from 'react';
+import { deleteSuggestion } from '../../services/auth';
 import ModalComponent from '../Modal';
 
 import './styles.css';

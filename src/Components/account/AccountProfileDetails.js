@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import {
   Box,
   Button,
@@ -9,6 +8,10 @@ import {
   Grid,
   TextField
 } from '@material-ui/core';
+import React, {useEffect, useState, useContext} from 'react';
+import { getProfile, updateProfile } from '../../services/auth';
+import { AuthContext } from '../../contexts/auth';
+import api from '../../services/api';
 
 const states = [
   {
@@ -25,33 +28,85 @@ const states = [
   }
 ];
 
-const AccountProfileDetails = (props) => {
-  const [values, setValues] = useState({
-    firstName: 'Katarina',
-    lastName: 'Smith',
-    email: 'demo@devias.io',
-    phone: '',
-    state: 'Alabama',
-    country: 'USA'
-  });
+function AccountProfileDetails(){
+  const { setLocalUser, emitMessage, user } = useContext(AuthContext);
 
-  const handleChange = (event) => {
-    setValues({
-      ...values,
-      [event.target.name]: event.target.value
+  const [name, setName] = useState('');
+  const [avatar, setAvatar] = useState('');
+  const [email, setEmail] = useState('');
+
+  async function handleUpdateProfile(e) {
+    e.preventDefault();
+    await updateProfile({ name, email, id: user.id }).then(() => {
+      emitMessage('Seu perfil foi atualizado!');
     });
-  };
+  }
+
+  function handleUploadAvatar() {
+    const el = document.createElement('input');
+    el.setAttribute('type', 'file');
+    el.setAttribute('accept', 'image/*');
+    el.click();
+    el.addEventListener('change', async () => {
+      if (el.files && el.files[0]) {
+        let reader = new FileReader();
+
+        reader.onload = imageIsLoaded;
+        reader.readAsDataURL(el.files[0]);
+
+        uploadAvatar({ image: el.files[0], id: user.id }).then(() => {
+          emitMessage('Seu avatar foi atualizado!');
+
+          getProfile(user).then((response) => {
+            const { email, name, avatar, id } = response.data.user;
+            setLocalUser({ email, name, avatar, id });
+          });
+        });
+      }
+    });
+
+    function uploadAvatar({ id, image }) {
+      const formData = new FormData();
+      formData.append('image', image);
+      formData.append('id', id);
+      const config = {
+        headers: {
+          'content-type': 'multipart/form-data',
+        },
+      };
+
+      return api.put('avatar', formData, config);
+    }
+
+    function imageIsLoaded(e) {
+      // @ts-ignore
+      setAvatar(e.target.result);
+    }
+  }
+
+  useEffect(() => {
+    getProfile(user)
+      .then((res) => {
+        const { name, email, avatar } = res.data.user;
+        setName(name);
+        setAvatar(avatar);
+        setEmail(email);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <form
       autoComplete="off"
       noValidate
-      {...props}
+      onSubmit={handleUpdateProfile}
     >
       <Card>
         <CardHeader
-          subheader="The information can be edited"
-          title="Profile"
+          subheader="A informação pode ser editada"
+          title="Perfil"
         />
         <Divider />
         <CardContent>
@@ -69,24 +124,9 @@ const AccountProfileDetails = (props) => {
                 helperText="Please specify the first name"
                 label="First name"
                 name="firstName"
-                onChange={handleChange}
+                onChange={(e) => {setName(e.target.value)}}
                 required
-                value={values.firstName}
-                variant="outlined"
-              />
-            </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
-              <TextField
-                fullWidth
-                label="Last name"
-                name="lastName"
-                onChange={handleChange}
-                required
-                value={values.lastName}
+                value={name}
                 variant="outlined"
               />
             </Grid>
@@ -99,68 +139,13 @@ const AccountProfileDetails = (props) => {
                 fullWidth
                 label="Email Address"
                 name="email"
-                onChange={handleChange}
+                onChange={(e) => {setName(e.target.value)}}
                 required
-                value={values.email}
+                value={email}
                 variant="outlined"
               />
             </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
-              <TextField
-                fullWidth
-                label="Phone Number"
-                name="phone"
-                onChange={handleChange}
-                type="number"
-                value={values.phone}
-                variant="outlined"
-              />
-            </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
-              <TextField
-                fullWidth
-                label="Country"
-                name="country"
-                onChange={handleChange}
-                required
-                value={values.country}
-                variant="outlined"
-              />
-            </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
-              <TextField
-                fullWidth
-                label="Select State"
-                name="state"
-                onChange={handleChange}
-                required
-                select
-                SelectProps={{ native: true }}
-                value={values.state}
-                variant="outlined"
-              >
-                {states.map((option) => (
-                  <option
-                    key={option.value}
-                    value={option.value}
-                  >
-                    {option.label}
-                  </option>
-                ))}
-              </TextField>
-            </Grid>
+            
           </Grid>
         </CardContent>
         <Divider />
@@ -174,6 +159,7 @@ const AccountProfileDetails = (props) => {
           <Button
             color="primary"
             variant="contained"
+            type="submit"
           >
             Save details
           </Button>
