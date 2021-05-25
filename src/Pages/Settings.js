@@ -6,7 +6,7 @@ import React from 'react'
 const SettingsView = () => (
   <>
     <Helmet>
-      <title>Settings | Material Kit</title>
+      <title>Settings | Shoprice</title>
     </Helmet>
     <Box
       sx={{

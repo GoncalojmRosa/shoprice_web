@@ -103,7 +103,7 @@ const TopBarContainer: React.FunctionComponent<TopBarContainerProps> = ({
                   >
                     <div className={isOpen ? 'dropdown dropdown--active' : 'dropdown'}>
                       <ul className="dropdown__list">
-                        <Link to="/test">
+                        <Link to="/app/account">
                           <li className="dropdown__list-item">
                             <span className="dropdown__icon">
                               <i className="far fa-user"></i>
@@ -113,7 +113,7 @@ const TopBarContainer: React.FunctionComponent<TopBarContainerProps> = ({
                         </Link>
                         {isAdmin ? (
                           <div>
-                            <Link to="/app/dashboard">
+                            <Link to="/app/customers">
                               <li className="dropdown__list-item">
                                 <span className="dropdown__icon">
                                   <i className="fas fa-columns"></i>

@@ -8,7 +8,7 @@ import {
 import AccountProfile from '../Components/account/AccountProfile';
 import AccountProfileDetails from '../Components/account/AccountProfileDetails';
 import AccountSuggestions from '../Components/account/AccountSuggestions';
-import { indexSuggestions } from '../services/auth';
+import { getSuggestions } from '../services/auth';
 import { AuthContext } from '../contexts/auth';
 
 function Account(){
@@ -19,8 +19,9 @@ function Account(){
 
 
   useEffect(()=>{
-    indexSuggestions(user).then((res) => {
+    getSuggestions(user).then((res) => {
       const sug = res.data;
+      
       setSuggestion(sug);
       // setComments(comment);
     });
@@ -30,7 +31,7 @@ function Account(){
   return(
   <>
     <Helmet>
-      <title>Account | Material Kit</title>
+      <title>Conta | Shoprice</title>
     </Helmet>
     <Box
       sx={{

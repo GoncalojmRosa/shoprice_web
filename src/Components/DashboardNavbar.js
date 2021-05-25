@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import HomeIcon from '@material-ui/icons/Home';
 import PropTypes from 'prop-types';
 import {
   AppBar,
@@ -13,6 +14,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
 import InputIcon from '@material-ui/icons/Input';
 import Logo from './Logo';
+import { Link } from 'react-router-dom';
 
 const DashboardNavbar = ({ onMobileNavOpen, ...rest }) => {
   const [notifications] = useState([]);
@@ -28,15 +30,11 @@ const DashboardNavbar = ({ onMobileNavOpen, ...rest }) => {
         </RouterLink>
         <Box sx={{ flexGrow: 1 }} />
         <Hidden lgDown>
-          <IconButton color="inherit">
-            <Badge
-              badgeContent={notifications.length}
-              color="primary"
-              variant="dot"
-            >
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
+          <Link to="/" style={{color: "#ffffff"}} >
+            <IconButton color="inherit">
+              <HomeIcon />
+            </IconButton>
+          </Link>
           <IconButton color="inherit">
             <InputIcon />
           </IconButton>

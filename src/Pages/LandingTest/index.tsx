@@ -26,17 +26,42 @@ import Group126 from '../../Assets/images/Group126.svg';
 import Group115 from '../../Assets/images/Group115.svg';
 
 import CarouselComponent from '../../Components/Carousel/Carousel';
-import { Link } from 'react-router-dom';
 import { AuthContext } from '../../contexts/auth';
 import 'intro.js/introjs.css';
 
 import logo from '../../Assets/icons/Vector.svg';
-import { indexSuggestions, listSuggestions, newReport } from '../../services/auth';
+import { indexSuggestions, newReport } from '../../services/auth';
 import TopBarContainer from '../../Components/TopBarContainer';
 import ModalComponent from '../../Components/Modal';
 // import 'intro.js/themes/introjs-modern.css';
 
 const { Steps, Hints } = require('intro.js-react');
+
+interface User {
+  name: string;
+  avatar: string;
+  id: string;
+}
+interface Comments {
+  id: String;
+  text: string;
+  _created_at: string;
+  suggestion_id: Int16Array;
+  user_id: Int16Array;
+  user: User;
+}
+
+interface Suggestions {
+  id: Int16Array;
+  text: string;
+  likes: Int16Array;
+  shares: Int16Array;
+  views: Int16Array;
+  comments: Comments[];
+  user_id: Int16Array;
+  _created_at: string;
+  user: User;
+}
 
 function LandingTest() {
   const { user } = useContext(AuthContext);
@@ -44,7 +69,7 @@ function LandingTest() {
   const [enableModal, setEnableModal] = useState(false);
   const [assunto, setAssunto] = useState('');
   const [mensagem, setMensagem] = useState('');
-  const [listSuggestions, setListSuggestions] = useState<listSuggestions[]>([]);
+  const [listSuggestions, setListSuggestions] = useState<Suggestions[]>([]);
 
   const [itemsShow, setItemsShow] = useState(4);
 

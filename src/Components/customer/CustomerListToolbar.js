@@ -17,17 +17,17 @@ const CustomerListToolbar = (props) => (
         justifyContent: 'flex-end'
       }}
     >
-      <Button>
-        Import
+      <Button variant="outlined" style={{color: "#D0312D", marginRight: "2px", borderColor: "#D0312D"}}>
+        Eliminar
       </Button>
-      <Button sx={{ mx: 1 }}>
-        Export
+      <Button sx={{ mx: 1 }} variant="contained" style={{backgroundColor: "#3bb143", color: "#ffffff"}}>
+        Editar
       </Button>
       <Button
         color="primary"
         variant="contained"
       >
-        Add customer
+        Adicionar
       </Button>
     </Box>
     <Box sx={{ mt: 3 }}>

@@ -115,7 +115,7 @@ function AccountProfile ({updateButton}) {
           color="textSecondary"
           variant="body1"
         >
-          {`${user.city} ${user.country}`}
+          @Shoprice
         </Typography>
         <Typography
           color="textSecondary"

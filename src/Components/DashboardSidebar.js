@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { Link as RouterLink, useLocation } from 'react-router-dom';
+import { useEffect, useState, useContext } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
   Avatar,
@@ -22,33 +22,25 @@ import {
   MessageSquare as Message
 } from 'react-feather';
 import NavItem from './NavItem';
+import { AuthContext } from '../contexts/auth'
+import { getProfile } from '../services/auth';
 
-const user = {
-  avatar: '/static/images/avatars/avatar_6.png',
-  jobTitle: 'Senior Developer',
-  name: 'Katarina Smith'
-};
 
 const items = [
-  {
-    href: '/app/dashboard',
-    icon: BarChartIcon,
-    title: 'Dashboard'
-  },
+  // {
+  //   href: '/app/dashboard',
+  //   icon: BarChartIcon,
+  //   title: 'Dashboard'
+  // },
   {
     href: '/app/customers',
     icon: UsersIcon,
-    title: 'Customers'
-  },
-  {
-    href: '/app/products',
-    icon: ShoppingBagIcon,
-    title: 'Products'
+    title: 'Utilizadores'
   },
   {
     href: '/app/account',
     icon: UserIcon,
-    title: 'Account'
+    title: 'Conta'
   },
   {
     href: '/app/suggestions',
@@ -58,7 +50,7 @@ const items = [
   {
     href: '/app/settings',
     icon: SettingsIcon,
-    title: 'Settings'
+    title: 'Definições'
   },
   {
     href: '/login',
@@ -78,13 +70,22 @@ const items = [
 ];
 
 const DashboardSidebar = ({ onMobileClose, openMobile }) => {
-  const location = useLocation();
+  const { user } = useContext(AuthContext);
+  const [name, setName] = useState('');
+  const [avatar, setAvatar] = useState('');
 
   useEffect(() => {
-    if (openMobile && onMobileClose) {
-      onMobileClose();
-    }
-  }, [location.pathname]);
+    getProfile(user)
+      .then((res) => {
+        const { name, avatar, badge } = res.data.user;
+        setName(name);
+        setAvatar(avatar);
+        console.log(res.data.user)
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const content = (
     <Box
@@ -104,7 +105,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
       >
         <Avatar
           component={RouterLink}
-          src={user.avatar}
+          src={avatar}
           sx={{
             cursor: 'pointer',
             width: 64,
@@ -116,13 +117,13 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
           color="textPrimary"
           variant="h5"
         >
-          {user.name}
+          {name}
         </Typography>
         <Typography
           color="textSecondary"
           variant="body2"
         >
-          {user.jobTitle}
+          @Shoprice
         </Typography>
       </Box>
       <Divider />

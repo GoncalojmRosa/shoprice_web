@@ -81,6 +81,7 @@
     "@types/aos": "^3.0.3",
     "@types/intro.js": "^3.0.1",
     "@types/js-cookie": "^2.2.6",
+    "@types/react-helmet": "^6.1.1",
     "@types/react-router-dom": "^5.1.7",
     "eslint-config-airbnb": "^18.2.1"
   }

@@ -7,6 +7,14 @@ interface User {
   avatar: string;
   id: string;
 }
+interface Comments {
+  id: String;
+  text: string;
+  _created_at: string;
+  suggestion_id: Int16Array;
+  user_id: Int16Array;
+  user: User;
+}
 
 interface Suggestions {
   id: Int16Array;
@@ -14,11 +22,12 @@ interface Suggestions {
   likes: Int16Array;
   shares: Int16Array;
   views: Int16Array;
-  comments: Int16Array;
+  comments: Comments[];
   user_id: Int16Array;
   _created_at: string;
   user: User;
 }
+
 interface SuggestionsItemProps {
   data: Suggestions[];
   itemsToShow: number;

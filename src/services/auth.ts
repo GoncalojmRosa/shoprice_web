@@ -43,6 +43,8 @@ export interface Suggestions {
   name: string
   avatar: string
 }
+
+
 export interface SuggestionsResponse {
   data: Suggestions[]
 }
@@ -71,20 +73,31 @@ interface User {
   id: string;
 }
 
-export interface listSuggestions {
+interface Comments {
+  id: String;
+  text: string;
+  _created_at: string;
+  suggestion_id: Int16Array;
+  user_id: Int16Array;
+  user: User;
+}
+
+export interface listAllSuggestions {
   id: Int16Array;
   text: string;
   likes: Int16Array;
   shares: Int16Array;
-  comments: Int16Array;
   views: Int16Array;
+  comments: Comments[];
   user_id: Int16Array;
   _created_at: string;
   user: User;
 }
-export interface listSuggestionsReponse {
-  data: listSuggestions[];
+
+export interface listAllSuggestionsReponse {
+  data: listAllSuggestions[];
 }
+
 
 export interface Categories {
   id: Int16Array;
@@ -131,7 +144,7 @@ export function updateReport(params: object): Promise<ReportsResponse> {
 export function deleteReport(params: object): Promise<ReportsResponse> {
   return api.delete('/reports', {data: params})
 }
-export function indexSuggestions(): Promise<listSuggestionsReponse> {
+export function indexSuggestions(): Promise<listAllSuggestionsReponse> {
   return api.get('/allSuggestions')
 }
 export function getCategories(params: object): Promise<CategoriesResponse> {
@@ -140,4 +153,10 @@ export function getCategories(params: object): Promise<CategoriesResponse> {
 
 export function deleteSuggestion(params: object): Promise<SuggestionsResponse> {
   return api.delete('/suggestions', {data: params})
+}
+export function newComment(params: object): Promise<SuggestionsResponse> {
+  return api.post('/comments', params)
+}
+export function listUsers(): Promise<UserData> {
+  return api.get('/users')
 }
