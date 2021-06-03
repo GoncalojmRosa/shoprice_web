@@ -1,17 +1,21 @@
 import {
     Card,
     CardContent,
-    CardMedia,
+
     CardHeader,
     Typography,
     Avatar,
-    IconButton,
+
   } from '@material-ui/core';
   import Fab from '@material-ui/core/Fab';
-  import AddIcon from '@material-ui/icons/Add';
   import DeleteIcon from '@material-ui/icons/Delete';
+import { deleteSuggestion } from '../../services/auth';
   
-  function AccountSuggestions({avatar, text, name}){
+  function AccountSuggestions({avatar, text, name, suggestionId}){
+
+    function handleSuggestionDelete(){
+      deleteSuggestion()
+    }
   
     return (
       <form
@@ -31,7 +35,7 @@ import {
                 }
                 action={
                     // <IconButton aria-label="settings">
-                        <Fab color="secondary" aria-label="delete" size="small">
+                        <Fab color="secondary" aria-label="delete" onClick={handleSuggestionDelete} size="small">
                             <DeleteIcon />
                         </Fab>
                     // </IconButton>

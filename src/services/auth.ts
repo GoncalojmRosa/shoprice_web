@@ -10,11 +10,12 @@ export interface UserData {
   // isConfirmed?: boolean
   emailToken?: string
   role?: string
+  warnings?: string
 }
 export interface Product {
   title: string
   name: string
-  price: string
+  price: number
   img: string
   url: string
 }
@@ -122,6 +123,12 @@ export function getProfile(params: Object): Promise<Response> {
 export function updateProfile(params: object): Promise<Response> {
   return api.put('/profile', params)
 }
+export function deleteUser(params: object): Promise<Response> {
+  return api.delete('/users', {data: params})
+}
+export function changePassword(params: object): Promise<Response> {
+  return api.put('/updatePassword', params)
+}
 
 export function getProducts(params: object): Promise<ProductsResponse> {
   return api.post('/products', params)
@@ -146,6 +153,9 @@ export function deleteReport(params: object): Promise<ReportsResponse> {
 }
 export function indexSuggestions(): Promise<listAllSuggestionsReponse> {
   return api.get('/allSuggestions')
+}
+export function newSuggestion(params: object): Promise<listAllSuggestionsReponse> {
+  return api.post('/suggestions', params)
 }
 export function getCategories(params: object): Promise<CategoriesResponse> {
   return api.post('/siteCategories', params)

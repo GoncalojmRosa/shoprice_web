@@ -36,7 +36,7 @@ const FlashMessage: React.FunctionComponent<{
         <img src={type === 'error' ? errorIcon : successIcon} alt="Icon" />
       </div>
       <div className="flash-content ">
-        <div className="flash-heading">{type === 'error' ? 'Vish!' : 'Muito bom!'}</div>
+        <div className="flash-heading">{type === 'error' ? 'Erro!' : 'Muito bem!'}</div>
         <div className="flash-message">{text}</div>
       </div>
     </div>

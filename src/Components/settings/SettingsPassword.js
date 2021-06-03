@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState,useContext } from 'react';
 import {
   Box,
   Button,
@@ -9,21 +9,28 @@ import {
   TextField
 } from '@material-ui/core';
 
-const SettingsPassword = (props) => {
-  const [values, setValues] = useState({
-    password: '',
-    confirm: ''
-  });
+import { changePassword } from '../../services/auth';
+import { AuthContext } from '../../contexts/auth';
 
-  const handleChange = (event) => {
-    setValues({
-      ...values,
-      [event.target.name]: event.target.value
-    });
+
+
+function SettingsPassword(){
+  const [password, setPassword] = useState('');
+  const { user, signIn, emitMessage } = useContext(AuthContext);
+
+  const [confirm, setConfirm] = useState('');
+
+  function handleSubmit(e){
+    e.preventDefault();
+   changePassword({id: user.id, password:  password, confirmPassword: confirm}).then((res) =>{
+     signIn({password: password, email: user.email})
+   }).catch((err)=>{
+     emitMessage(err.response.data.error, 'error')
+   })
   };
 
   return (
-    <form {...props}>
+    <form onSubmit={handleSubmit}>
       <Card>
         <CardHeader
           subheader="Update password"
@@ -36,9 +43,9 @@ const SettingsPassword = (props) => {
             label="Password"
             margin="normal"
             name="password"
-            onChange={handleChange}
+            onChange={(e)=> setPassword(e.target.value)}
             type="password"
-            value={values.password}
+            value={password}
             variant="outlined"
           />
           <TextField
@@ -46,9 +53,9 @@ const SettingsPassword = (props) => {
             label="Confirm password"
             margin="normal"
             name="confirm"
-            onChange={handleChange}
+            onChange={(e)=> setConfirm(e.target.value)}
             type="password"
-            value={values.confirm}
+            value={confirm}
             variant="outlined"
           />
         </CardContent>
@@ -63,6 +70,7 @@ const SettingsPassword = (props) => {
           <Button
             color="primary"
             variant="contained"
+            type="submit"
           >
             Update
           </Button>

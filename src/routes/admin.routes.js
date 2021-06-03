@@ -26,10 +26,11 @@ const AdminRoutes = [
       { path: 'settings', element: <Settings /> },
       { path: 'Test', element: <LandingTest /> },
       { path: '*', element: <Navigate to="/404" /> },
-      { path: 'reports', element: <TestRandom/> },
+      // { path: 'reports', element: <TestRandom/> },
       { path: 'suggestions', element: <Suggestions /> },
     ]
   },{ path: 'compare', element: <ItemsForm /> },
+  { path: 'reports', element: <TestRandom/> },
   {
     path: '/',
     element: <LandingTest />,

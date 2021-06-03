@@ -22,8 +22,7 @@ function SignUp() {
     if (isAble()) {
       await register({ name, email, password })
         .then((res) => {
-          // const msg = `Agora você faz parte da plataforma da Shoprice. Mas antes é nessário que você verifique a sua conta. Enviamos um token para seu e-mail!`;
-          // window.location.href = `/notify?title=Valide sua conta&msg=${msg}&url=/&text=Página Inicial`;
+          console.log(res);
         })
         .catch((err) => {
           console.log(err);

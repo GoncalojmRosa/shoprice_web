@@ -1,7 +1,6 @@
 import { Helmet } from 'react-helmet';
-import { Box, Container } from '@material-ui/core';
+import { Box } from '@material-ui/core';
 import CustomerListResults from '../Components/customer/CustomerListResults';
-import CustomerListToolbar from '../Components/customer/CustomerListToolbar';
 
 function CustomerList(){
 

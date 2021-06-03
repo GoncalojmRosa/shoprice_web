@@ -4,6 +4,7 @@ import { UserData } from '../services/auth';
 import * as auth from '../services/auth';
 import FlashMessage from '../Components/FlashMessage';
 import Cookie from 'js-cookie';
+import { Navigator } from 'react-router';
 
 interface AuthContextData {
   signed: boolean;
@@ -24,7 +25,6 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
       return response;
     },
     async function (error) {
-      console.log(error.response.status);
       if (401 === error.response.status) {
         signIn({
           email: '',
@@ -64,15 +64,16 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
       .then((response) => {
         const { token, refresh_token, user } = response.data;
         Cookie.set('refresh_token', refresh_token, { expires: 1 });
-        console.log('asdkjasdkajsdjask');
         setLocalToken(token, refresh_token);
         setLocalUser(user);
         if (user.role === 'admin') {
           setIsAdmin(true);
         }
         api.defaults.headers['Authorization'] = `Bearer ${token}`;
+        emitMessage('Autenticado com sucesso');
       })
       .catch((err) => {
+        emitMessage(err.response.data.error, 'error');
         signOut();
       });
   }
@@ -95,8 +96,10 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 
   async function register(params: { email: string; password: string; name: string }) {
     await auth.register(params).then((res) => {
-      setLocalToken(res.data.token, res.data.refresh_token);
-      setLocalUser(res.data.user);
+      // console.log(res);
+      // Cookie.set('refresh_token', res.data.refresh_token, { expires: 1 });
+      // setLocalToken(res.data.token, res.data.refresh_token);
+      // setLocalUser(res.data.user);
     });
   }
 
@@ -118,7 +121,6 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
       ) {
         signOut();
       } else {
-        console.log('ENTREI');
         signIn({ email: '', password: '', refresh_token }).then();
       }
     },

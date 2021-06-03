@@ -11,7 +11,7 @@ import {
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import React, { useEffect, useContext, useState } from 'react';
-import { indexSuggestions, newComment } from '../../services/auth';
+import { indexSuggestions, newComment, newSuggestion } from '../../services/auth';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -53,25 +53,29 @@ export interface ModalHandles {
 }
 
 const AllSuggestions: React.RefForwardingComponent<ModalHandles> = (props, ref) => {
-  const [OpenDialog, setOpenDialog] = useState(false);
+  const [OpenCommentDialog, setOpenCommentDialog] = useState(false);
+  const [OpenSuggestionDialog, setOpenSuggestionDialog] = useState(false);
   const [commentId, setcommentId] = useState<any>();
   const [allSuggestion, setAllSuggestion] = useState<Suggestions[]>([]);
 
-  const { emitMessage, user } = useContext(AuthContext);
+  const { emitMessage, user, signOut } = useContext(AuthContext);
   // const [isOpen, setIsOpen] = useState(false);
   const [text, setText] = useState('');
   const [showPopUp, setShowPopUp] = useState(false);
   const [showPopUpMessage, setshowPopUpMessage] = useState('');
 
   const handleClose = () => {
-    setOpenDialog(false);
+    setOpenCommentDialog(false);
+  };
+  const handleCloseSugDialog = () => {
+    setOpenSuggestionDialog(false);
   };
 
   const handleSubmit = () => {
     newComment({ user_id: user.id, suggestion_id: commentId, text: text })
       .then((a) => {
         console.log(a);
-        setOpenDialog(false);
+        setOpenCommentDialog(false);
         emitMessage('Comentário adicionado com sucesso!');
         indexSuggestions().then((res) => {
           setAllSuggestion(res.data);
@@ -80,9 +84,29 @@ const AllSuggestions: React.RefForwardingComponent<ModalHandles> = (props, ref) 
       })
       .catch((error) => {
         // console.log(error.response.data.error)
+        if (error.response.data.status === 'Banned') {
+          emitMessage(error.response.data.error, 'error');
+          signOut();
+        }
         setShowPopUp(true);
         setshowPopUpMessage(error.response.data.error);
         // setIsOpen(false);
+      });
+  };
+
+  const handleSugSubmit = () => {
+    newSuggestion({ text: text, user_id: user.id })
+      .then((res) => {
+        setOpenSuggestionDialog(false);
+        emitMessage('Sugestão adicionada com sucesso!');
+        indexSuggestions().then((res) => {
+          setAllSuggestion(res.data);
+          // setComments(comment);
+        });
+      })
+      .catch((err) => {
+        setShowPopUp(true);
+        setshowPopUpMessage(err.response.data.error);
       });
   };
 
@@ -95,8 +119,62 @@ const AllSuggestions: React.RefForwardingComponent<ModalHandles> = (props, ref) 
 
   return (
     <div>
-      {OpenDialog ? (
-        <Dialog open={OpenDialog} onClose={handleClose} aria-labelledby="form-dialog-title">
+      <Box {...props}>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+          }}
+        >
+          <Button color="primary" onClick={() => setOpenSuggestionDialog(true)} variant="contained">
+            Adicionar
+          </Button>
+        </Box>
+      </Box>
+      {OpenSuggestionDialog ? (
+        <Dialog
+          open={OpenSuggestionDialog}
+          onClose={handleCloseSugDialog}
+          aria-labelledby="form-dialog-title"
+        >
+          <DialogTitle id="form-dialog-title">Escreva a sua Sugestão</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Atenção com as palavras que irá usar, poderá fazer com que a sua conta seja banida!
+            </DialogContentText>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              label="Sugestão"
+              type="text"
+              fullWidth
+              onChange={(e) => {
+                setText(e.target.value);
+                setShowPopUp(false);
+              }}
+            />
+            {showPopUp ? <Alerts message={showPopUpMessage} type="error" /> : ''}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseSugDialog} color="primary">
+              Cancelar
+            </Button>
+            <Button
+              color="primary"
+              onClick={() => {
+                handleSugSubmit();
+              }}
+            >
+              Enviar
+            </Button>
+          </DialogActions>
+        </Dialog>
+      ) : (
+        ''
+      )}
+      {OpenCommentDialog ? (
+        <Dialog open={OpenCommentDialog} onClose={handleClose} aria-labelledby="form-dialog-title">
           <DialogTitle id="form-dialog-title">Escreva o seu comentário</DialogTitle>
           <DialogContent>
             <DialogContentText>
@@ -155,10 +233,10 @@ const AllSuggestions: React.RefForwardingComponent<ModalHandles> = (props, ref) 
                   aria-label="add"
                   size="small"
                   onClick={() => {
-                    setOpenDialog(true);
+                    setOpenCommentDialog(true);
                     setcommentId(suggestion.id);
                   }}
-                  onMouseOver={() => setOpenDialog(false)}
+                  onMouseOver={() => setOpenCommentDialog(false)}
                 >
                   <AddIcon />
                 </Fab>

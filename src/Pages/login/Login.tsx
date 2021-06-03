@@ -19,11 +19,10 @@ function Login() {
   async function handleSignIn(e: FormEvent) {
     e.preventDefault();
     if (isAble()) {
-      await signIn({ email, password })
-        .then((res) => {
-          emitMessage('Logado com sucesso');
-        })
-        .catch((res) => {});
+      await signIn({ email, password }).then((res) => {
+        // emitMessage('Logado com sucesso');
+        window.location.assign('/');
+      });
     }
   }
 

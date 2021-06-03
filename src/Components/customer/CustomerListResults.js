@@ -17,22 +17,27 @@ import {
   Container,
   CardContent,
   InputAdornment,
-  SvgIcon
+  SvgIcon,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  FormHelperText
 } from '@material-ui/core';
 import getInitials from '../../utils/getInitials';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import Select from '@material-ui/core/Select';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { AuthContext } from '../../contexts/auth';
-import { register, listUsers, updateProfile, getProfile } from '../../services/auth';
+import { register, listUsers, updateProfile, getProfile, deleteUser } from '../../services/auth';
 import Alerts from '../PopUpMessage/index';
 import { Search as SearchIcon } from 'react-feather';
 
-const CustomerListResults = (props, {...rest }) => {
+const CustomerListResults = () => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
@@ -44,6 +49,9 @@ const CustomerListResults = (props, {...rest }) => {
   const [OpenDialogAdd, setOpenDialogAdd] = useState(false);
   const [OpenDialogEdit, setOpenDialogEdit] = useState(false);
   const [OpenDialogDelete, setOpenDialogDelete] = useState(false);
+  const [BadgeSelectedOption, setBadgeSelectedOption] = useState('');
+  const [WarningSelectedOption, setWarningSelectedOption] = useState('');
+  const [RoleSelectedOption, setRoleSelectedOption] = useState('');
   const [showEditButton, setShowEditButton] = useState(false);
   const { emitMessage } = useContext(AuthContext);
   const [customers, setCustomers] = useState([]);
@@ -121,8 +129,10 @@ const CustomerListResults = (props, {...rest }) => {
   };
 
   const ChangeStateValues = () => {
-    // console.log(selectedCustomerIds[0])
     getProfile({id: selectedCustomerIds[0]}).then((user) => {
+      setWarningSelectedOption(user.data.user.warnings)
+      setBadgeSelectedOption(user.data.user.badge)
+      setRoleSelectedOption(user.data.user.role)
       setUsername(user.data.user.name)
       setEmail(user.data.user.email)
     }).catch((err) => {
@@ -131,7 +141,7 @@ const CustomerListResults = (props, {...rest }) => {
   }
 
   const handleSubmitEdit = () => {
-    updateProfile({ name: username , email: email, id: selectedCustomerIds[0] }).then(() => {
+    updateProfile({ name: username , email: email, role: RoleSelectedOption, warnings: WarningSelectedOption, badge: BadgeSelectedOption, id: selectedCustomerIds[0] }).then(() => {
       emitMessage('Dados Atualizados com Sucesso!');
       setOpenDialogEdit(false);
       listUsers().then((res)=>{
@@ -142,12 +152,26 @@ const CustomerListResults = (props, {...rest }) => {
     });
   };
   const handleSubmitDelete = () => {
-    
+    console.log(selectedCustomerIds[0])
+    deleteUser({id: selectedCustomerIds[0]}).then((user) => {
+      let newSelectedCustomerIds = [];
+
+
+      newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds.slice(1));
+      setSelectedCustomerIds(newSelectedCustomerIds);
+
+      setOpenDialogDelete(false)
+      listUsers().then((res)=>{
+        setCustomers(res.data.users)
+      }).catch((error) =>{
+        console.log(error)
+      })
+    })
   };
 
   return (
     <Container maxWidth={false}>
-      <Box {...props}>
+      <Box>
     <Box
       sx={{
         display: 'flex',
@@ -195,10 +219,10 @@ const CustomerListResults = (props, {...rest }) => {
       </Card>
     </Box>
   </Box>
-    <Card {...rest} sx={{mt: 3}}>
+    <Card sx={{mt: 3}}>
       {OpenDialogAdd ? (
         <Dialog open={OpenDialogAdd} onClose={handleClose} aria-labelledby="form-dialog-title">
-          <DialogTitle id="form-dialog-title">Escreva o seu comentário</DialogTitle>
+          <DialogTitle id="form-dialog-title">Adicione um novo Utilizador</DialogTitle>
           <DialogContent>
             <DialogContentText>
               Atenção com as palavras que irá usar, poderá fazer com que a sua conta seja banida!
@@ -290,7 +314,81 @@ const CustomerListResults = (props, {...rest }) => {
                 setEmail(e.target.value);
                 setShowPopUp(false);
               }}
-            />
+              />
+              <Box>
+
+              
+              <FormControl sx={{
+                        mr: 2, 
+                        // ml: 2, 
+                        minWidth: 265
+                        // alignItems: 'center',
+                        // display: 'flex'
+                        }}>
+                <InputLabel id="demo-simple-select-helper-label">Badge</InputLabel>
+                <Select
+                  labelId="demo-simple-select-helper-label"
+                  id="demo-simple-select-helper"
+                  value={BadgeSelectedOption}
+                  onChange={(e) => {
+                    setBadgeSelectedOption(e.target.value)
+                  }}
+                >
+                  <MenuItem value={'Active'}>
+                    <em>Active</em>
+                  </MenuItem>
+                  <MenuItem value={'Banned'}>Banned</MenuItem>
+                  <MenuItem value={'CEO'}>CEO</MenuItem>
+                </Select>
+                <FormHelperText>Escolha a Badge do Utilizador</FormHelperText>
+              </FormControl>
+              <FormControl sx={{
+                        // mr: 2, 
+                        minWidth: 265
+                        // alignItems: 'center',
+                        // display: 'flex'
+                        }}>
+                <InputLabel id="demo-simple-select-helper-label">Warnings</InputLabel>
+                <Select
+                  labelId="demo-simple-select-helper-label"
+                  id="demo-simple-select-helper"
+                  value={WarningSelectedOption}
+                  onChange={(e) => {
+                    setWarningSelectedOption(e.target.value)
+                  }}
+                >
+                  <MenuItem value={0}>
+                    <em>Nenhum</em>
+                  </MenuItem>
+                  <MenuItem value={1}>1</MenuItem>
+                  <MenuItem value={2}>2</MenuItem>
+                  <MenuItem value={3}>3</MenuItem>
+                </Select>
+                <FormHelperText>Escolha o número de avisos</FormHelperText>
+              </FormControl>
+              <FormControl sx={{
+                        // mr: 2, 
+                        minWidth: 545
+                        // alignItems: 'center',
+                        // display: 'flex'
+                        }}>
+                <InputLabel id="demo-simple-select-helper-label">Role</InputLabel>
+                <Select
+                  labelId="demo-simple-select-helper-label"
+                  id="demo-simple-select-helper"
+                  value={RoleSelectedOption}
+                  onChange={(e) => {
+                    setRoleSelectedOption(e.target.value)
+                  }}
+                >
+                  <MenuItem value={'basic'}>
+                    <em>Basic</em>
+                  </MenuItem>
+                  <MenuItem value={'admin'}>Admin</MenuItem>
+                </Select>
+                <FormHelperText>Escolha a role do utilizador</FormHelperText>
+              </FormControl>
+              </Box>
             {showPopUp ? <Alerts message={showPopUpMessage} type="error" /> : ''}
           </DialogContent>
           <DialogActions>
@@ -329,7 +427,7 @@ const CustomerListResults = (props, {...rest }) => {
                 handleSubmitDelete();
               }}
             >
-              Enviar
+              Eliminar
             </Button>
           </DialogActions>
         </Dialog>
@@ -362,7 +460,7 @@ const CustomerListResults = (props, {...rest }) => {
                   Badge
                 </TableCell>
                 <TableCell>
-                  Roll
+                  Role
                 </TableCell>
                 <TableCell>
                   Data de Entrada
