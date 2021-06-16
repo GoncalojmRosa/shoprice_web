@@ -64,27 +64,84 @@ export default function ItemsForm() {
 
   function comparePrices() {
     setOpenDialogAdd(true);
-    if (result[0].price > result[1].price && result[0].price > result[2].price) {
-      setImg(result[0].img);
-      setPrice(result[0].price);
-      setUrl(result[0].url);
-      setName(result[0].name);
-      setTitle(result[0].title);
-      console.log('preço 0 maior');
-    } else if (result[1].price > result[0].price && result[1].price > result[2].price) {
-      setImg(result[1].img);
-      setPrice(result[1].price);
-      setUrl(result[1].url);
-      setName(result[1].name);
-      setTitle(result[1].title);
-      console.log('preço 1 maior');
-    } else if (result[2].price > result[0].price && result[2].price > result[1].price) {
+    if (result[0].title === undefined && result[1].title === undefined) {
       setImg(result[2].img);
       setPrice(result[2].price);
       setUrl(result[2].url);
       setName(result[2].name);
       setTitle(result[2].title);
-      console.log('preço 2 maior');
+    } else if (result[0].title === undefined && result[2].title === undefined) {
+      setImg(result[1].img);
+      setPrice(result[1].price);
+      setUrl(result[1].url);
+      setName(result[1].name);
+      setTitle(result[1].title);
+    } else if (result[1].title === undefined && result[2].title === undefined) {
+      setImg(result[0].img);
+      setPrice(result[0].price);
+      setUrl(result[0].url);
+      setName(result[0].name);
+      setTitle(result[0].title);
+    } else if (result[0].title === undefined) {
+      if (result[1].price < result[2].price) {
+        setImg(result[1].img);
+        setPrice(result[1].price);
+        setUrl(result[1].url);
+        setName(result[1].name);
+        setTitle(result[1].title);
+      } else if (result[2].price < result[1].price) {
+        setImg(result[2].img);
+        setPrice(result[2].price);
+        setUrl(result[2].url);
+        setName(result[2].name);
+        setTitle(result[2].title);
+      }
+    } else if (result[1].title === undefined) {
+      if (result[0].price < result[2].price) {
+        setImg(result[0].img);
+        setPrice(result[0].price);
+        setUrl(result[0].url);
+        setName(result[0].name);
+        setTitle(result[0].title);
+      } else if (result[2].price < result[0].price) {
+        setImg(result[2].img);
+        setPrice(result[2].price);
+        setUrl(result[2].url);
+        setName(result[2].name);
+        setTitle(result[2].title);
+      }
+    } else if (result[2].title === undefined) {
+      if (result[0].price < result[1].price) {
+        setImg(result[0].img);
+        setPrice(result[0].price);
+        setUrl(result[0].url);
+        setName(result[0].name);
+        setTitle(result[0].title);
+      } else if (result[1].price < result[0].price) {
+        setImg(result[1].img);
+        setPrice(result[1].price);
+        setUrl(result[1].url);
+        setName(result[1].name);
+        setTitle(result[1].title);
+      }
+    } else if (result[0].price < result[1].price && result[0].price < result[2].price) {
+      setImg(result[0].img);
+      setPrice(result[0].price);
+      setUrl(result[0].url);
+      setName(result[0].name);
+      setTitle(result[0].title);
+    } else if (result[1].price < result[0].price && result[1].price < result[2].price) {
+      setImg(result[1].img);
+      setPrice(result[1].price);
+      setUrl(result[1].url);
+      setName(result[1].name);
+      setTitle(result[1].title);
+    } else if (result[2].price < result[0].price && result[2].price < result[1].price) {
+      setImg(result[2].img);
+      setPrice(result[2].price);
+      setUrl(result[2].url);
+      setName(result[2].name);
+      setTitle(result[2].title);
     }
   }
 
@@ -97,9 +154,9 @@ export default function ItemsForm() {
 
     getProducts({ product, Category })
       .then((res) => {
-        console.log(res.data);
         // setResult(res.data.Data[0].);
         setResult(res.data);
+        // console.log(result[0]);
         setResultReady(true);
         setShowInitialResults(false);
       })
@@ -142,7 +199,7 @@ export default function ItemsForm() {
             <a href={url}></a>
             <p>{name}</p>
 
-            <p>{price} $</p>
+            <p>{price} €</p>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose} color="primary">
@@ -212,7 +269,14 @@ export default function ItemsForm() {
                 })
               : ''}
             {result.map((prods: Product) => {
-              return <ProductItem key={prods.title} product={prods} />;
+              return (
+                <ProductItem
+                  key={prods.title}
+                  product={prods}
+                  error={prods.title === undefined ? true : false}
+                  errorMessage={'Produto não encontrado! Experimente alterar a Categoria.'}
+                />
+              );
             })}
           </Grid>
         </Container>

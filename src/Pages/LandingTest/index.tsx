@@ -267,7 +267,7 @@ function LandingTest() {
                 <div className="col-lg-9 col-xl-8 p-0">
                   <p className="py-4 m-0 text-muted">
                     Temos funcionalidades impressionantes e bem optimizadas prontas para serem
-                    usadas estando desenhadas com o intuito de o ajuda.
+                    usadas estando desenhadas com o intuito de o ajudar.
                   </p>
                   <p className="pb-2 font-weight-medium text-muted">
                     Garantimos uma ferramenta autônoma e inteligente.
@@ -388,21 +388,26 @@ function LandingTest() {
               </div>
             </div>
           </section>
-          <section className="customer-feedback" id="feedback-section" data-aos="fade-right">
-            <div>
-              <div className="col-12 text-center pb-5">
-                <h2>O que os nosso clientes têm a dizer</h2>
-                <h6 className="section-subtitle text-muted m-0">
-                  Lorem ipsum dolor sit amet, tincidunt vestibulum.
-                </h6>
+          {listSuggestions === null ? (
+            <section className="customer-feedback" id="feedback-section" data-aos="fade-right">
+              <div>
+                <div className="col-12 text-center pb-5">
+                  <h2>O que os nosso clientes têm a dizer</h2>
+                  <h6 className="section-subtitle text-muted m-0">
+                    Lorem ipsum dolor sit amet, tincidunt vestibulum.
+                  </h6>
+                </div>
+                {/* <OwlCarousel options={options} events={events}> */}
+                <div className="grid-margin">
+                  <CarouselComponent data={listSuggestions} itemsToShow={itemsShow} />
+                </div>
+                {/* </OwlCarousel> */}
               </div>
-              {/* <OwlCarousel options={options} events={events}> */}
-              <div className="grid-margin">
-                <CarouselComponent data={listSuggestions} itemsToShow={itemsShow} />
-              </div>
-              {/* </OwlCarousel> */}
-            </div>
-          </section>
+            </section>
+          ) : (
+            ''
+          )}
+
           <section className="contact-us" id="contact-section">
             <div className="contact-us-bgimage grid-margin">
               <div className="pb-4">

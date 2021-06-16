@@ -12,6 +12,17 @@ export interface UserData {
   role?: string
   warnings?: string
 }
+export interface SitesData {
+  id: string
+  Name: string
+  Url: string
+  XPath: string
+  ImgXPath: string
+  NameXPath: string
+  PriceXPath: string
+  // isConfirmed?: boolean
+
+}
 export interface Product {
   title: string
   name: string
@@ -99,6 +110,20 @@ export interface listAllSuggestionsReponse {
   data: listAllSuggestions[];
 }
 
+interface newsResponse {
+  id: string;
+  ProductName: string;
+  _created_at: string;
+  _next_email: string;
+  _sended_at: string;
+  website_id: string;
+  schedule_id: string;
+}
+
+export interface listNewsByUserId {
+  data: newsResponse[];
+}
+
 
 export interface Categories {
   id: Int16Array;
@@ -169,4 +194,23 @@ export function newComment(params: object): Promise<SuggestionsResponse> {
 }
 export function listUsers(): Promise<UserData> {
   return api.get('/users')
+}
+export function listSites(): Promise<SitesData> {
+  return api.get('/websites')
+}
+export function indexSiteById(params: object): Promise<SitesData> {
+
+  return api.post('/indexWebsites', params)
+}
+export function updateWebsite(params: object): Promise<SitesData> {
+
+  return api.put('/websites', params)
+}
+export function indexNewsByUserId(params: object): Promise<listNewsByUserId> {
+
+  return api.post('/indexNewsLetter', params)
+}
+export function newNewsLetter(params: object): Promise<listNewsByUserId> {
+
+  return api.post('/newsletter', params)
 }

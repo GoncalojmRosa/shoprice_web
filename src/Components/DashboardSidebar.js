@@ -19,7 +19,8 @@ import {
   User as UserIcon,
   UserPlus as UserPlusIcon,
   Users as UsersIcon,
-  MessageSquare as Message
+  MessageSquare as Message,
+  Calendar as News,
 } from 'react-feather';
 import NavItem from './NavItem';
 import { AuthContext } from '../contexts/auth'
@@ -48,12 +49,17 @@ const items = [
     title: 'Sugestões'
   },
   {
-    href: '/app/settings',
-    icon: SettingsIcon,
-    title: 'Definições'
+    href: '/app/news',
+    icon: News,
+    title: 'NewsLetter'
   },
   {
-    href: '/login',
+    href: '/app/settings',
+    icon: SettingsIcon,
+    title: 'Websites'
+  },
+  {
+    href: '/abc',
     icon: LockIcon,
     title: 'Login'
   },

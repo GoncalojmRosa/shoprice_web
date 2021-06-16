@@ -4,11 +4,11 @@ import { UserData } from '../services/auth';
 import * as auth from '../services/auth';
 import FlashMessage from '../Components/FlashMessage';
 import Cookie from 'js-cookie';
-import { Navigator } from 'react-router';
 
 interface AuthContextData {
   signed: boolean;
   isAdmin: boolean;
+  isDemo: boolean;
   user: UserData;
   signIn(params: { password: string; email: string }): Promise<UserData>;
 
@@ -52,6 +52,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
     time: number | undefined;
   }>({ text: '', type: 'success', time: undefined });
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isDemo, setIsDemo] = useState(false);
 
   function setLocalUser(userData: UserData) {
     setUser(userData);
@@ -68,6 +69,8 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
         setLocalUser(user);
         if (user.role === 'admin') {
           setIsAdmin(true);
+        } else if (user.role === 'demo') {
+          setIsDemo(true);
         }
         api.defaults.headers['Authorization'] = `Bearer ${token}`;
         emitMessage('Autenticado com sucesso');
@@ -135,6 +138,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
         // @ts-ignore
         user,
         isAdmin,
+        isDemo,
         // @ts-ignore
         signIn,
         signOut,

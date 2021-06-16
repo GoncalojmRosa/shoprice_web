@@ -74,7 +74,7 @@ const TopBarContainer: React.FunctionComponent<TopBarContainerProps> = ({
               </li>
               <li className="nav-item">
                 <Link to="/compare" className="nav-link">
-                  Compare
+                  Comparar
                 </Link>
               </li>
               <li className="nav-item">
@@ -88,9 +88,7 @@ const TopBarContainer: React.FunctionComponent<TopBarContainerProps> = ({
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#feedback-section">
-                  Sugestões
-                </a>
+                <Link to="/app/suggestions">Sugestões</Link>
               </li>
               {profile ? (
                 <li className="nav-item">
@@ -101,7 +99,10 @@ const TopBarContainer: React.FunctionComponent<TopBarContainerProps> = ({
                     }}
                     onClick={() => setIsOpen(!isOpen)}
                   >
-                    <div className={isOpen ? 'dropdown dropdown--active' : 'dropdown'}>
+                    <div
+                      className={isOpen ? 'dropdown dropdown--active' : 'dropdown'}
+                      style={{ zIndex: 99999 }}
+                    >
                       <ul className="dropdown__list">
                         <Link to="/app/account">
                           <li className="dropdown__list-item">

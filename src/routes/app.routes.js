@@ -1,18 +1,12 @@
 import { Navigate } from 'react-router-dom';
 import DashboardLayout from '../Components/DashboardLayout';
-import MainLayout from '../Components/MainLayout';
 import Account from '../Pages/Account';
-import CustomerList from '../Pages/CustomerList';
-import Dashboard from '../Pages/Dashboard';
 import ItemsForm from '../Pages/ItemsForm';
 import LandingTest from '../Pages/LandingTest';
-import Login from '../Pages/login/Login';
-import LoginTest from '../Pages/login/Login';
-import NotFound from '../Pages/NotFound';
-import ProductList from '../Pages/ProductList';
-import Register from '../Pages/Register';
 import Settings from '../Pages/Settings';
 import Suggestions from '../Pages/Suggestions';
+import NewsLetter from '../Pages/NewsLetter';
+import Login from '../Pages/Login';
 
 const AppRoutes = [
   {
@@ -22,6 +16,8 @@ const AppRoutes = [
       { path: 'account', element: <Account /> },    
       { path: 'settings', element: <Settings /> },
       { path: 'suggestions', element: <Suggestions /> },
+      { path: 'news', element: <NewsLetter /> },
+      { path: 'abc', element: <Login/> },
       // { path: '*', element: <Navigate to="/404" /> },
     ]
   },
@@ -29,7 +25,9 @@ const AppRoutes = [
   {
     path: '/',
     element: <LandingTest />,
-  }
+  },
+  { path: '*', element: <Navigate to="/" /> },
+
 ];
 
 export default AppRoutes;

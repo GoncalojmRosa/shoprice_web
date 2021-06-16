@@ -136,7 +136,7 @@ function AccountProfile ({updateButton}) {
           handleUploadAvatar()
         }}
       >
-        Upload picture
+        Atualizar Foto
       </Button>
     </CardActions>: ''}
     

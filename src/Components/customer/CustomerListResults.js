@@ -21,7 +21,9 @@ import {
   FormControl,
   InputLabel,
   MenuItem,
-  FormHelperText
+  FormHelperText,
+  Input,
+  IconButton
 } from '@material-ui/core';
 import getInitials from '../../utils/getInitials';
 import Button from '@material-ui/core/Button';
@@ -36,6 +38,8 @@ import { AuthContext } from '../../contexts/auth';
 import { register, listUsers, updateProfile, getProfile, deleteUser } from '../../services/auth';
 import Alerts from '../PopUpMessage/index';
 import { Search as SearchIcon } from 'react-feather';
+import ReplayIcon from '@material-ui/icons/Replay';
+import Visibility from '@material-ui/icons/Visibility';
 
 const CustomerListResults = () => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
@@ -55,6 +59,8 @@ const CustomerListResults = () => {
   const [showEditButton, setShowEditButton] = useState(false);
   const { emitMessage } = useContext(AuthContext);
   const [customers, setCustomers] = useState([]);
+  const [code, setCode] = useState('');
+  const [showCode, setShowCode] = useState(false);
 
   const handleSelectAll = (event) => {
     let newSelectedCustomerIds;
@@ -114,6 +120,15 @@ const CustomerListResults = () => {
     setOpenDialogDelete(false);
   };
 
+ const handleCreateCode = () => {
+  const code = Math.floor(Math.random() * 999999) + 1
+  setCode(code)
+ }
+
+ const handleClickShowCode = () => {
+   setShowCode(!showCode)
+ }
+
   const handleSubmit = () => {
     register({name: username, email: email, password: password}).then((a) => {
       console.log(a)
@@ -141,9 +156,10 @@ const CustomerListResults = () => {
   }
 
   const handleSubmitEdit = () => {
-    updateProfile({ name: username , email: email, role: RoleSelectedOption, warnings: WarningSelectedOption, badge: BadgeSelectedOption, id: selectedCustomerIds[0] }).then(() => {
+    updateProfile({ code: code,name: username , email: email, role: RoleSelectedOption, warnings: WarningSelectedOption, badge: BadgeSelectedOption, id: selectedCustomerIds[0] }).then(() => {
       emitMessage('Dados Atualizados com Sucesso!');
       setOpenDialogEdit(false);
+      setCode('')
       listUsers().then((res)=>{
         setCustomers(res.data.users)
       }).catch((error) =>{
@@ -387,6 +403,38 @@ const CustomerListResults = () => {
                   <MenuItem value={'admin'}>Admin</MenuItem>
                 </Select>
                 <FormHelperText>Escolha a role do utilizador</FormHelperText>
+              </FormControl>
+              <FormControl sx={{
+                        // mr: 2, 
+                        minWidth: 545
+                        // alignItems: 'center',
+                        // display: 'flex'
+                        }}>
+                <InputLabel htmlFor="standard-adornment-password">Código</InputLabel>
+          <Input
+            id="standard-adornment-password"
+            type={showCode ? 'text' : 'password'}
+            value={code}
+            readOnly={true}
+            onChange={(e) => setCode(e.target.value)}
+            endAdornment={
+              <InputAdornment position="end">
+                
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowCode}
+                >
+                  <Visibility />
+                </IconButton>
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleCreateCode}
+                >
+                  <ReplayIcon />
+                </IconButton>
+              </InputAdornment>
+            }
+          />
               </FormControl>
               </Box>
             {showPopUp ? <Alerts message={showPopUpMessage} type="error" /> : ''}
