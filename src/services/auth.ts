@@ -119,9 +119,17 @@ interface newsResponse {
   website_id: string;
   schedule_id: string;
 }
+interface codeResponse {
+  message: string,
+  error?: string
+}
 
 export interface listNewsByUserId {
   data: newsResponse[];
+}
+
+export interface sendCodeResponse {
+  data: codeResponse[];
 }
 
 
@@ -213,4 +221,11 @@ export function indexNewsByUserId(params: object): Promise<listNewsByUserId> {
 export function newNewsLetter(params: object): Promise<listNewsByUserId> {
 
   return api.post('/newsletter', params)
+}
+
+export function passwordToken(params: object): Promise<sendCodeResponse> {
+  return api.post('/passwordToken', params)
+}
+export function updatePassword(params: object): Promise<sendCodeResponse> {
+  return api.put('/changePassword', params)
 }

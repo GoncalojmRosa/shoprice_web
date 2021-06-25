@@ -143,7 +143,7 @@ function LandingTest() {
       <TopBarContainer profile={true}>
         <li className="nav-item btn-contact-us pl-4 pl-lg-0">
           <button onClick={() => setEnableModal(true)} className="btn btn-info">
-            Contact Us
+            Contacte nos
           </button>
         </li>
       </TopBarContainer>

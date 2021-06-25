@@ -7,17 +7,16 @@ import {
   Box,
   Button,
   Container,
-  Grid,
   Link,
   TextField,
   Typography
 } from '@material-ui/core';
-import { AuthContext } from '../contexts/auth';
-import { authenticate } from '../services/auth';
+import { AuthContext } from '../../contexts/auth';
+import { passwordToken } from '../../services/auth';
 
 function Login() {
   const navigate = useNavigate();
-  const { signIn, emitMessage } = useContext(AuthContext);
+  const { emitMessage } = useContext(AuthContext);
 
   return (
     <>
@@ -36,33 +35,16 @@ function Login() {
         <Container maxWidth="sm">
           <Formik
             initialValues={{
-              email: 'demo@shoprice.com',
-              password: 'Password123'
+              email: '',
             }}
             validationSchema={Yup.object().shape({
               email: Yup.string().email('Precisa de conter @(...).com para ser um Email válido').max(255).required('Preencha o campo Email'),
-              password: Yup.string().max(255).required('Preencha o campo Password')
             })}
-            onSubmit={async (values, e) => {
-              // console.log(e.)
-              // navigate('/login');
-               authenticate({ email: values.email, password: values.password })
-              .then((res) => {
-                // console.log(res)
-                 signIn({ email: values.email, password: values.password }).then((res) => {
-                  // emitMessage('Logado com sucesso');
-                  window.location.assign('/');
-                })
-              })
-              .catch((err) => {
-                emitMessage(err.response.data.error, 'error')
-              })
-              // await signIn({ email: values.email, password: values.password }).then((res) => {
-                // emitMessage('Logado com sucesso');
-                // window.location.assign('/');
-              // }).catch((err) => {
-              //   console.log(err.response.data.error)
-              // });
+            onSubmit={async (values) => {
+              await passwordToken({ email: values.email}).then((res) => {
+                navigate('/forgotPassword')
+                emitMessage(res.data.message);
+              });
             }}
           >
             {({
@@ -80,14 +62,14 @@ function Login() {
                     color="textPrimary"
                     variant="h2"
                   >
-                    Login
+                    Código de Verificação
                   </Typography>
                   <Typography
                     color="textSecondary"
                     gutterBottom
                     variant="body2"
                   >
-                    Utilize os seus dados para entrar na Aplicação
+                    Utilize o mesmo Email que usou no ato de criação da sua Conta.
                   </Typography>
                 </Box>
                 <TextField
@@ -103,33 +85,6 @@ function Login() {
                   value={values.email}
                   variant="outlined"
                 />
-                <TextField
-                  error={Boolean(touched.password && errors.password)}
-                  fullWidth
-                  helperText={touched.password && errors.password}
-                  label="Password"
-                  margin="normal"
-                  name="password"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  type="password"
-                  value={values.password}
-                  variant="outlined"
-                />
-                <Typography
-                  color="textSecondary"
-                  variant="body2"
-                >
-                  Esqueceu-se da Password?
-                  {' '}
-                  <Link
-                    component={RouterLink}
-                    to="/sendCode"
-                    variant="h6"
-                  >
-                    Alterar
-                  </Link>
-                </Typography>
                 <Box sx={{ py: 2 }}>
                   <Button
                     color="primary"
@@ -139,21 +94,21 @@ function Login() {
                     type="submit"
                     variant="contained"
                   >
-                    Autenticar
+                    Enviar Código
                   </Button>
                 </Box>
                 <Typography
                   color="textSecondary"
                   variant="body1"
                 >
-                  Não tem conta?
+                  Voltar atrás?
                   {' '}
                   <Link
                     component={RouterLink}
-                    to="/signup"
+                    to="/login"
                     variant="h6"
                   >
-                    Registar
+                    Login
                   </Link>
                 </Typography>
               </form>

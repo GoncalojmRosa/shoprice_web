@@ -1,6 +1,6 @@
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import React from 'react'
+import React, {useContext} from 'react'
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import {
@@ -13,9 +13,12 @@ import {
   TextField,
   Typography
 } from '@material-ui/core';
+import { AuthContext } from '../contexts/auth';
+
 
 const Register = () => {
   const navigate = useNavigate();
+  const { register } = useContext(AuthContext);
 
   return (
     <>
@@ -35,22 +38,28 @@ const Register = () => {
           <Formik
             initialValues={{
               email: '',
-              firstName: '',
+              username: '',
               lastName: '',
               password: '',
               policy: false
             }}
             validationSchema={
               Yup.object().shape({
-                email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-                firstName: Yup.string().max(255).required('First name is required'),
-                lastName: Yup.string().max(255).required('Last name is required'),
-                password: Yup.string().max(255).required('password is required'),
-                policy: Yup.boolean().oneOf([true], 'This field must be checked')
+                email: Yup.string().email('Precisa de conter @(...).com para ser um Email válido').max(255).required('Preencha o campo Email'),
+                username: Yup.string().max(255).required('Preencha o campo Username'),
+                password: Yup.string().max(255).required('Preencha o campo Password'),
+                policy: Yup.boolean().oneOf([true], 'Por favor Aceite os Termos e Condições')
               })
             }
-            onSubmit={() => {
-              navigate('/app/dashboard', { replace: true });
+            onSubmit={async (values) => {
+              navigate('/', { replace: true });
+              await register({ name: values.username, email: values.email, password: values.password })
+                .then((res) => {
+                  console.log(res);
+                })
+                .catch((err) => {
+                  console.log(err);
+              });
             }}
           >
             {({
@@ -68,38 +77,26 @@ const Register = () => {
                     color="textPrimary"
                     variant="h2"
                   >
-                    Create new account
+                   Criar nova Conta
                   </Typography>
                   <Typography
                     color="textSecondary"
                     gutterBottom
                     variant="body2"
                   >
-                    Use your email to create new account
+                    Utilize o seu Email para poder usufuir da Aplicação
                   </Typography>
                 </Box>
                 <TextField
-                  error={Boolean(touched.firstName && errors.firstName)}
+                  error={Boolean(touched.username && errors.username)}
                   fullWidth
-                  helperText={touched.firstName && errors.firstName}
-                  label="First name"
+                  helperText={touched.username && errors.username}
+                  label="Username"
                   margin="normal"
-                  name="firstName"
+                  name="username"
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.firstName}
-                  variant="outlined"
-                />
-                <TextField
-                  error={Boolean(touched.lastName && errors.lastName)}
-                  fullWidth
-                  helperText={touched.lastName && errors.lastName}
-                  label="Last name"
-                  margin="normal"
-                  name="lastName"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.lastName}
+                  value={values.username}
                   variant="outlined"
                 />
                 <TextField
@@ -144,7 +141,7 @@ const Register = () => {
                     color="textSecondary"
                     variant="body1"
                   >
-                    I have read the
+                    Eu li e aceito os
                     {' '}
                     <Link
                       color="primary"
@@ -153,7 +150,7 @@ const Register = () => {
                       underline="always"
                       variant="h6"
                     >
-                      Terms and Conditions
+                      Termos e Condições
                     </Link>
                   </Typography>
                 </Box>
@@ -171,21 +168,21 @@ const Register = () => {
                     type="submit"
                     variant="contained"
                   >
-                    Sign up now
+                    Criar Conta 
                   </Button>
                 </Box>
                 <Typography
                   color="textSecondary"
                   variant="body1"
                 >
-                  Have an account?
+                  Possui uma conta?
                   {' '}
                   <Link
                     component={RouterLink}
                     to="/login"
                     variant="h6"
                   >
-                    Sign in
+                    Login
                   </Link>
                 </Typography>
               </form>

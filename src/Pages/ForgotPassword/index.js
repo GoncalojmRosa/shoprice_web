@@ -7,22 +7,21 @@ import {
   Box,
   Button,
   Container,
-  Grid,
   Link,
   TextField,
   Typography
 } from '@material-ui/core';
-import { AuthContext } from '../contexts/auth';
-import { authenticate } from '../services/auth';
+import { AuthContext } from '../../contexts/auth';
+import { updatePassword } from '../../services/auth';
 
 function Login() {
   const navigate = useNavigate();
-  const { signIn, emitMessage } = useContext(AuthContext);
+  const {emitMessage} = useContext(AuthContext);
 
   return (
     <>
       <Helmet>
-        <title>Login | Shoprice</title>
+        <title>Alterar Password | Shoprice</title>
       </Helmet>
       <Box
         sx={{
@@ -36,33 +35,23 @@ function Login() {
         <Container maxWidth="sm">
           <Formik
             initialValues={{
-              email: 'demo@shoprice.com',
-              password: 'Password123'
+              code: '',
+              password: '',
+              confirmPassword: ''
             }}
             validationSchema={Yup.object().shape({
-              email: Yup.string().email('Precisa de conter @(...).com para ser um Email válido').max(255).required('Preencha o campo Email'),
-              password: Yup.string().max(255).required('Preencha o campo Password')
+              code: Yup.number("Só pode conter Números").required("Preencha o campo Código").positive("Não pode conter números Negativos").integer("Só pode conter Números").max(999999, "Código não pode ultrapassar os 6 digitos"),
+              password: Yup.string().max(255).required('Preencha o campo Passord'),
+              confirmPassword: Yup.string().max(255).required('Preencha o campo Confirm Password')
             })}
-            onSubmit={async (values, e) => {
-              // console.log(e.)
-              // navigate('/login');
-               authenticate({ email: values.email, password: values.password })
-              .then((res) => {
-                // console.log(res)
-                 signIn({ email: values.email, password: values.password }).then((res) => {
-                  // emitMessage('Logado com sucesso');
-                  window.location.assign('/');
-                })
-              })
-              .catch((err) => {
-                emitMessage(err.response.data.error, 'error')
-              })
-              // await signIn({ email: values.email, password: values.password }).then((res) => {
-                // emitMessage('Logado com sucesso');
-                // window.location.assign('/');
-              // }).catch((err) => {
-              //   console.log(err.response.data.error)
-              // });
+            onSubmit={async (values) => {
+                await updatePassword({ code: values.code, password: values.password, confirmPassword: values.confirmPassword}).then((res) => {
+                  navigate('/login');
+                emitMessage(res.data.message);
+              }).catch((err) => {
+                emitMessage(err.response.data.error, 'error');
+
+              });
             }}
           >
             {({
@@ -80,27 +69,27 @@ function Login() {
                     color="textPrimary"
                     variant="h2"
                   >
-                    Login
+                    Alterar Password
                   </Typography>
                   <Typography
                     color="textSecondary"
                     gutterBottom
                     variant="body2"
                   >
-                    Utilize os seus dados para entrar na Aplicação
+                    Utilize uma Password que se lembre.
                   </Typography>
                 </Box>
                 <TextField
-                  error={Boolean(touched.email && errors.email)}
+                  error={Boolean(touched.code && errors.code)}
                   fullWidth
-                  helperText={touched.email && errors.email}
-                  label="Email Address"
+                  helperText={touched.code && errors.code}
+                  label="Código"
                   margin="normal"
-                  name="email"
+                  name="code"
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  type="email"
-                  value={values.email}
+                  type="number"
+                  value={values.code}
                   variant="outlined"
                 />
                 <TextField
@@ -116,20 +105,19 @@ function Login() {
                   value={values.password}
                   variant="outlined"
                 />
-                <Typography
-                  color="textSecondary"
-                  variant="body2"
-                >
-                  Esqueceu-se da Password?
-                  {' '}
-                  <Link
-                    component={RouterLink}
-                    to="/sendCode"
-                    variant="h6"
-                  >
-                    Alterar
-                  </Link>
-                </Typography>
+                 <TextField
+                  error={Boolean(touched.confirmPassword && errors.confirmPassword)}
+                  fullWidth
+                  helperText={touched.confirmPassword && errors.confirmPassword}
+                  label="Confirm Password"
+                  margin="normal"
+                  name="confirmPassword"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  type="password"
+                  value={values.confirmPassword}
+                  variant="outlined"
+                />
                 <Box sx={{ py: 2 }}>
                   <Button
                     color="primary"
@@ -139,21 +127,21 @@ function Login() {
                     type="submit"
                     variant="contained"
                   >
-                    Autenticar
+                    Alterar Password
                   </Button>
                 </Box>
                 <Typography
                   color="textSecondary"
                   variant="body1"
                 >
-                  Não tem conta?
+                  Voltar atrás?
                   {' '}
                   <Link
                     component={RouterLink}
-                    to="/signup"
+                    to="/login"
                     variant="h6"
                   >
-                    Registar
+                    Login
                   </Link>
                 </Typography>
               </form>

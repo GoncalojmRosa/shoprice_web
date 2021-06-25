@@ -40,6 +40,11 @@ import Alerts from '../PopUpMessage/index';
 import { Search as SearchIcon } from 'react-feather';
 import ReplayIcon from '@material-ui/icons/Replay';
 import Visibility from '@material-ui/icons/Visibility';
+// import Loader from 'react-loader-spinner';
+import * as Yup from 'yup';
+import { Formik } from 'formik';
+import Spinner from '../spinner/index'
+
 
 const CustomerListResults = () => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
@@ -61,6 +66,7 @@ const CustomerListResults = () => {
   const [customers, setCustomers] = useState([]);
   const [code, setCode] = useState('');
   const [showCode, setShowCode] = useState(false);
+  const [showSpinner, setShowSpinner] = useState(false);
 
   const handleSelectAll = (event) => {
     let newSelectedCustomerIds;
@@ -100,16 +106,25 @@ const CustomerListResults = () => {
     setLimit(event.target.value);
   };
 
+  function isAble() {
+    return email !== '' && password !== '' && username !== '';
+  }
+
   const handlePageChange = (event, newPage) => {
     setPage(newPage);
   };
 
 
   useEffect(()=>{
+    setShowSpinner(true)
+
     listUsers().then((res)=>{
       setCustomers(res.data.users)
+      setTimeout(function (){setShowSpinner(false)}, 1500);
     }).catch((error) =>{
-      console.log(error)
+      // console.log(error.response.data)
+      setTimeout(function (){setShowSpinner(false)}, 1000);
+      emitMessage(error.response.data, "error")
     })
   }, [])
 
@@ -129,40 +144,37 @@ const CustomerListResults = () => {
    setShowCode(!showCode)
  }
 
-  const handleSubmit = () => {
-    register({name: username, email: email, password: password}).then((a) => {
-      console.log(a)
-      setOpenDialogAdd(false);
-      listUsers().then((res)=>{
-        setCustomers(res.data.users)
-      }).catch((error) =>{
-        console.log(error)
-      })
-    }).catch((error) => {
-      console.log(error)
-    })
-  };
-
   const ChangeStateValues = () => {
+    setShowSpinner(true)
     getProfile({id: selectedCustomerIds[0]}).then((user) => {
       setWarningSelectedOption(user.data.user.warnings)
       setBadgeSelectedOption(user.data.user.badge)
       setRoleSelectedOption(user.data.user.role)
       setUsername(user.data.user.name)
       setEmail(user.data.user.email)
+      setTimeout(function (){setShowSpinner(false)}, 1500);
+
     }).catch((err) => {
+      setTimeout(function (){setShowSpinner(false)}, 1500);
+
       console.log(err)
     })
   }
 
   const handleSubmitEdit = () => {
+    setShowSpinner(true)
+
     updateProfile({ code: code,name: username , email: email, role: RoleSelectedOption, warnings: WarningSelectedOption, badge: BadgeSelectedOption, id: selectedCustomerIds[0] }).then(() => {
       emitMessage('Dados Atualizados com Sucesso!');
       setOpenDialogEdit(false);
       setCode('')
       listUsers().then((res)=>{
         setCustomers(res.data.users)
+        setTimeout(function (){setShowSpinner(false)}, 1500);
+
       }).catch((error) =>{
+        setTimeout(function (){setShowSpinner(false)}, 1500);
+
         console.log(error)
       })
     });
@@ -187,6 +199,8 @@ const CustomerListResults = () => {
 
   return (
     <Container maxWidth={false}>
+      {showSpinner ? <Spinner/>  : ''}
+      
       <Box>
     <Box
       sx={{
@@ -237,47 +251,92 @@ const CustomerListResults = () => {
   </Box>
     <Card sx={{mt: 3}}>
       {OpenDialogAdd ? (
-        <Dialog open={OpenDialogAdd} onClose={handleClose} aria-labelledby="form-dialog-title">
+        <Dialog open={OpenDialogAdd} onClose={handleClose} aria-labelledby="form-dialog-title">          
+        <Formik
+        initialValues={{
+          username: '',
+          email: '',
+          password: ''
+        }}
+        validationSchema={Yup.object().shape({
+          username: Yup.string().max(255).required('Preencha o campo Nome'),
+          email: Yup.string().email('Precisa de conter @(...).com para ser um Email válido').max(255).required('Preencha o campo Email'),
+          password: Yup.string().max(255).required('Preencha o campo Password')
+        })}
+        onSubmit={async (values, e) => {
+          setShowSpinner(true)
+          register({name: values.username, email: values.email, password: values.password}).then((a) => {
+            setOpenDialogAdd(false);
+            listUsers().then((res)=>{
+              setCustomers(res.data.users)
+              setTimeout(function (){setShowSpinner(false)}, 1500);
+
+            }).catch((error) =>{
+              setTimeout(function (){setShowSpinner(false)}, 1000);
+              
+              console.log(error)
+            })
+          }).catch((error) => {
+            setTimeout(function (){setShowSpinner(false)}, 1000);
+
+            emitMessage(error.response.data.error, "error")
+            // console.log(error)
+          })
+        }}
+      >
+        {({
+          errors,
+          handleBlur,
+          handleChange,
+          handleSubmit,
+          isSubmitting,
+          touched,
+          values
+        }) => (
+          <form onSubmit={(e) => handleSubmit(e)}>
           <DialogTitle id="form-dialog-title">Adicione um novo Utilizador</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              Atenção com as palavras que irá usar, poderá fazer com que a sua conta seja banida!
+              Aqui poderá criar uma nova conta para um Utilizador!
             </DialogContentText>
             <TextField
               autoFocus
+              error={Boolean(touched.username && errors.username)}
+              helperText={touched.username && errors.username}
+              value={values.username}
+              onBlur={handleBlur}
+              onChange={handleChange}
               margin="dense"
               id="username"
               label="Nome"
               type="text"
               fullWidth
-              onChange={(e) => {
-                setUsername(e.target.value);
-                setShowPopUp(false);
-              }}
             />
             <TextField
               autoFocus
+              error={Boolean(touched.email && errors.email)}
+              helperText={touched.email && errors.email}
+              value={values.email}
+              onBlur={handleBlur}
+              onChange={handleChange}
               margin="dense"
               id="email"
               label="Email"
               type="email"
               fullWidth
-              onChange={(e) => {
-                setEmail(e.target.value);
-                setShowPopUp(false);
-              }}
             />
             <TextField
               autoFocus
               margin="dense"
               id="password"
               label="Password"
+              onBlur={handleBlur}
+              onChange={handleChange}
               type="password"
               fullWidth
-              onChange={(e) => {
-                setPassword(e.target.value);
-                setShowPopUp(false);
-              }}
+              error={Boolean(touched.password && errors.password)}
+              helperText={touched.password && errors.password}
+              value={values.password}
             />
             {showPopUp ? <Alerts message={showPopUpMessage} type="error" /> : ''}
           </DialogContent>
@@ -287,13 +346,14 @@ const CustomerListResults = () => {
             </Button>
             <Button
               color="primary"
-              onClick={() => {
-                handleSubmit();
-              }}
+              type="submit"
             >
               Enviar
             </Button>
           </DialogActions>
+          </form>
+          )}
+          </Formik>
         </Dialog>
       ) : (
         ''
@@ -311,6 +371,7 @@ const CustomerListResults = () => {
               id="username"
               label="Nome"
               type="text"
+              disabled
               fullWidth
               value={username}
               onChange={(e) => {
@@ -322,6 +383,7 @@ const CustomerListResults = () => {
               autoFocus
               margin="dense"
               id="email"
+              disabled
               label="Email"
               type="email"
               fullWidth
@@ -401,10 +463,11 @@ const CustomerListResults = () => {
                     <em>Basic</em>
                   </MenuItem>
                   <MenuItem value={'admin'}>Admin</MenuItem>
+                  <MenuItem value={'demo'}>Demo</MenuItem>
                 </Select>
                 <FormHelperText>Escolha a role do utilizador</FormHelperText>
               </FormControl>
-              <FormControl sx={{
+              {username !== "Shoprice Demo" && email !== "demo@shoprice.com" ? <FormControl sx={{
                         // mr: 2, 
                         minWidth: 545
                         // alignItems: 'center',
@@ -435,7 +498,8 @@ const CustomerListResults = () => {
               </InputAdornment>
             }
           />
-              </FormControl>
+              </FormControl> : ''}
+              
               </Box>
             {showPopUp ? <Alerts message={showPopUpMessage} type="error" /> : ''}
           </DialogContent>
@@ -516,19 +580,22 @@ const CustomerListResults = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {customers.slice(0, limit).map((customer) => (
+              {customers.slice(page * limit, page * limit + limit).map((customer) => (
+                
                 <TableRow
                   hover
                   key={customer.id}
                   selected={selectedCustomerIds.indexOf(customer.id) !== -1}
                 >
-                  <TableCell padding="checkbox">
+                  {customer.role !== 'admin' ?  <TableCell padding="checkbox">
                     <Checkbox
                       checked={selectedCustomerIds.indexOf(customer.id) !== -1}
                       onChange={(event) => handleSelectOne(event, customer.id)}
                       value="true"
+                      disabled={customer.role === 'admin' ? true : false}
                     />
-                  </TableCell>
+                  </TableCell> :  <TableCell></TableCell>}
+                 
                   <TableCell>
                     <Box
                       sx={{

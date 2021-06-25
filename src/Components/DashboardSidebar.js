@@ -26,13 +26,7 @@ import NavItem from './NavItem';
 import { AuthContext } from '../contexts/auth'
 import { getProfile } from '../services/auth';
 
-
-const items = [
-  // {
-  //   href: '/app/dashboard',
-  //   icon: BarChartIcon,
-  //   title: 'Dashboard'
-  // },
+const adminItems = [
   {
     href: '/app/customers',
     icon: UsersIcon,
@@ -57,26 +51,29 @@ const items = [
     href: '/app/settings',
     icon: SettingsIcon,
     title: 'Websites'
+  }
+];
+
+const normalItems = [
+  {
+    href: '/app/account',
+    icon: UserIcon,
+    title: 'Conta'
   },
   {
-    href: '/abc',
-    icon: LockIcon,
-    title: 'Login'
+    href: '/app/suggestions',
+    icon: Message,
+    title: 'Sugestões'
   },
   {
-    href: '/register',
-    icon: UserPlusIcon,
-    title: 'Register'
-  },
-  {
-    href: '/404',
-    icon: AlertCircleIcon,
-    title: 'Error'
+    href: '/app/news',
+    icon: News,
+    title: 'NewsLetter'
   }
 ];
 
 const DashboardSidebar = ({ onMobileClose, openMobile }) => {
-  const { user } = useContext(AuthContext);
+  const { user, isAdmin } = useContext(AuthContext);
   const [name, setName] = useState('');
   const [avatar, setAvatar] = useState('');
 
@@ -135,7 +132,15 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
       <Divider />
       <Box sx={{ p: 2 }}>
         <List>
-          {items.map((item) => (
+
+          {isAdmin ? adminItems.map((item) => (
+            <NavItem
+              href={item.href}
+              key={item.title}
+              title={item.title}
+              icon={item.icon}
+            />
+          )) : normalItems.map((item) => (
             <NavItem
               href={item.href}
               key={item.title}

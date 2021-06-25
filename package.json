@@ -66,6 +66,7 @@
     "react-elastic-carousel": "^0.11.4",
     "react-feather": "^2.0.8",
     "react-helmet": "^6.1.0",
+    "react-loader-spinner": "^4.0.0",
     "react-modal": "^3.11.2",
     "react-perfect-scrollbar": "^1.5.8",
     "react-router": "^6.0.0-beta.0",
@@ -83,6 +84,7 @@
     "@types/js-cookie": "^2.2.6",
     "@types/react-helmet": "^6.1.1",
     "@types/react-router-dom": "^5.1.7",
+    "@types/yup": "^0.29.11",
     "eslint-config-airbnb": "^18.2.1"
   }
 }

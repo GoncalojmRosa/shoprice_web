@@ -21,6 +21,9 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { AuthContext } from '../../contexts/auth';
 import Alerts from '../PopUpMessage/index';
+import * as Yup from 'yup';
+import { Formik } from 'formik';
+import Spinner from '../spinner/index';
 
 interface User {
   name: string;
@@ -63,6 +66,7 @@ const AllSuggestions: React.RefForwardingComponent<ModalHandles> = (props, ref) 
   const [text, setText] = useState('');
   const [showPopUp, setShowPopUp] = useState(false);
   const [showPopUpMessage, setshowPopUpMessage] = useState('');
+  const [showSpinner, setShowSpinner] = useState(false);
 
   const handleClose = () => {
     setOpenCommentDialog(false);
@@ -71,28 +75,7 @@ const AllSuggestions: React.RefForwardingComponent<ModalHandles> = (props, ref) 
     setOpenSuggestionDialog(false);
   };
 
-  const handleSubmit = () => {
-    newComment({ user_id: user.id, suggestion_id: commentId, text: text })
-      .then((a) => {
-        console.log(a);
-        setOpenCommentDialog(false);
-        emitMessage('Comentário adicionado com sucesso!');
-        indexSuggestions().then((res) => {
-          setAllSuggestion(res.data);
-          // setComments(comment);
-        });
-      })
-      .catch((error) => {
-        // console.log(error.response.data.error)
-        if (error.response.data.status === 'Banned') {
-          emitMessage(error.response.data.error, 'error');
-          signOut();
-        }
-        setShowPopUp(true);
-        setshowPopUpMessage(error.response.data.error);
-        // setIsOpen(false);
-      });
-  };
+  const handleSubmit = () => {};
 
   const handleSugSubmit = () => {
     newSuggestion({ text: text, user_id: user.id })
@@ -111,14 +94,19 @@ const AllSuggestions: React.RefForwardingComponent<ModalHandles> = (props, ref) 
   };
 
   useEffect(() => {
+    setShowSpinner(true);
     indexSuggestions().then((res) => {
       setAllSuggestion(res.data);
       // setComments(comment);
+      setTimeout(function () {
+        setShowSpinner(false);
+      }, 1000);
     });
   }, []);
 
   return (
     <div>
+      {showSpinner ? <Spinner /> : ''}
       <Box {...props}>
         <Box
           sx={{
@@ -137,76 +125,168 @@ const AllSuggestions: React.RefForwardingComponent<ModalHandles> = (props, ref) 
           onClose={handleCloseSugDialog}
           aria-labelledby="form-dialog-title"
         >
-          <DialogTitle id="form-dialog-title">Escreva a sua Sugestão</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Atenção com as palavras que irá usar, poderá fazer com que a sua conta seja banida!
-            </DialogContentText>
-            <TextField
-              autoFocus
-              margin="dense"
-              id="name"
-              label="Sugestão"
-              type="text"
-              fullWidth
-              onChange={(e) => {
-                setText(e.target.value);
-                setShowPopUp(false);
-              }}
-            />
-            {showPopUp ? <Alerts message={showPopUpMessage} type="error" /> : ''}
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCloseSugDialog} color="primary">
-              Cancelar
-            </Button>
-            <Button
-              color="primary"
-              onClick={() => {
-                handleSugSubmit();
-              }}
-            >
-              Enviar
-            </Button>
-          </DialogActions>
+          <Formik
+            initialValues={{
+              text: '',
+            }}
+            validationSchema={Yup.object().shape({
+              text: Yup.string().max(255).required('Preencha o campo Sugestão!'),
+            })}
+            onSubmit={async (values, e) => {
+              setShowSpinner(true);
+              newSuggestion({ text: values.text, user_id: user.id })
+                .then((res) => {
+                  setOpenSuggestionDialog(false);
+                  emitMessage('Sugestão adicionada com sucesso!');
+                  indexSuggestions().then((res) => {
+                    setAllSuggestion(res.data);
+                    // setComments(comment);
+                    setTimeout(function () {
+                      setShowSpinner(false);
+                    }, 1000);
+                  });
+                })
+                .catch((err) => {
+                  setShowPopUp(true);
+                  setTimeout(function () {
+                    setShowSpinner(false);
+                  }, 1000);
+                  setshowPopUpMessage(err.response.data.error);
+                });
+            }}
+          >
+            {({
+              errors,
+              handleBlur,
+              handleChange,
+              handleSubmit,
+              isSubmitting,
+              touched,
+              values,
+            }) => (
+              <form onSubmit={(e) => handleSubmit(e)}>
+                <DialogTitle id="form-dialog-title">Escreva a sua Sugestão</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    Atenção com as palavras que irá usar, poderá fazer com que a sua conta seja
+                    banida!
+                  </DialogContentText>
+                  <TextField
+                    autoFocus
+                    margin="dense"
+                    id="text"
+                    label="Sugestão"
+                    type="text"
+                    fullWidth
+                    error={Boolean(touched.text && errors.text)}
+                    helperText={touched.text && errors.text}
+                    value={values.text}
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                  />
+                  {showPopUp ? <Alerts message={showPopUpMessage} type="error" /> : ''}
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleCloseSugDialog} color="primary">
+                    Cancelar
+                  </Button>
+                  <Button color="primary" type="submit">
+                    Enviar
+                  </Button>
+                </DialogActions>
+              </form>
+            )}
+          </Formik>
         </Dialog>
       ) : (
         ''
       )}
       {OpenCommentDialog ? (
         <Dialog open={OpenCommentDialog} onClose={handleClose} aria-labelledby="form-dialog-title">
-          <DialogTitle id="form-dialog-title">Escreva o seu comentário</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Atenção com as palavras que irá usar, poderá fazer com que a sua conta seja banida!
-            </DialogContentText>
-            <TextField
-              autoFocus
-              margin="dense"
-              id="name"
-              label="Comentário"
-              type="text"
-              fullWidth
-              onChange={(e) => {
-                setText(e.target.value);
-                setShowPopUp(false);
-              }}
-            />
-            {showPopUp ? <Alerts message={showPopUpMessage} type="error" /> : ''}
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose} color="primary">
-              Cancelar
-            </Button>
-            <Button
-              color="primary"
-              onClick={() => {
-                handleSubmit();
-              }}
-            >
-              Enviar
-            </Button>
-          </DialogActions>
+          <Formik
+            initialValues={{
+              comentario: '',
+            }}
+            validationSchema={Yup.object().shape({
+              comentario: Yup.string().max(255).required('Preencha o campo Comentário!'),
+            })}
+            onSubmit={async (values, e) => {
+              setShowSpinner(true);
+              newComment({ user_id: user.id, suggestion_id: commentId, text: values.comentario })
+                .then((a) => {
+                  console.log(a);
+                  setOpenCommentDialog(false);
+                  emitMessage('Comentário adicionado com sucesso!');
+                  indexSuggestions().then((res) => {
+                    setAllSuggestion(res.data);
+                    // setComments(comment);
+                    setTimeout(function () {
+                      setShowSpinner(false);
+                    }, 1000);
+                  });
+                })
+                .catch((error) => {
+                  // console.log(error.response.data.error)
+                  if (error.response.data.status === 'Banned') {
+                    emitMessage(error.response.data.error, 'error');
+                    signOut();
+                  }
+                  setTimeout(function () {
+                    setShowSpinner(false);
+                  }, 1000);
+                  setShowPopUp(true);
+                  setshowPopUpMessage(error.response.data.error);
+                  // setIsOpen(false);
+                });
+            }}
+          >
+            {({
+              errors,
+              handleBlur,
+              handleChange,
+              handleSubmit,
+              isSubmitting,
+              touched,
+              values,
+            }) => (
+              <form onSubmit={(e) => handleSubmit(e)}>
+                <DialogTitle id="form-dialog-title">Escreva o seu comentário</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    Atenção com as palavras que irá usar, poderá fazer com que a sua conta seja
+                    banida!
+                  </DialogContentText>
+                  <TextField
+                    autoFocus
+                    margin="dense"
+                    id="comentario"
+                    label="Comentário"
+                    type="text"
+                    fullWidth
+                    error={Boolean(touched.comentario && errors.comentario)}
+                    helperText={touched.comentario && errors.comentario}
+                    value={values.comentario}
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                  />
+                  {showPopUp ? <Alerts message={showPopUpMessage} type="error" /> : ''}
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleClose} color="primary">
+                    Cancelar
+                  </Button>
+                  <Button
+                    color="primary"
+                    onClick={() => {
+                      handleSubmit();
+                    }}
+                  >
+                    Enviar
+                  </Button>
+                </DialogActions>
+              </form>
+            )}
+          </Formik>
         </Dialog>
       ) : (
         ''

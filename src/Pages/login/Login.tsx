@@ -21,7 +21,7 @@ function Login() {
     if (isAble()) {
       await signIn({ email, password }).then((res) => {
         // emitMessage('Logado com sucesso');
-        window.location.assign('/');
+        // window.location.assign('/');
       });
     }
   }

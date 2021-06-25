@@ -1,5 +1,5 @@
 import { Container, Box, Grid, Button, Fab } from '@material-ui/core';
-import React, { FormEvent, useEffect, useState } from 'react';
+import React, { FormEvent, useContext, useEffect, useState } from 'react';
 import ProductItem from '../../Components/ProductItem';
 import TopBarContainer from '../../Components/TopBarContainer';
 // import { Product } from '../../Components/ProductItem';
@@ -9,6 +9,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import CompareArrowsIcon from '@material-ui/icons/CompareArrows';
+import Spinner from '../../Components/spinner/index';
+import { AuthContext } from '../../contexts/auth';
 
 import { Categories, getCategories, getProducts, Product } from '../../services/auth';
 //CSS
@@ -18,12 +20,15 @@ export default function ItemsForm() {
   const [isModalOpen, setModalState] = useState(false);
   const [product, setProduct] = useState('');
   const [result, setResult] = useState<Product[]>([]);
+  const { emitMessage } = useContext(AuthContext);
+
   const [resultReady, setResultReady] = useState(false);
   const [categories, setCategories] = useState<Categories[]>([]);
   const [isClicked, setClicked] = useState(false);
   const [OpenDialogAdd, setOpenDialogAdd] = useState(false);
   const [style, setStyle] = useState('active');
   const [defaultOption, setDefaultOption] = useState<String>('All');
+  const [showSpinner, setShowSpinner] = useState(false);
 
   const [showInitialResults, setShowInitialResults] = useState(true);
 
@@ -148,26 +153,43 @@ export default function ItemsForm() {
   function handleSearch(e: FormEvent) {
     e.preventDefault();
 
-    let Category: String = '';
+    if (isAble()) {
+      setShowSpinner(true);
 
-    defaultOption === 'All' ? (Category = '') : (Category = defaultOption);
+      let Category: String = '';
 
-    getProducts({ product, Category })
-      .then((res) => {
-        // setResult(res.data.Data[0].);
-        setResult(res.data);
-        // console.log(result[0]);
-        setResultReady(true);
-        setShowInitialResults(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      defaultOption === 'All' ? (Category = '') : (Category = defaultOption);
+
+      getProducts({ product, Category })
+        .then((res) => {
+          // setResult(res.data.Data[0].);
+          setResult(res.data);
+          // console.log(result[0]);
+          setResultReady(true);
+          setShowInitialResults(false);
+          setTimeout(function () {
+            setShowSpinner(false);
+          }, 1000);
+        })
+        .catch((err) => {
+          setTimeout(function () {
+            setShowSpinner(false);
+          }, 1000);
+          console.log(err);
+        });
+    } else {
+      emitMessage('Preencha o campo Produto!', 'error');
+    }
   }
 
   useEffect(() => {
+    setShowSpinner(true);
+
     getCategories({ id: 1 }).then((a) => {
       setCategories(a.data);
+      setTimeout(function () {
+        setShowSpinner(false);
+      }, 1000);
     });
   }, []);
 
@@ -183,6 +205,10 @@ export default function ItemsForm() {
     // });
   }
 
+  function isAble() {
+    return product !== '';
+  }
+
   const handleClose = () => {
     setOpenDialogAdd(false);
   };
@@ -190,6 +216,7 @@ export default function ItemsForm() {
   return (
     <div>
       <TopBarContainer profile={true} />
+      {showSpinner ? <Spinner /> : ''}
       {OpenDialogAdd ? (
         <Dialog open={OpenDialogAdd} onClose={handleClose} aria-labelledby="form-dialog-title">
           <DialogTitle id="form-dialog-title">Produto com Melhor Preço!</DialogTitle>
@@ -249,7 +276,7 @@ export default function ItemsForm() {
                 type="text"
                 className="input"
                 value={product}
-                placeholder="Search"
+                placeholder="Produto"
                 onChange={(e) => {
                   setProduct(e.target.value);
                 }}

@@ -22,7 +22,6 @@ const AdminRoutes = [
     children: [
       { path: 'account', element: <Account /> },
       { path: 'customers', element: <CustomerList /> },
-      { path: 'dashboard', element: <Dashboard /> },
       { path: 'settings', element: <Settings /> },
       { path: 'Test', element: <LandingTest /> },
       // { path: '*', element: <Navigate to="/404" /> },
