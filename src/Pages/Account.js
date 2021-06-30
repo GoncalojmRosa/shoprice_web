@@ -23,7 +23,7 @@ import { AuthContext } from '../contexts/auth';
 import Fab from '@material-ui/core/Fab';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SettingsPassword from '../Components/settings/SettingsPassword';
-
+import Spinner from '../Components/spinner/index'
 
 function Account(){
 
@@ -32,6 +32,7 @@ function Account(){
   const [suggestions, setSuggestion] = useState([]);
   const [suggestionId, setSuggestionId] = useState('');
   const [OpenDialogDelete, setOpenDialogDelete] = useState(false);
+  const [showSpinner, setShowSpinner] = useState(false);
 
   function handleSuggestionDelete(){
     deleteSuggestion({id: suggestionId}).then((res) => {
@@ -50,9 +51,10 @@ function Account(){
   }
 
   useEffect(()=>{
+    setShowSpinner(true)
     getSuggestions(user).then((res) => {
       const sug = res.data;
-      
+      setTimeout(function (){setShowSpinner(false)}, 1500);
       setSuggestion(sug);
       // setComments(comment);
     });
@@ -61,6 +63,7 @@ function Account(){
 
   return(
   <>
+  {showSpinner ? <Spinner/>  : ''}
   {OpenDialogDelete ? (
         <Dialog open={OpenDialogDelete} onClose={handleClose} aria-labelledby="form-dialog-title">
           <DialogTitle id="form-dialog-title">Eliminar Sugestão</DialogTitle>

@@ -46,12 +46,13 @@ function Login() {
             onSubmit={async (values, e) => {
               // console.log(e.)
               // navigate('/login');
-               authenticate({ email: values.email, password: values.password })
+              authenticate({ email: values.email, password: values.password })
               .then((res) => {
                 // console.log(res)
-                 signIn({ email: values.email, password: values.password }).then((res) => {
+                signIn({ email: values.email, password: values.password }).then((res) => {
                   // emitMessage('Logado com sucesso');
-                  window.location.assign('/');
+                  navigate('/')
+                  // window.location.assign('/');
                 })
               })
               .catch((err) => {

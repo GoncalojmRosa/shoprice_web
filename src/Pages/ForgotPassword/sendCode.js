@@ -86,6 +86,20 @@ function Login() {
                   variant="outlined"
                 />
                 <Box sx={{ py: 2 }}>
+                <Typography
+                  color="textSecondary"
+                  variant="body1"
+                >
+                  Já possui o código?
+                  {' '}
+                  <Link
+                    component={RouterLink}
+                    to="/forgotPassword"
+                    variant="h6"
+                  >
+                    Avançar
+                  </Link>
+                </Typography>
                   <Button
                     color="primary"
                     disabled={isSubmitting}

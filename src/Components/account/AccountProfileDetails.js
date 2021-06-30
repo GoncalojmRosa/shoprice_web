@@ -11,25 +11,9 @@ import {
 import React, {useEffect, useState, useContext} from 'react';
 import { getProfile, updateProfile } from '../../services/auth';
 import { AuthContext } from '../../contexts/auth';
-import api from '../../services/api';
-
-const states = [
-  {
-    value: 'alabama',
-    label: 'Alabama'
-  },
-  {
-    value: 'new-york',
-    label: 'New York'
-  },
-  {
-    value: 'san-francisco',
-    label: 'San Francisco'
-  }
-];
 
 function AccountProfileDetails(){
-  const { setLocalUser, emitMessage, user } = useContext(AuthContext);
+  const {emitMessage, user } = useContext(AuthContext);
 
   const [name, setName] = useState('');
   const [avatar, setAvatar] = useState('');
@@ -42,47 +26,6 @@ function AccountProfileDetails(){
     });
   }
 
-  function handleUploadAvatar() {
-    const el = document.createElement('input');
-    el.setAttribute('type', 'file');
-    el.setAttribute('accept', 'image/*');
-    el.click();
-    el.addEventListener('change', async () => {
-      if (el.files && el.files[0]) {
-        let reader = new FileReader();
-
-        reader.onload = imageIsLoaded;
-        reader.readAsDataURL(el.files[0]);
-
-        uploadAvatar({ image: el.files[0], id: user.id }).then(() => {
-          emitMessage('Seu avatar foi atualizado!');
-
-          getProfile(user).then((response) => {
-            const { email, name, avatar, id } = response.data.user;
-            setLocalUser({ email, name, avatar, id });
-          });
-        });
-      }
-    });
-
-    function uploadAvatar({ id, image }) {
-      const formData = new FormData();
-      formData.append('image', image);
-      formData.append('id', id);
-      const config = {
-        headers: {
-          'content-type': 'multipart/form-data',
-        },
-      };
-
-      return api.put('avatar', formData, config);
-    }
-
-    function imageIsLoaded(e) {
-      // @ts-ignore
-      setAvatar(e.target.result);
-    }
-  }
 
   useEffect(() => {
     getProfile(user)
@@ -121,8 +64,8 @@ function AccountProfileDetails(){
             >
               <TextField
                 fullWidth
-                helperText="Please specify the first name"
-                label="First name"
+                helperText="Poderá colocar o seu Nome completo"
+                label="Nome"
                 name="firstName"
                 onChange={(e) => {setName(e.target.value)}}
                 required
@@ -137,7 +80,7 @@ function AccountProfileDetails(){
             >
               <TextField
                 fullWidth
-                label="Email Address"
+                label="Email"
                 name="email"
                 onChange={(e) => {setName(e.target.value)}}
                 required
@@ -161,7 +104,7 @@ function AccountProfileDetails(){
             variant="contained"
             type="submit"
           >
-            Save details
+            Guardar
           </Button>
         </Box>
       </Card>

@@ -72,7 +72,7 @@ function SettingsPassword(){
             variant="contained"
             type="submit"
           >
-            Update
+            Atualizar
           </Button>
         </Box>
       </Card>

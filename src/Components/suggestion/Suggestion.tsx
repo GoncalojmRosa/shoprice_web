@@ -3,7 +3,6 @@ import {
   Card,
   Container,
   CardContent,
-  CardMedia,
   CardHeader,
   Typography,
   Avatar,
@@ -63,7 +62,7 @@ const AllSuggestions: React.RefForwardingComponent<ModalHandles> = (props, ref) 
 
   const { emitMessage, user, signOut } = useContext(AuthContext);
   // const [isOpen, setIsOpen] = useState(false);
-  const [text, setText] = useState('');
+
   const [showPopUp, setShowPopUp] = useState(false);
   const [showPopUpMessage, setshowPopUpMessage] = useState('');
   const [showSpinner, setShowSpinner] = useState(false);
@@ -73,24 +72,6 @@ const AllSuggestions: React.RefForwardingComponent<ModalHandles> = (props, ref) 
   };
   const handleCloseSugDialog = () => {
     setOpenSuggestionDialog(false);
-  };
-
-  const handleSubmit = () => {};
-
-  const handleSugSubmit = () => {
-    newSuggestion({ text: text, user_id: user.id })
-      .then((res) => {
-        setOpenSuggestionDialog(false);
-        emitMessage('Sugestão adicionada com sucesso!');
-        indexSuggestions().then((res) => {
-          setAllSuggestion(res.data);
-          // setComments(comment);
-        });
-      })
-      .catch((err) => {
-        setShowPopUp(true);
-        setshowPopUpMessage(err.response.data.error);
-      });
   };
 
   useEffect(() => {
@@ -294,7 +275,7 @@ const AllSuggestions: React.RefForwardingComponent<ModalHandles> = (props, ref) 
 
       {allSuggestion.map((suggestion) => {
         return (
-          <Card style={{ marginTop: 40 }}>
+          <Card style={{ marginTop: 40 }} key={String(suggestion.id)}>
             <CardHeader
               avatar={
                 <Avatar

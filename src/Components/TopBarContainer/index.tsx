@@ -24,7 +24,7 @@ const TopBarContainer: React.FunctionComponent<TopBarContainerProps> = ({
   logoColor = true,
   children,
 }) => {
-  const { signOut, user, isAdmin } = useContext(AuthContext);
+  const { signOut, user, isAdmin, isDemo } = useContext(AuthContext);
   const [isOpen, setIsOpen] = useState(false);
 
   function handleSignOut() {
@@ -57,7 +57,10 @@ const TopBarContainer: React.FunctionComponent<TopBarContainerProps> = ({
             </button>
           </div>
           <div className="collapse navbar-collapse navbar-menu-wrapper" id="navbarSupportedContent">
-            <ul className="navbar-nav align-items-lg-center align-items-start ml-auto">
+            <ul
+              className="navbar-nav align-items-lg-center align-items-start ml-auto"
+              id="navbarSupportedContent"
+            >
               <li className="d-flex align-items-center justify-content-between pl-4 pl-lg-0">
                 <div className="navbar-collapse-logo">
                   <img src={Group2} alt="" />
@@ -106,14 +109,18 @@ const TopBarContainer: React.FunctionComponent<TopBarContainerProps> = ({
                       style={{ zIndex: 99999 }}
                     >
                       <ul className="dropdown__list">
-                        <Link to="/app/account">
-                          <li className="dropdown__list-item">
-                            <span className="dropdown__icon">
-                              <i className="far fa-user"></i>
-                            </span>
-                            <span className="dropdown__title">Perfil</span>
-                          </li>
-                        </Link>
+                        {isDemo ? (
+                          ''
+                        ) : (
+                          <Link to="/app/account">
+                            <li className="dropdown__list-item">
+                              <span className="dropdown__icon">
+                                <i className="far fa-user"></i>
+                              </span>
+                              <span className="dropdown__title">Perfil</span>
+                            </li>
+                          </Link>
+                        )}
                         {isAdmin ? (
                           <div>
                             <Link to="/app/customers">
@@ -141,7 +148,7 @@ const TopBarContainer: React.FunctionComponent<TopBarContainerProps> = ({
                           <span className="dropdown__icon">
                             <i className="fas fa-sign-out-alt"></i>
                           </span>
-                          <span className="dropdown__title">log out</span>
+                          <span className="dropdown__title">Terminar Sessão</span>
                         </li>
                       </ul>
                     </div>

@@ -72,7 +72,7 @@ function LandingTest() {
   const [listSuggestions, setListSuggestions] = useState<Suggestions[]>([]);
 
   const [itemsShow, setItemsShow] = useState(4);
-
+  const [nextStepIndex, setNextStepIndex] = useState();
   const steps = [
     {
       element: '.selector1',
@@ -138,6 +138,15 @@ function LandingTest() {
     // setLoading(false);
   }, []);
 
+  function onBeforeChange() {
+    console.log(nextStepIndex);
+    if (nextStepIndex === 3) {
+      console.log('ULTIMO');
+      return true;
+    }
+    return false;
+  }
+
   return (
     <div id="body" data-spy="scroll" data-target=".navbar" data-offset="100">
       <TopBarContainer profile={true}>
@@ -147,11 +156,19 @@ function LandingTest() {
           </button>
         </li>
       </TopBarContainer>
+      {/* <Steps
+        enabled={enableIntro}
+        steps={steps}
+        options={options}
+        initialStep={0}
+        onBeforeExit={onBeforeChange}
+        onChange={(a: any) => setNextStepIndex(a + 1)}
+      /> */}
       <div className="banner">
         <div className="container">
           <h1 className="font-weight-semibold">
             Compare preços entre <br />
-            supermercados portugueses.
+            Supermercados Portugueses.
           </h1>
           <h6 className="font-weight-normal text-muted pb-3">
             Shoprice é uma plataforma totalmente segura e inovadora no mercado português.

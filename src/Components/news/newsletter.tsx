@@ -36,7 +36,7 @@ const NewsLetter = (props: any, ref: any) => {
   const [OpenSuggestionDialog, setOpenSuggestionDialog] = useState(false);
   const [newsLetters, setNewsLetters] = useState<news[]>([]);
 
-  const { emitMessage, user, signOut } = useContext(AuthContext);
+  const { emitMessage, user } = useContext(AuthContext);
   // const [isOpen, setIsOpen] = useState(false);
   const [showPopUp, setShowPopUp] = useState(false);
   const [showPopUpMessage, setshowPopUpMessage] = useState('');

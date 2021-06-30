@@ -35,7 +35,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { AuthContext } from '../../contexts/auth';
-import { register, listUsers, updateProfile, getProfile, deleteUser } from '../../services/auth';
+import { register, listUsers, updateProfile, getProfile, deleteUser, search } from '../../services/auth';
 import Alerts from '../PopUpMessage/index';
 import { Search as SearchIcon } from 'react-feather';
 import ReplayIcon from '@material-ui/icons/Replay';
@@ -62,9 +62,11 @@ const CustomerListResults = () => {
   const [WarningSelectedOption, setWarningSelectedOption] = useState('');
   const [RoleSelectedOption, setRoleSelectedOption] = useState('');
   const [showEditButton, setShowEditButton] = useState(false);
+  const [showDeleteButton, setShowDeleteButton] = useState(false);
   const { emitMessage } = useContext(AuthContext);
   const [customers, setCustomers] = useState([]);
   const [code, setCode] = useState('');
+  const [customerName, setCustomerName] = useState('');
   const [showCode, setShowCode] = useState(false);
   const [showSpinner, setShowSpinner] = useState(false);
 
@@ -87,9 +89,11 @@ const CustomerListResults = () => {
     if (selectedIndex === -1) {
       // console.log(id)
       setShowEditButton(true)
+      setShowDeleteButton(true)
       newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds, id);
     } else if (selectedIndex === 0) {
       setShowEditButton(false);
+      setShowDeleteButton(false)
       newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds.slice(1));
     }else if (selectedIndex === selectedCustomerIds.length - 1) {
       newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds.slice(0, -1));
@@ -105,10 +109,6 @@ const CustomerListResults = () => {
   const handleLimitChange = (event) => {
     setLimit(event.target.value);
   };
-
-  function isAble() {
-    return email !== '' && password !== '' && username !== '';
-  }
 
   const handlePageChange = (event, newPage) => {
     setPage(newPage);
@@ -179,6 +179,14 @@ const CustomerListResults = () => {
       })
     });
   };
+  const handleCustomerSearchChange = () => {
+    search({letters: customerName}).then((res) => {
+      setCustomers(res.data)
+    }).catch((err) => {
+      console.log(err.response.data.error)
+    })
+    
+  }
   const handleSubmitDelete = () => {
     console.log(selectedCustomerIds[0])
     deleteUser({id: selectedCustomerIds[0]}).then((user) => {
@@ -208,9 +216,10 @@ const CustomerListResults = () => {
         justifyContent: 'flex-end'
       }}
     >
-      <Button variant="outlined" onClick={() => {setOpenDialogDelete(true)}} style={{color: "#D0312D", marginRight: "2px", borderColor: "#D0312D"}}>
+      {showEditButton ? <Button variant="outlined" onClick={() => {setOpenDialogDelete(true)}} style={{color: "#D0312D", marginRight: "2px", borderColor: "#D0312D"}}>
         Eliminar
-      </Button>
+      </Button> : ''}
+      
       {showEditButton ? <Button sx={{ mx: 1 }} onClick={() => {setOpenDialogEdit(true); ChangeStateValues()}} variant="contained" style={{backgroundColor: "#3bb143", color: "#ffffff"}}>
         Editar
       </Button> : <></>}
@@ -226,25 +235,35 @@ const CustomerListResults = () => {
     <Box sx={{ mt: 3 }}>
       <Card>
         <CardContent>
-          <Box sx={{ maxWidth: 500 }}>
-            <TextField
-              fullWidth
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SvgIcon
-                      fontSize="small"
-                      color="action"
-                    >
-                      <SearchIcon />
-                    </SvgIcon>
-                  </InputAdornment>
-                )
-              }}
-              placeholder="Search customer"
-              variant="outlined"
-            />
-          </Box>
+            <Box sx={{ maxWidth: 500 }}>
+            
+          <TextField
+                fullWidth
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SvgIcon
+                        fontSize="small"
+                        color="action"
+                      >
+                        <SearchIcon />
+                      </SvgIcon>
+                    </InputAdornment>
+                  ),
+
+                }}
+                placeholder="Procure um Utilizador"
+                variant="outlined"
+                value={customerName}
+                onChange={(e) => {
+                  handleCustomerSearchChange();
+                  setCustomerName(e.target.value)
+                }}
+                
+              />
+              
+              
+            </Box>
         </CardContent>
       </Card>
     </Box>
@@ -591,7 +610,7 @@ const CustomerListResults = () => {
                     <Checkbox
                       checked={selectedCustomerIds.indexOf(customer.id) !== -1}
                       onChange={(event) => handleSelectOne(event, customer.id)}
-                      value="true"
+                      value="false"
                       disabled={customer.role === 'admin' ? true : false}
                     />
                   </TableCell> :  <TableCell></TableCell>}

@@ -22,10 +22,10 @@ const AuthRoutes = [
     path: '/signup',
     element: <SignUp />,
   },
-  // {
-  //   path: '*', 
-  //   element: <Navigate to="/login" />,
-  // }
+  {
+    path: '*', 
+    element: <Navigate to="/login" />,
+  }
 ];
 
 export default AuthRoutes;

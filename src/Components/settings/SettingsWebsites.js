@@ -1,9 +1,9 @@
-import { useEffect, useContext, useState } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import {
-  Avatar,
+
   Box,
   Card,
   Checkbox,
@@ -13,26 +13,22 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Typography,
+
   Container,
   CardContent,
   InputAdornment,
   SvgIcon,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  FormHelperText
+
 } from '@material-ui/core';
-import getInitials from '../../utils/getInitials';
+
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import Select from '@material-ui/core/Select';
+
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
+
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { AuthContext } from '../../contexts/auth';
 import { listSites, indexSiteById, updateWebsite } from '../../services/auth';
 import Alerts from '../PopUpMessage/index';
 import { Search as SearchIcon } from 'react-feather';
@@ -47,7 +43,7 @@ const SettingsWebsites = () => {
   const [OpenDialogEdit, setOpenDialogEdit] = useState(false);
 
   const [showEditButton, setShowEditButton] = useState(false);
-  const { emitMessage } = useContext(AuthContext);
+  // const { emitMessage } = useContext(AuthContext);
   const [sites, setSites] = useState([]);
 
   const [name, setName] = useState('');

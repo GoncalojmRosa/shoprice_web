@@ -11,16 +11,15 @@ import {
   Typography
 } from '@material-ui/core';
 import {
-  AlertCircle as AlertCircleIcon,
-  BarChart as BarChartIcon,
-  Lock as LockIcon,
+ 
   Settings as SettingsIcon,
-  ShoppingBag as ShoppingBagIcon,
+
   User as UserIcon,
-  UserPlus as UserPlusIcon,
+ 
   Users as UsersIcon,
   MessageSquare as Message,
   Calendar as News,
+ 
 } from 'react-feather';
 import NavItem from './NavItem';
 import { AuthContext } from '../contexts/auth'
@@ -80,10 +79,9 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
   useEffect(() => {
     getProfile(user)
       .then((res) => {
-        const { name, avatar, badge } = res.data.user;
+        const { name, avatar } = res.data.user;
         setName(name);
         setAvatar(avatar);
-        console.log(res.data.user)
       })
       .catch((err) => {
         console.log(err);
@@ -146,6 +144,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
               key={item.title}
               title={item.title}
               icon={item.icon}
+              
             />
           ))}
         </List>

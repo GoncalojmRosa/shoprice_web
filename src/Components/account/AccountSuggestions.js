@@ -24,7 +24,7 @@ import { deleteSuggestion } from '../../services/auth';
         // onSubmit={handleUpdateProfile}
       >
               
-        <Card>
+        <Card key={String(suggestionId)} >
             <CardHeader
                 avatar={
                 <Avatar aria-label="recipe" src={avatar}

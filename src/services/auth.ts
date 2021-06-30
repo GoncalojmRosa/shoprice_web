@@ -228,4 +228,7 @@ export function passwordToken(params: object): Promise<sendCodeResponse> {
 }
 export function updatePassword(params: object): Promise<sendCodeResponse> {
   return api.put('/changePassword', params)
+} 
+export function search(params: object): Promise<UserData> {
+  return api.post('/search', params)
 }

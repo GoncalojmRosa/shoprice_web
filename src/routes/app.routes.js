@@ -18,11 +18,11 @@ const AppRoutes = [
     ]
   },
   { path: 'compare', element: <ItemsForm /> },
-  // {
-  //   path: '/',
-  //   element: <LandingTest />,
-  // },
-  // { path: '*', element: <Navigate to="/" /> },
+  {
+    path: '/',
+    element: <LandingTest />,
+  },
+  { path: '*', element: <Navigate to="/" /> },
 
 ];
 
