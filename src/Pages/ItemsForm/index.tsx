@@ -43,11 +43,11 @@ export default function ItemsForm() {
 
   const [initialResults, setInitialResults] = useState<Product[]>([
     {
-      title: 'Continente',
+      title: 'Mini Preço',
       name: 'Alface Frisada',
-      price: 1.49,
-      img: 'https://www.continente.pt/dw/image/v2/BDVS_PRD/on/demandware.static/-/Sites-col-master-catalog/default/dw5a1fb5b0/images/col/264/2647366-frente.jpg?sw=280&sh=280',
-      url: 'https://www.continente.pt/pesquisa/?q=Alface',
+      price: 0.6,
+      img: 'https://s0.minipreco.pt/medias/he6/h79/8860738584606.jpg',
+      url: 'https://lojaonline.minipreco.pt/search?text=Alface',
     },
     {
       title: 'Pingo Doce',

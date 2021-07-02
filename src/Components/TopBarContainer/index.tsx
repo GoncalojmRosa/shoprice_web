@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import Group2 from '../../Assets/images/Group2.svg';
+import Group2 from '../../Assets/images/FinalLogo.svg';
 import '../../Assets/Styles/style.min.css';
 import 'mdi/css/materialdesignicons.min.css';
 // import './styles.scss';
@@ -40,9 +40,8 @@ const TopBarContainer: React.FunctionComponent<TopBarContainerProps> = ({
       >
         <div className="container">
           <div className="navbar-brand-wrapper d-flex w-100">
-            {/* <img src={Group2} alt="" /> */}
             <Link to="/" className="nav-link">
-              Shoprice
+              <img src={Group2} alt="" />
             </Link>
             <button
               className="navbar-toggler ml-auto"
@@ -83,13 +82,8 @@ const TopBarContainer: React.FunctionComponent<TopBarContainerProps> = ({
                 </Link>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#features-section">
+                <a className="nav-link" href="/#features-section">
                   Sobre
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#digital-marketing-section">
-                  Doar
                 </a>
               </li>
               <li className="nav-item">

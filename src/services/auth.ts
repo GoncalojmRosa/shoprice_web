@@ -197,6 +197,9 @@ export function getCategories(params: object): Promise<CategoriesResponse> {
 export function deleteSuggestion(params: object): Promise<SuggestionsResponse> {
   return api.delete('/suggestions', {data: params})
 }
+export function deleteNewsletter(params: object): Promise<newsResponse> {
+  return api.delete('/newsletter', {data: params})
+}
 export function newComment(params: object): Promise<SuggestionsResponse> {
   return api.post('/comments', params)
 }

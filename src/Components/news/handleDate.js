@@ -14,7 +14,7 @@ export default function HandleDate(date){
     // To calculate the no. of days between two dates
     var Difference_In_Days = Math.floor(Difference_In_Time / (1000 * 3600 * 24));
     Difference_In_Days = Difference_In_Days < 0 ? 0 : Difference_In_Days;
-    var dateFuture = new Date('2021-06-20 14:06:18');
+    var dateFuture = new Date(date);
     var dateNow = new Date();
 
     var seconds = Math.floor((dateFuture - (dateNow))/1000);

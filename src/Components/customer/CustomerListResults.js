@@ -216,7 +216,7 @@ const CustomerListResults = () => {
         justifyContent: 'flex-end'
       }}
     >
-      {showEditButton ? <Button variant="outlined" onClick={() => {setOpenDialogDelete(true)}} style={{color: "#D0312D", marginRight: "2px", borderColor: "#D0312D"}}>
+      {showDeleteButton ? <Button variant="outlined" onClick={() => {setOpenDialogDelete(true)}} style={{color: "#D0312D", marginRight: "2px", borderColor: "#D0312D"}}>
         Eliminar
       </Button> : ''}
       

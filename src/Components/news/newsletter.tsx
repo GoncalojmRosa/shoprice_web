@@ -1,6 +1,6 @@
 import { Box, MenuItem, FormHelperText, FormControl, InputLabel, Select } from '@material-ui/core';
 import React, { useEffect, useContext, useState } from 'react';
-import { indexNewsByUserId, newNewsLetter } from '../../services/auth';
+import { indexNewsByUserId, newNewsLetter, deleteNewsletter } from '../../services/auth';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -39,6 +39,7 @@ const NewsLetter = (props: any, ref: any) => {
   const { emitMessage, user } = useContext(AuthContext);
   // const [isOpen, setIsOpen] = useState(false);
   const [showPopUp, setShowPopUp] = useState(false);
+  const [showDeleteButton, setShowDeleteButton] = useState(false);
   const [showPopUpMessage, setshowPopUpMessage] = useState('');
 
   const [siteSelectedOption, setSiteSelectedOption] = useState('');
@@ -48,9 +49,36 @@ const NewsLetter = (props: any, ref: any) => {
   const [minutes, setMinutes] = useState<number>();
   const [seconds, setSeconds] = useState<number>();
   const [showSpinner, setShowSpinner] = useState(false);
+  const [OpenDialogDelete, setOpenDialogDelete] = useState(false);
+  const [selectedCustomerIds, setSelectedCustomerIds] = useState<string>();
 
   const handleCloseSugDialog = () => {
     setOpenSuggestionDialog(false);
+  };
+  const handleSubmitDelete = () => {
+    setShowSpinner(true);
+
+    deleteNewsletter({ id: selectedCustomerIds }).then((rep) => {
+      console.log(rep);
+      setOpenDialogDelete(false);
+      setShowDeleteButton(false);
+      setTimeout(function () {
+        setShowSpinner(false);
+      }, 1500);
+      indexNewsByUserId({ id: user.id })
+        .then((news) => {
+          setTimeout(function () {
+            setShowSpinner(false);
+          }, 1500);
+          setNewsLetters(news.data);
+        })
+        .catch((err) => {});
+      emitMessage('NewsLetter eliminado com sucesso');
+    });
+  };
+
+  const handleClose = () => {
+    setOpenDialogDelete(false);
   };
 
   const ShowDaysAndHours = (date: string) => {
@@ -84,6 +112,19 @@ const NewsLetter = (props: any, ref: any) => {
             justifyContent: 'flex-end',
           }}
         >
+          {showDeleteButton ? (
+            <Button
+              variant="outlined"
+              onClick={() => {
+                setOpenDialogDelete(true);
+              }}
+              style={{ color: '#D0312D', marginRight: '2px', borderColor: '#D0312D' }}
+            >
+              Eliminar
+            </Button>
+          ) : (
+            ''
+          )}
           <Button color="primary" onClick={() => setOpenSuggestionDialog(true)} variant="contained">
             Adicionar
           </Button>
@@ -230,6 +271,31 @@ const NewsLetter = (props: any, ref: any) => {
       ) : (
         ''
       )}
+      {OpenDialogDelete ? (
+        <Dialog open={OpenDialogDelete} onClose={handleClose} aria-labelledby="form-dialog-title">
+          <DialogTitle id="form-dialog-title">Eliminar NewsLetter</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Aqui pode escolher se pretende eliminar a sua NewsLetter
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              Cancelar
+            </Button>
+            <Button
+              color="primary"
+              onClick={() => {
+                handleSubmitDelete();
+              }}
+            >
+              Eliminar
+            </Button>
+          </DialogActions>
+        </Dialog>
+      ) : (
+        ''
+      )}
       {newsLetters.map((news) => {
         return (
           <div style={{ marginTop: 20 }}>
@@ -248,7 +314,14 @@ const NewsLetter = (props: any, ref: any) => {
                   aria-label="Acknowledge"
                   onClick={(event) => event.stopPropagation()}
                   onFocus={(event) => event.stopPropagation()}
-                  control={<Checkbox />}
+                  control={
+                    <Checkbox
+                      onClick={(e) => {
+                        setSelectedCustomerIds(news.id);
+                        setShowDeleteButton(!showDeleteButton);
+                      }}
+                    />
+                  }
                   label={news.ProductName}
                 />
               </AccordionSummary>
