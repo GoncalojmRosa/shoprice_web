@@ -153,31 +153,6 @@ const SettingsWebsites = () => {
         Editar
       </Button> : <></>}
     </Box>
-    <Box sx={{ mt: 3 }}>
-      <Card>
-        <CardContent>
-          <Box sx={{ maxWidth: 500 }}>
-            <TextField
-              fullWidth
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SvgIcon
-                      fontSize="small"
-                      color="action"
-                    >
-                      <SearchIcon />
-                    </SvgIcon>
-                  </InputAdornment>
-                )
-              }}
-              placeholder="Procure um Site"
-              variant="outlined"
-            />
-          </Box>
-        </CardContent>
-      </Card>
-    </Box>
   </Box>
     <Card sx={{mt: 3}}>
       {OpenDialogEdit ? (
@@ -320,7 +295,7 @@ const SettingsWebsites = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {sites.slice(0, limit).map((site) => (
+              {sites.slice(page * limit, page * limit + limit).map((site) => (
                 <TableRow
                   hover
                   key={site.id}

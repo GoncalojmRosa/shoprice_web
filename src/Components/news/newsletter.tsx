@@ -226,7 +226,7 @@ const NewsLetter = (props: any, ref: any) => {
                         <MenuItem value={5}>Mbit</MenuItem>
                         <MenuItem value={6}>Chip7</MenuItem>
                       </Select>
-                      <FormHelperText>Escolha a Badge do Utilizador</FormHelperText>
+                      <FormHelperText>Escolha o Site onde Pesquisar</FormHelperText>
                     </FormControl>
                     <FormControl
                       sx={{
@@ -251,7 +251,7 @@ const NewsLetter = (props: any, ref: any) => {
                         <MenuItem value={2}>Semanalmente</MenuItem>
                         <MenuItem value={3}>Mensalmente</MenuItem>
                       </Select>
-                      <FormHelperText>Escolha o número de avisos</FormHelperText>
+                      <FormHelperText>Escolha quando é que recebe Email</FormHelperText>
                     </FormControl>
                   </Box>
                   {showPopUp ? <Alerts message={showPopUpMessage} type="error" /> : ''}

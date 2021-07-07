@@ -61,7 +61,7 @@ const CarouselComponent: React.FC<SuggestionsItemProps> = ({ data, itemsToShow }
                   <p className="m-0 py-3 text-muted">{prods.text}</p>
                   <div className="content-divider m-auto"></div>
                   <h6 className="card-title pt-3">{prods.user.name}</h6>
-                  <h6 className="customer-designation text-muted m-0">Marketing Manager</h6>
+                  <h6 className="customer-designation text-muted m-0">Shoprice@</h6>
                 </div>
               </div>
             </div>

@@ -28,14 +28,23 @@ import Group115 from '../../Assets/images/Group115.svg';
 import CarouselComponent from '../../Components/Carousel/Carousel';
 import { AuthContext } from '../../contexts/auth';
 import 'intro.js/introjs.css';
-
-import logo from '../../Assets/icons/Vector.svg';
 import { indexSuggestions, newReport } from '../../services/auth';
 import TopBarContainer from '../../Components/TopBarContainer';
-import ModalComponent from '../../Components/Modal';
 // import 'intro.js/themes/introjs-modern.css';
+import { useNavigate } from 'react-router-dom';
 
-const { Steps, Hints } = require('intro.js-react');
+import {
+  DialogContent,
+  DialogActions,
+  Button,
+  Dialog,
+  DialogContentText,
+  DialogTitle,
+  TextField,
+} from '@material-ui/core';
+import * as Yup from 'yup';
+import { Formik } from 'formik';
+import Spinner from '../../Components/spinner/index';
 
 interface User {
   name: string;
@@ -64,53 +73,20 @@ interface Suggestions {
 }
 
 function LandingTest() {
-  const { user } = useContext(AuthContext);
-  const [enableIntro, setEnableIntro] = useState(true);
-  const [enableModal, setEnableModal] = useState(false);
-  const [assunto, setAssunto] = useState('');
-  const [mensagem, setMensagem] = useState('');
+  const { user, emitMessage } = useContext(AuthContext);
+
   const [listSuggestions, setListSuggestions] = useState<Suggestions[]>([]);
+  const navigate = useNavigate();
+  const [showSpinner, setShowSpinner] = useState(false);
+  const [OpenDialogAdd, setOpenDialogAdd] = useState(false);
 
   const [itemsShow, setItemsShow] = useState(4);
-  const [nextStepIndex, setNextStepIndex] = useState();
-  const steps = [
-    {
-      element: '.selector1',
-      intro: 'test 1',
-      // position: 'right',
-      // tooltipClass: 'myTooltipClass',
-      // highlightClass: 'myHighlightClass',
-    },
-    {
-      element: '.nav-link',
-      intro: 'test 2',
-    },
-    {
-      element: '.selector3',
-      intro: 'test 3',
-    },
-  ];
-  const hints = [
-    {
-      element: '.nav-link',
-      hint: 'test 1',
-      hintPosition: 'middle-middle',
-      doneLabel: 'Ok',
-    },
-    {
-      element: '.selector2',
-      hint: 'test 2',
-    },
-  ];
 
-  const options = {
-    // doneLabel: 'Skip',
-    nextLabel: 'Next',
-    // skipLabel: 'Skip',
-    showBullets: false,
-    showStepNumbers: true,
-  };
   window.onresize = ChangeCarouselItems;
+
+  const handleClose = () => {
+    setOpenDialogAdd(false);
+  };
 
   function ChangeCarouselItems() {
     if (window.innerWidth <= 768) {
@@ -122,13 +98,6 @@ function LandingTest() {
     }
   }
 
-  function HandleReportSubmit(e: FormEvent) {
-    e.preventDefault();
-    newReport({ Title: assunto, Summary: mensagem, user_id: user.id }).then(() => {
-      setEnableModal(false);
-    });
-  }
-
   useEffect(() => {
     Aos.init({ duration: 3000 });
     ChangeCarouselItems();
@@ -138,20 +107,12 @@ function LandingTest() {
     // setLoading(false);
   }, []);
 
-  function onBeforeChange() {
-    console.log(nextStepIndex);
-    if (nextStepIndex === 3) {
-      console.log('ULTIMO');
-      return true;
-    }
-    return false;
-  }
-
   return (
     <div id="body" data-spy="scroll" data-target=".navbar" data-offset="100">
+      {showSpinner ? <Spinner /> : ''}
       <TopBarContainer profile={true}>
         <li className="nav-item btn-contact-us pl-4 pl-lg-0">
-          <button onClick={() => setEnableModal(true)} className="btn btn-info">
+          <button onClick={() => setOpenDialogAdd(true)} className="btn btn-info">
             Contacte nos
           </button>
         </li>
@@ -173,10 +134,10 @@ function LandingTest() {
           <h6 className="font-weight-normal text-muted pb-3">
             Shoprice é uma plataforma totalmente segura e inovadora no mercado português.
           </h6>
-          <div>
+          {/* <div>
             <button className="btn btn-opacity-light mr-1">Get started</button>
             <button className="btn btn-opacity-success ml-1">Learn more</button>
-          </div>
+          </div> */}
           <img src={Group171} alt="" className="img-fluid" />
         </div>
       </div>
@@ -199,12 +160,10 @@ function LandingTest() {
                     incrível
                   </h5>
                   <p className="text-muted">
-                    Lorem ipsum dolor sit amet, tincidunt vestibulum. Fusce egeabus consectetuer
-                    turpis, suspendisse.
+                    Aquilo que oferecemos é algo nunca antes visto em Portugal, desde comparar
+                    preços até receber NewsLetter's com informações daquele produto que pretende
+                    comprar
                   </p>
-                  <a href="#">
-                    <p className="readmore-link">Ler Mais</p>
-                  </a>
                 </div>
               </div>
               <div className="grid-margin d-flex justify-content-center">
@@ -216,12 +175,9 @@ function LandingTest() {
                     100% reais
                   </h5>
                   <p className="text-muted">
-                    Lorem ipsum dolor sit amet, tincidunt vestibulum. Fusce egeabus consectetuer
-                    turpis, suspendisse.
+                    Caso esteja com algumas dúvidas em relação à informação pode consultar os
+                    Supermercados para verificar a mesma.
                   </p>
-                  <a href="#">
-                    <p className="readmore-link">Readmore</p>
-                  </a>
                 </div>
               </div>
               <div className="grid-margin d-flex justify-content-end">
@@ -233,12 +189,9 @@ function LandingTest() {
                     categorias
                   </h5>
                   <p className="text-muted">
-                    Lorem ipsum dolor sit amet, tincidunt vestibulum. Fusce egeabus consectetuer
-                    turpis, suspendisse.
+                    Caso não encontre o produto que pretende pesquisar pode sempre tentar alterar a
+                    categoria e verificar se obtem alguma informação.
                   </p>
-                  <a href="#">
-                    <p className="readmore-link">Readmore</p>
-                  </a>
                 </div>
               </div>
             </div>
@@ -253,11 +206,11 @@ function LandingTest() {
                 </h3>
                 <div className="col-lg-7 col-xl-6 p-0">
                   <p className="py-4 m-0 text-muted">
-                    Lorem ipsum dolor sit amet, tincidunt vestibulum. Fusce egeabus consectetuer
-                    turpis, suspendisse.
+                    A Shoprice oferece a capacidade de comparar preços entre Mini Preço, Pingo Doce
+                    e Auchan.
                   </p>
                   <p className="font-weight-medium text-muted">
-                    Lorem ipsum dolor sit amet, tincidunt vestibulum. Fusce egeabus consectetuer
+                    Disponibilizamos ainda da Global Data, Mbit e Chip7
                   </p>
                 </div>
               </div>
@@ -290,7 +243,6 @@ function LandingTest() {
                     Garantimos uma ferramenta autônoma e inteligente.
                   </p>
                 </div>
-                <button className="btn btn-info">Readmore</button>
               </div>
             </div>
           </section>
@@ -298,9 +250,6 @@ function LandingTest() {
             <div className="row grid-margin">
               <div className="col-12 text-center pb-5">
                 <h2>Aquilo que realmente importa</h2>
-                <h6 className="section-subtitle text-muted">
-                  Lorem ipsum dolor sit amet, tincidunt vestibulum.
-                </h6>
               </div>
               <div
                 className="col-12 col-md-6 col-lg-3 stretch-card mb-3 mb-lg-0"
@@ -321,7 +270,7 @@ function LandingTest() {
                     </div>
                     <div className="card-details text-center pt-4">
                       <h6 className="m-0 pb-1">Proteger os seus dados</h6>
-                      <p>Seo, Marketing</p>
+                      <p>Ceo, Marketing</p>
                     </div>
                   </div>
                 </div>
@@ -405,13 +354,13 @@ function LandingTest() {
               </div>
             </div>
           </section>
-          {listSuggestions === null ? (
+          {listSuggestions !== null ? (
             <section className="customer-feedback" id="feedback-section" data-aos="fade-right">
               <div>
                 <div className="col-12 text-center pb-5">
                   <h2>O que os nosso clientes têm a dizer</h2>
                   <h6 className="section-subtitle text-muted m-0">
-                    Lorem ipsum dolor sit amet, tincidunt vestibulum.
+                    Algumas Sugestões feitas pelos nossos Clientes.
                   </h6>
                 </div>
                 {/* <OwlCarousel options={options} events={events}> */}
@@ -436,115 +385,140 @@ function LandingTest() {
                 </h4>
               </div>
               <div data-aos="fade-up">
-                <button className="btn btn-rounded btn-outline-danger">Sugerir</button>
-              </div>
-            </div>
-          </section>
-          <section className="contact-details" id="contact-details-section">
-            <div className="row text-center text-md-left">
-              <div className="col-12 col-md-6 col-lg-3 grid-margin">
-                {/* <img src={Group2} alt="" className="pb-2" /> */}
-                Shoprice
-                <div className="pt-2">
-                  <p className="text-muted m-0">shoprice@gmail.com</p>
-                  <p className="text-muted m-0">-------------</p>
-                </div>
-              </div>
-              <div className="col-12 col-md-6 col-lg-3 grid-margin">
-                <h5 className="pb-2">Entre em Contacto</h5>
-                <p className="text-muted">Não perca nenhuma atualização na nossa App.!</p>
-                <form>
-                  <input type="text" className="form-control" id="Email" placeholder="Email id" />
-                </form>
-                <div className="pt-3">
-                  <button className="btn btn-dark">Subscrever</button>
-                </div>
-              </div>
-              <div className="col-12 col-md-6 col-lg-3 grid-margin">
-                <h5 className="pb-2">Diretrizes</h5>
-                <a href="#">
-                  <p className="m-0 pb-2">Terms</p>
-                </a>
-                <a href="#">
-                  <p className="m-0 pt-1 pb-2">Privacy policy</p>
-                </a>
-                <a href="#">
-                  <p className="m-0 pt-1 pb-2">Cookie Policy</p>
-                </a>
-                <a href="#">
-                  <p className="m-0 pt-1">Discover</p>
-                </a>
-              </div>
-              <div className="col-12 col-md-6 col-lg-3 grid-margin">
-                <h5 className="pb-2">Onde nos situamos</h5>
-                <p className="text-muted">
-                  Portugal
-                  <br />
-                  Castelo Branco
-                </p>
-                <div className="d-flex justify-content-center justify-content-md-start">
-                  <a href="#">
-                    <span className="mdi mdi-facebook"></span>
-                  </a>
-                  <a href="#">
-                    <span className="mdi mdi-twitter"></span>
-                  </a>
-                  <a href="#">
-                    <span className="mdi mdi-instagram"></span>
-                  </a>
-                  <a href="#">
-                    <span className="mdi mdi-linkedin"></span>
-                  </a>
-                </div>
+                <button
+                  className="btn btn-rounded btn-outline-danger"
+                  onClick={(e) => navigate('/app/suggestions')}
+                >
+                  Sugerir
+                </button>
               </div>
             </div>
           </section>
           <footer className="border-top">
             <p className="text-center text-muted pt-4">
               Copyright © 2021
-              <a href="#" className="px-1">
+              <a href="https://github.com/GoncalojmRosa/" className="px-1">
                 Gonçalo Rosa.
               </a>
               Direitos Reservados.
             </p>
           </footer>
-          <ModalComponent isOpen={enableModal} title="aaaaa" onClose={() => setEnableModal(false)}>
-            <p style={{ fontSize: '24px' }}>Pedimos desculpa pelo Bug</p>
-            <br />
-            <form onSubmit={HandleReportSubmit}>
-              <div className="form-outline mb-4">
-                <input
-                  type="text"
-                  id="form4Example1"
-                  className="form-control"
-                  onChange={(e) => {
-                    setAssunto(e.target.value);
-                  }}
-                />
-                <label className="form-label" form="form4Example1" style={{ fontSize: '16px' }}>
-                  Assunto
-                </label>
-              </div>
+          {OpenDialogAdd ? (
+            <Dialog open={OpenDialogAdd} onClose={handleClose} aria-labelledby="form-dialog-title">
+              <Formik
+                initialValues={{
+                  Title: '',
+                  Summary: '',
+                }}
+                validationSchema={Yup.object().shape({
+                  Title: Yup.string().max(255).required('Preencha o campo Nome'),
+                  Summary: Yup.string().max(255).required('Preencha o campo Password'),
+                })}
+                onSubmit={async (values, e) => {
+                  setShowSpinner(true);
 
-              <div className="form-outline mb-4">
-                <textarea
-                  className="form-control"
-                  id="form4Example3"
-                  rows={4}
-                  onChange={(e) => {
-                    setMensagem(e.target.value);
-                  }}
-                ></textarea>
-                <label className="form-label" form="form4Example3" style={{ fontSize: '16px' }}>
-                  Mensagem
-                </label>
-              </div>
+                  console.log(values);
+                  newReport({
+                    Title: values.Title,
+                    Summary: values.Summary,
+                    user_id: user.id,
+                  }).then(() => {
+                    setTimeout(function () {
+                      setShowSpinner(false);
+                    }, 1500);
+                    emitMessage('Obrigado por enviar o report');
+                    setOpenDialogAdd(false);
+                  });
+                  // register({
+                  //   name: values.username,
+                  //   email: values.email,
+                  //   password: values.password,
+                  // })
+                  //   .then((a) => {
+                  //     setOpenDialogAdd(false);
+                  //     listUsers()
+                  //       .then((res) => {
+                  //         setCustomers(res.data.users);
+                  //         setTimeout(function () {
+                  //           setShowSpinner(false);
+                  //         }, 1500);
+                  //       })
+                  //       .catch((error) => {
+                  //         setTimeout(function () {
+                  //           setShowSpinner(false);
+                  //         }, 1000);
 
-              <button type="submit" className="btn btn-primary btn-block mb-4">
-                Enviar
-              </button>
-            </form>
-          </ModalComponent>
+                  //         console.log(error);
+                  //       });
+                  //   })
+                  //   .catch((error) => {
+                  //     setTimeout(function () {
+                  //       setShowSpinner(false);
+                  //     }, 1000);
+
+                  //     emitMessage(error.response.data.error, 'error');
+                  //     // console.log(error)
+                  //   });
+                }}
+              >
+                {({
+                  errors,
+                  handleBlur,
+                  handleChange,
+                  handleSubmit,
+                  isSubmitting,
+                  touched,
+                  values,
+                }) => (
+                  <form onSubmit={(e) => handleSubmit(e)}>
+                    <DialogTitle id="form-dialog-title">Contactar</DialogTitle>
+                    <DialogContent>
+                      <DialogContentText>
+                        Aqui poderá descrever aquilo que aconteceu em relação ao Bug, Obrigado por
+                        nos ajudar!
+                      </DialogContentText>
+                      <TextField
+                        autoFocus
+                        error={Boolean(touched.Title && errors.Title)}
+                        helperText={touched.Title && errors.Title}
+                        value={values.Title}
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        margin="dense"
+                        id="Title"
+                        label="Título"
+                        type="text"
+                        fullWidth
+                      />
+                      <TextField
+                        autoFocus
+                        error={Boolean(touched.Summary && errors.Summary)}
+                        helperText={touched.Summary && errors.Summary}
+                        value={values.Summary}
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        margin="dense"
+                        id="Summary"
+                        label="Descreva o Bug"
+                        type="text"
+                        fullWidth
+                      />
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={handleClose} color="primary">
+                        Cancelar
+                      </Button>
+                      <Button color="primary" type="submit">
+                        Enviar
+                      </Button>
+                    </DialogActions>
+                  </form>
+                )}
+              </Formik>
+            </Dialog>
+          ) : (
+            ''
+          )}
         </div>
       </div>
     </div>

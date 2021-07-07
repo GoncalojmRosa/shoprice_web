@@ -1,4 +1,16 @@
-import { Container, Box, Grid, Button, Fab } from '@material-ui/core';
+import {
+  Container,
+  Box,
+  Grid,
+  Button,
+  Fab,
+  Card,
+  CardMedia,
+  CardActionArea,
+  CardContent,
+  Typography,
+  CardActions,
+} from '@material-ui/core';
 import React, { FormEvent, useContext, useEffect, useState } from 'react';
 import ProductItem from '../../Components/ProductItem';
 import TopBarContainer from '../../Components/TopBarContainer';
@@ -165,7 +177,11 @@ export default function ItemsForm() {
           // setResult(res.data.Data[0].);
           setResult(res.data);
           // console.log(result[0]);
-          setResultReady(true);
+          if (res.data[0] === res.data[1] && res.data[1] === res.data[2]) {
+            setResultReady(false);
+          } else {
+            setResultReady(true);
+          }
           setShowInitialResults(false);
           setTimeout(function () {
             setShowSpinner(false);
@@ -221,17 +237,41 @@ export default function ItemsForm() {
         <Dialog open={OpenDialogAdd} onClose={handleClose} aria-labelledby="form-dialog-title">
           <DialogTitle id="form-dialog-title">Produto com Melhor Preço!</DialogTitle>
           <DialogContent>
-            <DialogContentText>{title}</DialogContentText>
-            <img src={img} alt="" />
+            {/* <DialogContentText>{title}</DialogContentText> */}
+            {/* <img src={img} alt="" />
             <a href={url}></a>
             <p>{name}</p>
 
-            <p>{price} €</p>
+            <p>{price} €</p> */}
+            <Card>
+              <CardActionArea>
+                <CardMedia
+                  component="img"
+                  alt="Contemplative Reptile"
+                  height="auto"
+                  image={img}
+                  title="Contemplative Reptile"
+                />
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="h2">
+                    {title}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary" component="p">
+                    {name}
+                  </Typography>
+                </CardContent>
+              </CardActionArea>
+              <CardActions>
+                <Button size="small" color="primary">
+                  {price} €
+                </Button>
+                <Button size="small" color="primary" href={url}>
+                  Ver Online
+                </Button>
+              </CardActions>
+            </Card>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose} color="primary">
-              Cancelar
-            </Button>
             <Button color="primary" onClick={handleClose}>
               Ok
             </Button>
